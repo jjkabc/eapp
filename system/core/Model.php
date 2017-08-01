@@ -511,6 +511,7 @@ class CI_Model {
     {
         // Add filter for search puroses
         $this->db->limit(1);
+		
         if($filter != null)
         {
             $this->db->like("name", $filter);
@@ -524,13 +525,13 @@ class CI_Model {
         $this->db->select(STORE_PRODUCT_TABLE.".id, price, product_id, ".PRODUCT_TABLE.".name");
         $this->db->join(PRODUCT_TABLE, $this->store_product_product_join);
         $this->db->where(STORE_PRODUCT_TABLE.".id", $product_id);
+		
         if($category_id != null)
         {
             $this->db->join(SUB_CATEGORY_TABLE, $this->store_product_subcategory_join);	
             $this->db->where(array(SUB_CATEGORY_TABLE.".product_category_id" => $category_id));
         }
 
-        
         return $this->db->get(STORE_PRODUCT_TABLE)->row();
     }
 
