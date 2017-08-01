@@ -27,14 +27,21 @@ and open the template in the editor.
                 scope.site_url = "<?php echo $site_url; ?>";
                 scope.controller = "<?php echo $controller; ?>";
                 scope.method = "<?php echo $method; ?>";
-		if(window.sessionStorage.getItem("store_id"))
-		{
-		    scope.store_id = parseInt(window.sessionStorage.getItem("store_id"));
-		}
-		if(window.sessionStorage.getItem("category_id"))
-		{
-		    scope.category_id = parseInt(window.sessionStorage.getItem("category_id"));
-		}
+				if(window.sessionStorage.getItem("store_id"))
+				{
+					scope.store_id = parseInt(window.sessionStorage.getItem("store_id"));
+				}
+				if(window.sessionStorage.getItem("category_id"))
+				{
+					scope.category_id = parseInt(window.sessionStorage.getItem("category_id"));
+				}
+				if(window.sessionStorage.getItem("searchText"))
+				{
+					scope.query.filter = window.sessionStorage.getItem("searchText");
+					scope.searchText = window.sessionStorage.getItem("searchText");
+					window.sessionStorage.removeItem("searchText")
+				}
+				
                 scope.getProducts();
             });
   	});
