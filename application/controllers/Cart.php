@@ -230,7 +230,7 @@ class Cart extends CI_Controller {
         
         foreach($products as $product_item)
         {
-            $store_product = $this->cart_model->get_best_store_product($product_item->id, $distance, $distance, $this->user, true, $coords);
+            $store_product = $this->cart_model->get_best_store_product($product_item->id, $distance, $distance, $this->user, $search_all, $coords);
             $cart_item = new stdClass();
             $cart_item->store_product = $store_product == null ? $this->create_empty_store_product() : $store_product;;
             $cart_item->product = $this->cart_model->get(PRODUCT_TABLE, $product_item->id);
