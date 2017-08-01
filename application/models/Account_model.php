@@ -78,9 +78,11 @@ class Account_model extends CI_Model
             
             $product_list = json_decode($product_list->grocery_list);
             
-            foreach ($product_list as $id) 
+            foreach ($product_list as $item) 
             {
-                array_push($user_account->grocery_list, $this->get_product($id));
+				$product = $this->get_product($item->id);
+				$product->quantity = $item->quantity;
+                array_push($user_account->grocery_list, $product);
             }
         }
         
