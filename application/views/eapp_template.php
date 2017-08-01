@@ -165,13 +165,13 @@
                             <li><a href="http://<?php echo site_url("cart"); ?>"><i class="fa fa-user"></i>Mon panier</a></li>
                             <li ng-hide="isUserLogged"><a href="http://<?php echo site_url("account/login"); ?>"><i class="fa fa-user"></i>s'identifier</a></li>
                             <li ng-show="isUserLogged">
-                            <md-menu>
-				<a href md-menu-origin  ng-click="$mdMenu.open($event)" class="main-menu-item">Bonjour, {{loggedUser.profile.firstname}}</a>
-				<md-menu-content>
-                                    <md-menu-item><a href ng-click="logout()">Logout</a></md-menu-item>
-                                    <md-menu-item><a href="http://<?php echo site_url("account/account"); ?>">Mon Compte</a></md-menu-item>
-				</md-menu-content>
-			    </md-menu>
+								<md-menu>
+									<a href md-menu-origin  ng-click="$mdMenu.open($event)" class="main-menu-item">Bonjour, {{loggedUser.profile.firstname}}</a>
+									<md-menu-content>
+										<md-menu-item><a href ng-click="logout()">Logout</a></md-menu-item>
+										<md-menu-item><a href="http://<?php echo site_url("account/account"); ?>">Mon Compte</a></md-menu-item>
+									</md-menu-content>
+								</md-menu>
                             </li>
                         </ul>
                     </div>
@@ -180,15 +180,6 @@
                 <div class="col-md-4">
                     <div class="header-right">
                         <ul class="list-unstyled list-inline">
-                            <li class="dropdown dropdown-small">
-                                <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span class="key">Devise :</span><span class="value">USD </span><b class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">USD</a></li>
-                                    <li><a href="#">INR</a></li>
-                                    <li><a href="#">GBP</a></li>
-                                </ul>
-                            </li>
-
                             <li class="dropdown dropdown-small">
                                 <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span class="key">Langue :</span><span class="value">Anglais </span><b class="caret"></b></a>
                                 <ul class="dropdown-menu">
@@ -228,10 +219,10 @@
         <div class="row">
             <form action="#">
                 <div class="col-md-11 single-sidebar">
-                    <input type="text" placeholder="Search products...">
+                    <input type="text" placeholder="Search products..." ng-model="searchText">
                 </div>
                 <div class="col-md-1">
-                    <input type="submit" value="Search">
+                    <input type="submit" value="Search" ng-click="searchProducts()">
                 </div>
             </form>
         </div>
@@ -253,7 +244,7 @@
                     <ul class="nav navbar-nav">
                         <li><a href="http://<?php echo site_url("home"); ?>">Accueil</a></li>
 			<li style="padding : 20px;">
-			    <md-menu>
+			    <md-menu  md-offset="0 80">
 				<a href md-menu-origin  ng-click="$mdMenu.open($event)" class="main-menu-item">Réduisez vos dépenses</a>
 				<md-menu-content>
                                     <md-menu-item><a href="http://<?php echo site_url("account/my_grocery_list"); ?>">Votre liste d'épicerie</a></md-menu-item>
@@ -265,7 +256,7 @@
                         <li><a href ng-click="gotoShop()">Trouvez un produit</a></li>
 			<li><a href="http://<?php echo site_url("cart"); ?>">Votre panier</a></li>
                         <li style="padding : 20px;">
-				<md-menu>
+				<md-menu  md-offset="0 80">
 					<a href md-menu-origin  ng-click="$mdMenu.open($event)" class="main-menu-item">Blogue</a>
 					<md-menu-content>
 					  	<md-menu-item><a href="http://<?php echo site_url("home/grocery_press"); ?>">Épicerie dans la presse</a></md-menu-item>
@@ -277,7 +268,7 @@
 				</md-menu>
 			 </li>
 			 <li style="padding : 20px;">
-				<md-menu>
+				<md-menu  md-offset="0 80">
 					<a href md-menu-origin ng-click="$mdMenu.open($event)" class="main-menu-item">Contact</a>
 					<md-menu-content>
 						<md-menu-item><a href="http://<?php echo site_url("home/contact"); ?>">Formulaire</a></md-menu-item>

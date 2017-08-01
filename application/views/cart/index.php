@@ -15,7 +15,7 @@
 <md-content class="admin-container" ng-controller="CartController">
     
     <div>
-        <md-content style="margin: 15px; padding:15px">
+        <md-content class="eapp-container">
             <fieldset>
                 <legend>Optimizations</legend>
                 <md-radio-group ng-model="viewing_cart_optimization.value" ng-change="optimization_preference_changed()">
@@ -25,7 +25,7 @@
 
                 <h4 class="search-preference">Rechercher dans ...</h4>
                 <md-radio-group ng-model="searchInMyList" ng-change="optimization_preference_changed()">
-                    <md-radio-button ng-value="true_value">Votre liste prefere</md-radio-button>
+                    <md-radio-button ng-value="true_value" ng-disabled="!isUserLogged">Votre liste prefere</md-radio-button>
                     <md-radio-button ng-value="false_value">Tout les magasins</md-radio-button>
                 </md-radio-group>
 
@@ -118,7 +118,7 @@
         </md-content>
     </div>
 
-    <div id="store-optimization-container" class="container" ng-hide="viewing_cart_optimization.value">
+    <div id="store-optimization-container" class="eapp-container" ng-hide="viewing_cart_optimization.value">
         <!-- Store Optimizations -->
         <md-content layout-padding >
             <table class="table table-condensed" style="table-layout: fixed;">
@@ -183,7 +183,7 @@
     </div>
 
     <div>
-        <div class="container">
+        <div class="eapp-container">
 
             <div class="cart_totals ">
                 <h2>Détails d'optimisation</h2>

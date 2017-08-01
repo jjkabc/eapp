@@ -511,4 +511,11 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
         });
     };
 	
+	$rootScope.searchProducts = function()
+	{
+		window.sessionStorage.setItem("searchText", $scope.searchText);
+		
+		windlow.location.href = "http://" + site_url.concat("/shop");
+	}
+	
 }]);
