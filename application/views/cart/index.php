@@ -103,7 +103,7 @@
                         </td>
 
                         <td md-cell ng-show="isUserLogged">
-                            <md-checkbox ng-model="item.is_favorite" aria-label="Add to my list" ng-checked="inMyList(item.store_product.product.id)">
+                            <md-checkbox ng-model="item.store_product.product.favorite" ng-true-value="true_value" ng-false-value="false_value" aria-label="Add to my list" ng-checked="inMyList(item.store_product.product.id)" ng-change="favoriteChanged(item.store_product.product)">
                             </md-checkbox>
                         </td>
 
