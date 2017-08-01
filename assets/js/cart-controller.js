@@ -527,6 +527,22 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
         });
     };
 	
-
+	$rootScope.addToMyList = function(product)
+	{
+		product.quantity = 1;
+		
+		$rootScope.currentProduct = product;
+		
+		$rootScope.AddProductToList();
+		
+		$rootScope.saveMyList();
+	};
+	
+	$rootScope.removeFromMyList = function(product)
+	{
+		$rootScope.removeProductFromList(product.id, null);
+		$rootScope.saveMyList();
+	};
+	
 	
 }]);
