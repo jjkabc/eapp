@@ -170,11 +170,12 @@ class Cart_model extends CI_Model
 		{
 			$this->db->order_by("price", "ASC");
 			$store_product = $this->get_specific(STORE_PRODUCT_TABLE, array("product_id" => $product_id));
+			
 			if($store_product != null)
 			{
 				$best_Store_product = $this->getStoreProduct($store_product->id, false, false);
-			$best_Store_product->department_store = new stdClass();
-			$best_Store_product->department_store->name = "RAS";
+				$best_Store_product->department_store = new stdClass();
+				$best_Store_product->department_store->name = "Le magasin n'est pas disponible près de chez vous.";
 				$best_Store_product->department_store->distance = 0;
 			}
 		}
@@ -287,8 +288,8 @@ class Cart_model extends CI_Model
 
 		if(isset($distance_time["distance"]) != null)
 		{
-                    $dist = intval(trim(str_replace("km","",$distance_time["distance"])));
-                    $driving_distance = $dist;
+			$dist = intval(trim(str_replace("km","",$distance_time["distance"])));
+			$driving_distance = $dist;
 		}
 		
 		return $driving_distance;
