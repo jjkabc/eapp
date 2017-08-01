@@ -53,7 +53,7 @@
                         <th md-column>Magasin</th>
                         <th md-column>Address / Distance en voiture</th>
                         <th md-column>Product</th>
-                        <th md-column>PDescription du produit</th>
+                        <th md-column>Description du produit</th>
                         <th md-column md-numeric>Quantité</th>
                         <th md-column md-numeric>Total (CAD)</th>
                         <th md-column><i class="fa fa-heart"></i></th>
@@ -75,10 +75,7 @@
                             <div ng-show="item.store_product.department_store">
                                 <p>{{item.store_product.department_store.address}}</p>
                                 <p>{{item.store_product.department_store.city}}, {{item.store_product.department_store.state}} , {{item.store_product.department_store.postcode }}</p>
-                                <p> < {{item.store_product.department_store.distance}} Km</p>
-                            </div>
-                            <div ng-hide="item.store_product.department_store">
-                                <p>Pas disponible pres de vous</p>
+                                <p ng-show="item.store_product.department_store.distance > 0"> < {{item.store_product.department_store.distance}} Km</p>
                             </div>
                         </td>
 
