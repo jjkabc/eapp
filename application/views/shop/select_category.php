@@ -11,7 +11,6 @@ $(document).ready(function(){
 </script>
 
 <!-- Main Script -->
-<script src="http://<?php echo base_url("assets/js/shop-controller.js")?>"></script>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <!-- Animate CSS -->
 <link rel="stylesheet" href="http://<?php echo base_url("assets/css/shop.css")?>">

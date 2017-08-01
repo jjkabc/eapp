@@ -130,6 +130,13 @@ angular.module('eappApp').controller('ShopController', ["$scope", "$q", "$http",
 	window.sessionStorage.setItem("category_id", category_id);    
 	window.location = "http://" + $scope.site_url.concat("/shop");
     };
+    
+    
+    $scope.searchProducts = function(searchText)
+    {
+        window.sessionStorage.setItem("searchText", searchText);
+        window.location.href = "http://" + $scope.site_url.concat("/shop");
+    };
  
   
 }]);

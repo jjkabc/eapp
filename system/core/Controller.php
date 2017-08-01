@@ -156,7 +156,7 @@ class CI_Controller {
             }
             else
             {
-                return "null";
+                return json_encode(array());
             }
         }
         

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{title}</title>
     
-     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdUBJq3Y93iEd29Q6GAK5SHQJniqZiHu0&sensor=false"></script> 
+     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdUBJq3Y93iEd29Q6GAK5SHQJniqZiHu0"></script> 
      <!-- Angular Material style sheet -->
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.css">
     <link rel="stylesheet" href="http://<?php echo base_url("assets/css/lf-ng-md-file-input.css")?>">
@@ -85,6 +85,9 @@
     
     <!-- Menu Controller Script -->
     <script src="http://<?php echo base_url("assets/js/cart-controller.js")?>"></script>
+    
+    <!-- Menu Controller Script -->
+    <script src="http://<?php echo base_url("assets/js/shop-controller.js")?>"></script>
     
     <!-- ngNotificationsBar Script -->
     <script src="http://<?php echo base_url("assets/js/ngNotificationsBar.min.js")?>"></script>
@@ -214,15 +217,14 @@
         </div>
     </div> 
     <!-- End site branding area -->
-    
-    <div class="container search-box" ng-controller="CartController" ng-hide="hideSearchArea">
+    <div class="container search-box" ng-controller="ShopController" ng-hide="hideSearchArea">
         <div class="row">
-            <form action="#">
+            <form ng-submit="searchProducts(searchText)">
                 <div class="col-md-11 single-sidebar">
                     <input type="text" placeholder="Search products..." ng-model="searchText">
                 </div>
                 <div class="col-md-1">
-                    <input type="submit" value="Search" ng-click="searchProducts()">
+                    <input type="submit" value="Search">
                 </div>
             </form>
         </div>
