@@ -39,7 +39,7 @@ and open the template in the editor.
 				{
 					scope.query.filter = window.sessionStorage.getItem("searchText");
 					scope.searchText = window.sessionStorage.getItem("searchText");
-					window.sessionStorage.removeItem("searchText")
+					window.sessionStorage.removeItem("searchText");
 				}
 				
                 scope.getProducts();
