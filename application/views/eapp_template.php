@@ -217,7 +217,7 @@
         </div>
     </div> 
     <!-- End site branding area -->
-    <div class="container search-box" ng-controller="ShopController" ng-hide="hideSearchArea">
+    <div class="container search-box" id="search-box" ng-controller="ShopController" ng-hide="hideSearchArea">
         <div class="row">
             <form ng-submit="searchProducts(searchText)">
                 <div class="col-md-11 single-sidebar">
