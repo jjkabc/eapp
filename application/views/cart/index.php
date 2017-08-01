@@ -72,11 +72,14 @@
                         </td>
 
                         <td md-cell>
-                            <div ng-show="item.store_product.department_store">
+                            <div ng-show="item.store_product.department_store.distance > 0">
                                 <p>{{item.store_product.department_store.address}}</p>
                                 <p>{{item.store_product.department_store.city}}, {{item.store_product.department_store.state}} , {{item.store_product.department_store.postcode }}</p>
-                                <p ng-show="item.store_product.department_store.distance > 0"> < {{item.store_product.department_store.distance}} Km</p>
+                                <p> < {{item.store_product.department_store.distance}} Km en voiture</p>
                             </div>
+							<div ng-show="item.store_product.department_store.distance == 0">
+								<p>Le produit n'est pas disponible près de chez vous.</p>
+							</div>
                         </td>
 
                         <td md-cell>
