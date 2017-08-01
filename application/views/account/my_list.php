@@ -55,7 +55,7 @@
                 </md-autocomplete>
             
             
-            <md-button ng-click="AddItemToList()" class="md-fab md-mini md-primary" style="background-color : #1abc9c;" aria-label="" ng-click="removeProduct(product.id, $event)">
+            <md-button ng-click="AddProductToList()" class="md-fab md-mini md-primary" style="background-color : #1abc9c;" aria-label="" ng-click="removeProduct(product.id, $event)">
                 <md-icon md-svg-src="{{icons.add | trustUrl}}"></md-icon>
             </md-button>
         </div>
@@ -72,7 +72,7 @@
                         <md-input-container class="md-secondary">
                             <input style="width: 40px;" aria-label="Qty" type="number" ng-model="product.quantity">
                         </md-input-container>
-                        <md-button class="md-fab md-mini md-secondary" aria-label="" ng-click="removeProduct(product.id, $event)">
+                        <md-button class="md-fab md-mini md-secondary" aria-label="" ng-click="removeProductFromList(product.id, $event)">
                             <md-icon md-svg-src="{{icons.delete | trustUrl}}"></md-icon>
                         </md-button>
                     </md-list-item>
