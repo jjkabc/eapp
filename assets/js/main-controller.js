@@ -366,7 +366,7 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
         });
     };
    
-   $scope.showSimpleToast = function(message, parent_id) {
+   $rootScope.showSimpleToast = function(message, parent_id) {
         $mdToast.show(
           $mdToast.simple()
             .textContent(message)
