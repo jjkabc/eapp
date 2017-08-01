@@ -75,7 +75,7 @@
     <script src="http://<?php echo base_url("assets/js/angular-country-state.js")?>"></script>
     
     <!-- Main Script -->
-    <script src="http://<?php echo base_url("assets/js/main.js")?>"></script>
+    <script src="http://<?php echo base_url("assets/js/main-controller.js")?>"></script>
     
     <!-- Admin Script -->
     <script src="http://<?php echo base_url("assets/js/admin.js")?>"></script>
