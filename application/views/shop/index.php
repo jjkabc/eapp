@@ -16,6 +16,12 @@ and open the template in the editor.
             rootScope.$apply(function()
             {
                 rootScope.menu = "shop";
+				rootScope.searchText = "";
+				if(window.sessionStorage.getItem("searchText"))
+				{
+					rootScope.searchText = window.sessionStorage.getItem("searchText");
+					window.sessionStorage.removeItem("searchText");
+				}
             });
             
             var scope = angular.element($("#shop-container")).scope();
@@ -34,12 +40,8 @@ and open the template in the editor.
 				{
 					scope.category_id = parseInt(window.sessionStorage.getItem("category_id"));
 				}
-				if(window.sessionStorage.getItem("searchText"))
-				{
-					scope.query.filter = window.sessionStorage.getItem("searchText");
-					scope.searchText = window.sessionStorage.getItem("searchText");
-					window.sessionStorage.removeItem("searchText");
-				}
+				
+				scope.query.filter = scope.searchText;
 				
                 scope.getProducts();
             });
