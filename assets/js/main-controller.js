@@ -226,7 +226,7 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
             for(var i in $scope.loggedUser.grocery_list)
             {
                 $scope.currentProduct = $scope.loggedUser.grocery_list[i];
-                $scope.AddItemToList();
+                $scope.AddProductToList();
             }
         }
         
