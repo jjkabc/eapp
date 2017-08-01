@@ -165,13 +165,13 @@
                             <li><a href="http://<?php echo site_url("cart"); ?>"><i class="fa fa-user"></i>Mon panier</a></li>
                             <li ng-hide="isUserLogged"><a href="http://<?php echo site_url("account/login"); ?>"><i class="fa fa-user"></i>s'identifier</a></li>
                             <li ng-show="isUserLogged">
-                            <md-menu>
-				<a href md-menu-origin  ng-click="$mdMenu.open($event)" class="main-menu-item">Bonjour, {{loggedUser.profile.firstname}}</a>
-				<md-menu-content>
-                                    <md-menu-item><a href ng-click="logout()">Logout</a></md-menu-item>
-                                    <md-menu-item><a href="http://<?php echo site_url("account/account"); ?>">Mon Compte</a></md-menu-item>
-				</md-menu-content>
-			    </md-menu>
+								<md-menu>
+									<a href md-menu-origin  ng-click="$mdMenu.open($event)" class="main-menu-item">Bonjour, {{loggedUser.profile.firstname}}</a>
+									<md-menu-content>
+										<md-menu-item><a href ng-click="logout()">Logout</a></md-menu-item>
+										<md-menu-item><a href="http://<?php echo site_url("account/account"); ?>">Mon Compte</a></md-menu-item>
+									</md-menu-content>
+								</md-menu>
                             </li>
                         </ul>
                     </div>
@@ -244,7 +244,7 @@
                     <ul class="nav navbar-nav">
                         <li><a href="http://<?php echo site_url("home"); ?>">Accueil</a></li>
 			<li style="padding : 20px;">
-			    <md-menu>
+			    <md-menu  md-offset="0 80">
 				<a href md-menu-origin  ng-click="$mdMenu.open($event)" class="main-menu-item">Réduisez vos dépenses</a>
 				<md-menu-content>
                                     <md-menu-item><a href="http://<?php echo site_url("account/my_grocery_list"); ?>">Votre liste d'épicerie</a></md-menu-item>
@@ -256,7 +256,7 @@
                         <li><a href ng-click="gotoShop()">Trouvez un produit</a></li>
 			<li><a href="http://<?php echo site_url("cart"); ?>">Votre panier</a></li>
                         <li style="padding : 20px;">
-				<md-menu>
+				<md-menu  md-offset="0 80">
 					<a href md-menu-origin  ng-click="$mdMenu.open($event)" class="main-menu-item">Blogue</a>
 					<md-menu-content>
 					  	<md-menu-item><a href="http://<?php echo site_url("home/grocery_press"); ?>">Épicerie dans la presse</a></md-menu-item>
@@ -268,7 +268,7 @@
 				</md-menu>
 			 </li>
 			 <li style="padding : 20px;">
-				<md-menu>
+				<md-menu  md-offset="0 80">
 					<a href md-menu-origin ng-click="$mdMenu.open($event)" class="main-menu-item">Contact</a>
 					<md-menu-content>
 						<md-menu-item><a href="http://<?php echo site_url("home/contact"); ?>">Formulaire</a></md-menu-item>
