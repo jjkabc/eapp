@@ -219,10 +219,10 @@
         <div class="row">
             <form action="#">
                 <div class="col-md-11 single-sidebar">
-                    <input type="text" placeholder="Search products...">
+                    <input type="text" placeholder="Search products..." ng-model="searchText">
                 </div>
                 <div class="col-md-1">
-                    <input type="submit" value="Search">
+                    <input type="submit" value="Search" ng-click="searchProducts()">
                 </div>
             </form>
         </div>
