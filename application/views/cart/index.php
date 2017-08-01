@@ -28,16 +28,16 @@
                     <md-radio-button ng-value="true_value" ng-disabled="!isUserLogged">Votre liste prefere</md-radio-button>
                     <md-radio-button ng-value="false_value">Tout les magasins</md-radio-button>
                 </md-radio-group>
-
-                <md-slider-container style="width : 50%;">
-                    <md-slider min="1" max="50" ng-model="distance" aria-label="red" id="red-slider" >
+                
+                <div layout>
+                    <div flex="15" layout layout-align="center center">
+                      <span class="md-body-1">Distance {{distance}} Km</span>
+                    </div>
+                    <md-slider flex class="md-primary" md-discrete ng-model="distance" step="1" min="1" max="50" aria-label="Distance">
                     </md-slider>
-                    <md-input-container>
-                        <input type="number" ng-model="distance" ng-min="1" ng-max="50" aria-label="red" aria-controls="red-slider">
-                    </md-input-container>
-                    Km
-                </md-slider-container>
-                <md-button class="md-raised" ng-click="optimization_preference_changed()">Mettre à jour</md-button>
+                    <md-button class="md-raised" ng-click="optimization_preference_changed()">Mettre à jour</md-button>
+                </div>
+                
             </fieldset>
     	</md-content>
     </div>
@@ -56,7 +56,7 @@
                         <th md-column>Description du produit</th>
                         <th md-column md-numeric>Quantité</th>
                         <th md-column md-numeric>Total (CAD)</th>
-                        <th md-column><i class="fa fa-heart"></i></th>
+                        <th md-column  ng-show="isUserLogged"><i class="fa fa-heart"></i></th>
                         <th md-column>Coupon</th>
                     </tr>
                 </thead>
@@ -102,8 +102,8 @@
                             <span class="amount">CAD {{item.store_product.price * item.quantity | number : 2}} </span> 
                         </td>
 
-                        <td md-cell>
-                            <md-checkbox ng-model="item.is_favorite" aria-label="Add to my list">
+                        <td md-cell ng-show="isUserLogged">
+                            <md-checkbox ng-model="item.is_favorite" aria-label="Add to my list" ng-checked="inMyList(item.store_product.product.id)">
                             </md-checkbox>
                         </td>
 

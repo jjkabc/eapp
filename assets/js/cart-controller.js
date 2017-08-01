@@ -422,11 +422,27 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 	}
 	
 	return true;
-     }; 
+    };
+    
+    $rootScope.inMyList = function(product_id)
+    {
+        if($rootScope.isUserLogged)
+        {
+            for(var key in $rootScope.loggedUser.grocery_list)
+            {
+                if(parseInt($rootScope.loggedUser.grocery_list[key].id) === parseInt(product_id))
+                {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    };
      
- 	$rootScope.getUserCoordinates = function()
-	{
-		// Get the current geo location only if it's not yet the case
+    $rootScope.getUserCoordinates = function()
+    {
+        // Get the current geo location only if it's not yet the case
         if ('https:' == document.location.protocol && "geolocation" in navigator && !window.localStorage.getItem("longitude") && !window.localStorage.getItem("latitude")) 
         {
             navigator.geolocation.getCurrentPosition(function(position) 
@@ -438,11 +454,11 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
                 $rootScope.getCartContents();
             });
         }
-		else
-		{
-			$rootScope.getCartContents();
-		}
-	};
+        else
+        {
+                $rootScope.getCartContents();
+        }
+    };
          
     $rootScope.promptForZipCode = function(ev) 
     {
@@ -451,48 +467,48 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 
         if(!window.localStorage.getItem("longitude") && !window.localStorage.getItem("latitude"))
         {
-                // Appending dialog to document.body to cover sidenav in docs app
-                var confirm = $mdDialog.prompt()
-                  .title('Veillez entrer votre code postale. ')
-                  .textContent('Ceci vas aider a optimiser les resultats.')
-                  .placeholder('Votre Code Postale E.g. H1H 1H1')
-                  .ariaLabel('Code Postale')
-                  .initialValue('')
-                  .targetEvent(ev)
-                  .ok('Valider!')
-                  .cancel('Annuler');
+            // Appending dialog to document.body to cover sidenav in docs app
+            var confirm = $mdDialog.prompt()
+              .title('Veillez entrer votre code postale. ')
+              .textContent('Ceci vas aider a optimiser les resultats.')
+              .placeholder('Votre Code Postale E.g. H1H 1H1')
+              .ariaLabel('Code Postale')
+              .initialValue('')
+              .targetEvent(ev)
+              .ok('Valider!')
+              .cancel('Annuler');
 
-                $mdDialog.show(confirm).then(function(result) 
-                {
-                        var address = result;
-                        var geocoder = new google.maps.Geocoder();
-                        geocoder.geocode( { 'address': address}, function(results, status) 
-                        {
-                                if (status === google.maps.GeocoderStatus.OK) 
-                                {
-                                         $rootScope.latitude = results[0].geometry.location.lat();
-                                         $rootScope.longitude = results[0].geometry.location.lng();
-                                         window.localStorage.setItem("longitude", $rootScope.longitude);
-                                         window.localStorage.setItem("latitude", $rootScope.latitude);
-                                         $rootScope.getCartContents();
-                                }
-                                else
-                                {
-                                        $rootScope.getUserCoordinates();
-                                }
-                        });
+            $mdDialog.show(confirm).then(function(result) 
+            {
+                    var address = result;
+                    var geocoder = new google.maps.Geocoder();
+                    geocoder.geocode( { 'address': address}, function(results, status) 
+                    {
+                            if (status === google.maps.GeocoderStatus.OK) 
+                            {
+                                     $rootScope.latitude = results[0].geometry.location.lat();
+                                     $rootScope.longitude = results[0].geometry.location.lng();
+                                     window.localStorage.setItem("longitude", $rootScope.longitude);
+                                     window.localStorage.setItem("latitude", $rootScope.latitude);
+                                     $rootScope.getCartContents();
+                            }
+                            else
+                            {
+                                    $rootScope.getUserCoordinates();
+                            }
+                    });
 
 
-                }, function() 
-                {
-                        $rootScope.getUserCoordinates();
-                });
+            }, function() 
+            {
+                $rootScope.getUserCoordinates();
+            });
         }
         else
         {
-                $rootScope.getCartContents();
+            $rootScope.getCartContents();
         }
-  };
+    };
   
     $rootScope.getCartContents = function()
     {                
