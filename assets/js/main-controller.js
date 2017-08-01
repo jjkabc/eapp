@@ -183,7 +183,7 @@ eappApp.controller('HomeController', ["$scope", function($scope)
   
 }]);
 
-eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", function($scope, $http, $mdToast, $q) 
+eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$rootScope", function($scope, $http, $mdToast, $q, $rootScope) 
 {
     $scope.currentProduct = null;
     $scope.searchProductText = "";
@@ -344,7 +344,7 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", fu
         return result;
     };
     
-    $scope.saveMyList = function()
+    $rootScope.saveMyList = function()
     {
         var formData = new FormData();
         formData.append("my_list", JSON.stringify($scope.getProductList()));
