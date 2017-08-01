@@ -145,7 +145,7 @@
                     <tr>
                         <th><p>Distance</p></th>
                         <th ng-repeat="store in close_stores">
-                            <p> > {{store.distance}} Km</p>
+                            <p> > {{store.distance}} Km en voiture</p>
                         </th>
                     </tr>
 
