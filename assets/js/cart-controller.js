@@ -366,7 +366,7 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
         
         for(var key in $rootScope.cart)
 	{
-            if(parseInt($rootScope.cart[key].store_product.id) === parseInt(product_id))
+            if(parseInt($rootScope.cart[key].store_product.product_id) === parseInt(product_id))
             {
                 index = key;
                 break;
