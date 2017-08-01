@@ -185,10 +185,10 @@ eappApp.controller('HomeController', ["$scope", function($scope)
 
 eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$rootScope", function($scope, $http, $mdToast, $q, $rootScope) 
 {
-    $scope.currentProduct = null;
+    $rootScope.currentProduct = null;
     $scope.searchProductText = "";
     $scope.myCategories = [];
-	$scope.maxNumItems = 50;
+    $scope.maxNumItems = 50;
 	
     $scope.querySearch = function(searchProductText)
     {
@@ -234,7 +234,7 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
         
     };
 	
-    $scope.AddItemToList = function()
+    $rootScope.AddItemToList = function()
     {
         if($scope.currentProduct != null &&  $scope.my_list_count() < $scope.maxNumItems)
         {
