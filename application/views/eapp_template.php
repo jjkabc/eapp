@@ -181,15 +181,6 @@
                     <div class="header-right">
                         <ul class="list-unstyled list-inline">
                             <li class="dropdown dropdown-small">
-                                <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span class="key">Devise :</span><span class="value">USD </span><b class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">USD</a></li>
-                                    <li><a href="#">INR</a></li>
-                                    <li><a href="#">GBP</a></li>
-                                </ul>
-                            </li>
-
-                            <li class="dropdown dropdown-small">
                                 <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span class="key">Langue :</span><span class="value">Anglais </span><b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="#">Anglais</a></li>
