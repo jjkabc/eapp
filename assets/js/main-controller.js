@@ -234,7 +234,7 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
         
     };
 	
-    $rootScope.AddItemToList = function()
+    $rootScope.AddProductToList = function()
     {
         if($scope.currentProduct != null &&  $scope.my_list_count() < $scope.maxNumItems)
         {
@@ -274,7 +274,7 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
         }
     };
     
-    $scope.removeProduct = function(product_id, $event)
+    $rootScope.removeProductFromList = function(product_id, $event)
     {
         for(var index in $scope.myCategories)
         {
