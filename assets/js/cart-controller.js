@@ -349,13 +349,13 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
         var rowid = -1;
         
         for(var key in $rootScope.cart)
-	{
-            if(parseInt($rootScope.cart[key].store_product.id) === parseInt(product_id))
+		{
+            if(parseInt($rootScope.cart[key].store_product.product_id) === parseInt(product_id))
             {
                 rowid = $rootScope.cart[key].rowid;
                 break;
             }
-	}
+		}
         
         return rowid;
     };
