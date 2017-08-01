@@ -544,5 +544,17 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 		$rootScope.saveMyList();
 	};
 	
+	$rootScope.favoriteChanged = function(product)
+	{
+		if(product.favorite)
+		{
+			$rootScope.addToMyList(product);
+		}
+		else
+		{
+			$rootScope.removeFromMyList(product);
+		}
+	};
+	
 	
 }]);
