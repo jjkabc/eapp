@@ -188,6 +188,7 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", fu
     $scope.currentProduct = null;
     $scope.searchProductText = "";
     $scope.myCategories = [];
+	$scope.maxNumItems = 50;
 	
     $scope.querySearch = function(searchProductText)
     {
@@ -235,7 +236,7 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", fu
 	
     $scope.AddItemToList = function()
     {
-        if($scope.currentProduct != null)
+        if($scope.currentProduct != null &&  $scope.my_list_count() < $scope.maxNumItems)
         {
             var product = $scope.currentProduct;
             product.quantity = 1;
