@@ -191,13 +191,8 @@ class CI_Model {
         if($store_product != null)
         {
             // Get associated product
-            $store_product->product = $this->get(PRODUCT_TABLE, $store_product->product_id);
+            $store_product->product = $this->get_product($store_product->product_id);
             
-            $product_image_path = ASSETS_DIR_PATH."img/products/".$store_product->product->image;
-            if(!file_exists($product_image_path) || empty($store_product->product->image))
-            {
-                $store_product->product->image = "no_image_available.png";
-            }
             
             // Get product store
             $store_product->retailer = $this->get(CHAIN_TABLE, $store_product->retailer_id);
@@ -209,20 +204,9 @@ class CI_Model {
             // Get product unit
             $store_product->unit = $this->get(UNITS_TABLE, $store_product->unit_id);
             // Get subcategory
-            if($store_product->product != null)
+            if($store_product->product != null && $includeRelatedProducts)
             {
-                $store_product->subcategory = $this->get(SUB_CATEGORY_TABLE, $store_product->product->subcategory_id);
-                // Get category
-                if($store_product->subcategory != null)
-                {
-                    $store_product->category = $this->get(CATEGORY_TABLE, $store_product->subcategory->product_category_id);
-                }
-                // Get associated store products
-                if($includeRelatedProducts)
-                {
-                    $store_product->related_products = $this->get_related_products($store_product);
-                }
-                
+                $store_product->related_products = $this->get_related_products($store_product);
             }
         }
         

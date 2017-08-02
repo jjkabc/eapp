@@ -332,12 +332,12 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
         {
             for(var i in $scope.myCategories[index].products)
             {
-				var data = 
-				{
-					id : $scope.myCategories[index].products[i].id,
-					quantity : $scope.myCategories[index].products[i].quantity
-				};    
-                result.push($scope.myCategories[index].products[i].id);
+                var data = 
+                {
+                        id : $scope.myCategories[index].products[i].id,
+                        quantity : $scope.myCategories[index].products[i].quantity
+                };    
+                result.push(data);
             }
         }
         

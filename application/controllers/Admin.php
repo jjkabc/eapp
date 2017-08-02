@@ -141,6 +141,8 @@ class Admin extends CI_Controller
                     'organic' => 0,
                     'in_flyer' => 0,
 		    'retailer_id' => 1,
+                    'country' => 'Canada',
+                    'state' => 'Quebec',
                     'format' => '1x1',
                     'quantity' => '1',
                     'period_from' => date("Y-m-d"),
@@ -166,8 +168,8 @@ class Admin extends CI_Controller
 	
     public function delete_store_product()
     {
-            $id = $this->input->post('id');
-            $this->admin_model->delete(STORE_PRODUCT_TABLE, $id);
+        $id = $this->input->post('id');
+        $this->admin_model->delete(STORE_PRODUCT_TABLE, $id);
     }
     
     public function store_products() 

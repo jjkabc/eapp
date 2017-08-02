@@ -33,7 +33,7 @@ $(document).ready(function(){
                             <!-- -->
                             <md-input-container class="md-block col-md-6" flex-gt-sm>
                                 <label>Prenom</label>
-                                <md-icon style="background: #1abc9c;" md-svg-src="{{icons.person | trustUrl}}"></md-icon>
+                                <md-icon style="color: #1abc9c;"><i class="material-icons">person</i></md-icon>
                                 <input name="firstname" ng-model="user.firstname" />
                             </md-input-container>
                             
@@ -51,7 +51,7 @@ $(document).ready(function(){
 
                             <md-input-container class="md-block col-md-12" flex-gt-sm>
                                 <label>Adresse</label>
-                                <md-icon style="background: #1abc9c;" md-svg-src="{{icons.place | trustUrl}}"></md-icon>
+                                <md-icon style="color: #1abc9c;"><i class="material-icons">place</i></md-icon>
                                 <input required name="address" ng-model="user.address" />
                                 <div ng-messages="signupForm.address.$error">
                                     <div ng-message="required">Vous devez entrer une adresse</div>
@@ -75,7 +75,7 @@ $(document).ready(function(){
 
                             <md-input-container class="md-block col-md-6" flex-gt-sm>
                                 <label>Numbero de telephone principale</label>
-                                <md-icon style="background: #1abc9c;" md-svg-src="{{icons.phone | trustUrl}}"></md-icon>
+                                <md-icon style="color: #1abc9c;"><i class="material-icons">local_phone</i></md-icon>
                                 <input name="phone1" ng-model="user.phone1" />
                             </md-input-container>
 
@@ -92,7 +92,7 @@ $(document).ready(function(){
 
                             <md-input-container class="md-block col-md-12" flex-gt-sm>
                                 <label>Email</label>
-                                <md-icon style="background: #1abc9c;" md-svg-src="{{icons.email | trustUrl}}"></md-icon>
+                                <md-icon style="color: #1abc9c;"><i class="material-icons">email</i></md-icon>
                                 <input style="border-left: none; border-top: none; border-right: none;" type="email" required name="email" ng-model="user.email" />
                                 <div ng-messages="signupForm.email.$error">
                                     <div ng-message="email">Entrez un email valide.</div>
@@ -102,7 +102,7 @@ $(document).ready(function(){
 
                             <md-input-container class="md-block col-md-6" flex-gt-sm>
                                 <label>Mot de passe</label>
-                                <md-icon style="background: #1abc9c;" md-svg-src="{{icons.lock | trustUrl}}"></md-icon>
+                                <md-icon style="color: #1abc9c;"><i class="material-icons">lock</i></md-icon>
                                 <input style="border-left : none; border-right : none;border-top : none;" type="password" required name="password" ng-model="user.password" equals="{{user.confirm_password}}" ng-pattern="/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/" />
                                 <div ng-messages="signupForm.password.$error">
                                     <div ng-message="required">Un mot de passe est requis.</div>

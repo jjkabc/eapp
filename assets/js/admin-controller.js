@@ -4,7 +4,51 @@
  * and open the template in the editor.
  */
 
-angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$http", "notifications", "$q", function($scope, Form, $http, notifications, $q) {
+angular.module("eappApp").directive('apsUploadFile', apsUploadFile);
+
+function apsUploadFile() {
+  var directive = {
+    restrict: 'E',
+    template: '<input id="fileInput" type="file" style="" class="ng-hide"> <md-button id="uploadButton" class="md-raised md-primary" aria-label="attach_file">    Choose file </md-button><md-input-container  md-no-float>    <input id="textInput" ng-model="fileName" type="text" placeholder="No file chosen" ng-readonly="true"></md-input-container>',
+    link: apsUploadFileLink
+  };
+  return directive;
+}
+
+function apsUploadFileLink(scope, element, attrs) 
+{
+    var input = $(element[0].querySelector('#fileInput'));
+    var button = $(element[0].querySelector('#uploadButton'));
+    var textInput = $(element[0].querySelector('#textInput'));
+
+    if (input.length && button.length && textInput.length) 
+    {
+      button.click(function(e) 
+      {
+          input.click();
+      });
+      textInput.click(function(e) 
+      {
+          input.click();
+      });
+    }
+    
+    input.on('change', function(e) 
+    {
+        var files = e.target.files;
+        if (files[0]) 
+        {
+            scope.fileName = files[0].name;
+        } 
+        else 
+        {
+            scope.fileName = null;
+        }
+        scope.$apply();
+    });
+}
+
+angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$http", "notifications", "$q", "$mdDialog", function($scope, Form, $http, notifications, $q, $mdDialog) {
       
     $scope.selectedProduct = null;
     $scope.searchProductText = "";
@@ -65,29 +109,58 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
 
     };
     
-    $scope.createNewBrand = function(brand_name)
+    $scope.createNewBrand = function(ev, brand_name)
     {
+        
+        $mdDialog.show({
+            controller: DialogController,
+            templateUrl: '../../assets/templates/create-new-brand.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose:true,
+            fullscreen: false //
+          })
+          .then(function(answer) {
+            $scope.status = 'You said the information was "' + answer + '".';
+          }, function() {
+            $scope.status = 'You cancelled the dialog.';
+          });
+        
+        
         //upload the image here
-        var formData = new FormData();
+        //var formData = new FormData();
         
-        formData.append("name", brand_name);
+        //formData.append("name", brand_name);
         
-        $http.post("http://" + $scope.site_url.concat("/admin/create_new_brand"), formData, {
-            transformRequest: angular.identity,
-            headers: {'Content-Type': undefined}
-        }).then(function(result)
-        {
-		if(result.data.success)
-		{
-			$scope.brands[result.data] = { id : result.data.id, name : brand_name } ;
-            
-            		notifications.showSuccess(result.data.message);
-		}
-            
-            // do sometingh                   
-        },function(err){
-            // do sometingh
-        });
+//        $http.post("http://" + $scope.site_url.concat("/admin/create_new_brand"), formData, {
+//            transformRequest: angular.identity,
+//            headers: {'Content-Type': undefined}
+//        }).then(function(result)
+//        {
+//            if(result.data.success)
+//            {
+//                $scope.brands[result.data] = { id : result.data.id, name : brand_name } ;
+//                notifications.showSuccess(result.data.message);
+//            }
+//            // do sometingh                   
+//        },function(err){
+//            // do sometingh
+//        });
+    };
+    
+    function DialogController($scope, $mdDialog) 
+    {
+        $scope.hide = function() {
+          $mdDialog.hide();
+        };
+
+        $scope.cancel = function() {
+          $mdDialog.cancel();
+        };
+
+        $scope.answer = function(answer) {
+          $mdDialog.hide(answer);
+        };
     };
 	
     $scope.createNewProduct = function(product_name)

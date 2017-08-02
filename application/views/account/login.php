@@ -35,7 +35,7 @@ $(document).ready(function(){
                 
                 <md-input-container class="md-block col-md-12" flex-gt-sm>
                     <label>Email</label>
-                    <md-icon style="background-color: #1abc9c; " md-svg-src="{{icons.email | trustUrl}}"></md-icon>
+                    <md-icon style="color: #1abc9c;"><i class="material-icons">email</i></md-icon>
                     <input required name="email" ng-model="user.email" />
                     <div ng-messages="loginForm.email.$error">
                         <div ng-message="required">Veillez entrer votre addresse email.</div>
@@ -44,7 +44,7 @@ $(document).ready(function(){
                 
                 <md-input-container class="md-block col-md-12" flex-gt-sm>
                     <label>Mot de passe</label>
-                    <md-icon style="background: #1abc9c;" md-svg-src="{{icons.lock | trustUrl}}"></md-icon>
+                    <md-icon style="color: #1abc9c;"><i class="material-icons">lock</i></md-icon>
                     <input style="border-left : none; border-right : none;border-top : none;" type="password" required name="password" ng-model="user.password" />
                     <div ng-messages="loginForm.password.$error">
                         <div ng-message="required">Veillez entrer un mot de passe.</div>

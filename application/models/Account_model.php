@@ -80,8 +80,8 @@ class Account_model extends CI_Model
             
             foreach ($product_list as $item) 
             {
-				$product = $this->get_product($item->id);
-				$product->quantity = $item->quantity;
+                $product = $this->get_product($item->id);
+                $product->quantity = $item->quantity;
                 array_push($user_account->grocery_list, $product);
             }
         }

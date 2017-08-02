@@ -31,7 +31,7 @@
                 
                 <div layout>
                     <div flex="15" layout layout-align="center center">
-                      <span class="md-body-1">Distance {{distance}} Km</span>
+                      <span class="md-body-1">Distance : {{distance}} Km</span>
                     </div>
                     <md-slider flex class="md-primary" md-discrete ng-model="distance" step="1" min="1" max="50" aria-label="Distance">
                     </md-slider>
@@ -103,7 +103,7 @@
                         </td>
 
                         <td md-cell ng-show="isUserLogged">
-                            <md-checkbox ng-model="item.store_product.product.favorite" ng-true-value="true_value" ng-false-value="false_value" aria-label="Add to my list" ng-checked="inMyList(item.store_product.product.id)" ng-change="favoriteChanged(item.store_product.product)">
+                            <md-checkbox ng-model="item.store_product.product.favorite" aria-label="Add to my list" ng-checked="inMyList(item.store_product.product.id)" ng-change="favoriteChanged(item.store_product.product)">
                             </md-checkbox>
                         </td>
 
@@ -120,7 +120,7 @@
 
     <div id="store-optimization-container" class="eapp-container" ng-hide="viewing_cart_optimization.value">
         <!-- Store Optimizations -->
-        <md-content layout-padding ng-hide="close_stores.length == 0">
+        <md-content layout-padding ng-hide="close_stores.length == 0 && !loading_store_products">
             <table class="table table-condensed" style="table-layout: fixed;">
                 <md-progress-linear md-mode="indeterminate" ng-disabled="!loading_store_products"></md-progress-linear>
                 <thead>
@@ -181,7 +181,7 @@
             </table>
         </md-content>
 		
-		<md-content layout-padding ng-show="close_stores.length == 0">
+		<md-content layout-padding ng-show="close_stores.length == 0 && !loading_store_products">
 			<p>Aucun résultat trouvé pour la liste des produits.</p>
 		</md-content>
     </div>
