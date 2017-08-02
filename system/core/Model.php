@@ -226,6 +226,18 @@ class CI_Model {
         
         return $result;
     }
+	
+	public function get_products()
+	{
+		$products = $this->get_all(PRODUCT_TABLE);
+		
+		foreach($products as $product)
+		{
+		
+		}
+		
+		return $products;
+	}
         
     /**
      * This method gets the other store products related to this store product
