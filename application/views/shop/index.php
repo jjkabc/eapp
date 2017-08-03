@@ -7,7 +7,7 @@ and open the template in the editor.
 <!-- Main Script -->
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <!-- Animate CSS -->
-<link rel="stylesheet" href="http://<?php echo base_url("assets/css/shop.css")?>">
+<link rel="stylesheet" href="<?php echo base_url("assets/css/shop.css")?>">
 
 <script>
 	$(document).ready(function()

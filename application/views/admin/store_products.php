@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 
 <!-- Main Script -->
-<script src="http://<?php echo base_url("assets/js/admin-controller.js")?>"></script>
+<script src="<?php echo base_url("assets/js/admin-controller.js")?>"></script>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<link rel="stylesheet" href="http://<?php echo base_url("assets/css/shop.css")?>">
+<link rel="stylesheet" href="<?php echo base_url("assets/css/shop.css")?>">
 
 <script>
     $(document).ready(function()
@@ -37,9 +37,9 @@
                 </div> 
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li><a  href="http://<?php echo site_url("admin/uploads"); ?>">Uploads</a></li>
-                        <li><a href="http://<?php echo site_url("admin/create_store_product"); ?>">Create Product</a></li>
-                        <li class="active"><a href="http://<?php echo site_url("admin/store_products"); ?>">View Products</a></li>
+                        <li><a  href="<?php echo site_url("admin/uploads"); ?>">Uploads</a></li>
+                        <li><a href="<?php echo site_url("admin/create_store_product"); ?>">Create Product</a></li>
+                        <li class="active"><a href="<?php echo site_url("admin/store_products"); ?>">View Products</a></li>
                     </ul>
                 </div>
             </div>
@@ -102,11 +102,11 @@
                     </td>
 
                     <td md-cell>
-                        <div class="admin-image"><a href=""><img alt="" ng-src="http://<?php echo base_url("assets/img/stores/"); ?>{{retailers[store_product.retailer_id].image}}" ></a></div>
+                        <div class="admin-image"><a href=""><img alt="" ng-src="<?php echo base_url("assets/img/stores/"); ?>{{retailers[store_product.retailer_id].image}}" ></a></div>
                     </td>
 
                     <td md-cell>
-                        <div class="admin-image"><a href=""><img alt="" ng-src="http://<?php echo base_url("assets/img/products/"); ?>{{products[store_product.product_id].image}}" ></a></div>
+                        <div class="admin-image"><a href=""><img alt="" ng-src="<?php echo base_url("assets/img/products/"); ?>{{products[store_product.product_id].image}}" ></a></div>
                     </td>
 
                     <td md-cell width="100%">
@@ -133,7 +133,7 @@
                     </td>
 
                     <td md-cell>
-                        <a ng-href="http://<?php echo site_url("admin/create_store_product"); ?>/{{store_product.id}}">Edit</a> 
+                        <a ng-href="<?php echo site_url("admin/create_store_product"); ?>/{{store_product.id}}">Edit</a> 
                     </td>
                 </tr>
             </tbody>

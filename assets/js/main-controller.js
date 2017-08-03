@@ -196,7 +196,7 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
         var formData = new FormData();
         formData.append("name", searchProductText);
 
-        $http.post("http://" + $scope.site_url.concat("/admin/searchProducts"), formData, {
+        $http.post( $scope.site_url.concat("/admin/searchProducts"), formData, {
                 transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}
         }).then(function(response)
@@ -349,7 +349,7 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
         var formData = new FormData();
         formData.append("my_list", JSON.stringify($scope.getProductList()));
         // Send request to server to get optimized list 	
-        $http.post("http://"+ $scope.site_url.concat("/account/save_user_list"), 
+        $http.post( $scope.site_url.concat("/account/save_user_list"), 
         formData, { transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(
         function(response)
         {
@@ -380,16 +380,16 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
     {
         $scope.icons = 
         {
-            person : "http://" + $scope.base_url + "/assets/icons/ic_person_white_24px.svg",
-            flag : "http://" + $scope.base_url + "/assets/icons/ic_flag_white_24px.svg",
-            place : "http://" + $scope.base_url + "/assets/icons/ic_place_white_24px.svg",
-            phone : "http://" + $scope.base_url + "/assets/icons/ic_local_phone_white_24px.svg",
-            email : "http://" + $scope.base_url + "/assets/icons/ic_email_white_24px.svg",
-            lock : "http://" + $scope.base_url + "/assets/icons/ic_lock_white_24px.svg",
-            favorite : "http://" + $scope.base_url + "/assets/icons/ic_favorite_white_24px.svg",
-            delete : "http://" + $scope.base_url + "/assets/icons/ic_delete_white_24px.svg",
-            add : "http://" + $scope.base_url + "/assets/icons/ic_add_circle_white_24px.svg",
-            search : "http://" + $scope.base_url + "/assets/icons/ic_search_black_24px.svg",
+            person :  $scope.base_url + "/assets/icons/ic_person_white_24px.svg",
+            flag :  $scope.base_url + "/assets/icons/ic_flag_white_24px.svg",
+            place :  $scope.base_url + "/assets/icons/ic_place_white_24px.svg",
+            phone :  $scope.base_url + "/assets/icons/ic_local_phone_white_24px.svg",
+            email :  $scope.base_url + "/assets/icons/ic_email_white_24px.svg",
+            lock :  $scope.base_url + "/assets/icons/ic_lock_white_24px.svg",
+            favorite :  $scope.base_url + "/assets/icons/ic_favorite_white_24px.svg",
+            delete :  $scope.base_url + "/assets/icons/ic_delete_white_24px.svg",
+            add :  $scope.base_url + "/assets/icons/ic_add_circle_white_24px.svg",
+            search :  $scope.base_url + "/assets/icons/ic_search_black_24px.svg",
         };
     };
     
@@ -473,7 +473,7 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
             formData.append("selected_retailers", JSON.stringify($scope.selected_retailers));
             formData.append("email", $scope.registered_email);
             // Send request to server to get optimized list 	
-            $http.post("http://"+ $scope.site_url.concat("/account/submit_favorite_stores"), 
+            $http.post( $scope.site_url.concat("/account/submit_favorite_stores"), 
             formData, { transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(
             function(response)
             {
@@ -481,7 +481,7 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
                 {
                     // redirect to login. 
                     window.sessionStorage.setItem("accountCreated", "Votre compte a été créé avec succès.");
-                    window.location = "http://" + $scope.site_url.concat("/account/login");
+                    window.location =  $scope.site_url.concat("/account/login");
                 }
                 else
                 {
@@ -520,7 +520,7 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
 	    
 
             $http.post(
-                "http://" + $scope.site_url.concat("/account/registration"),formData,
+                 $scope.site_url.concat("/account/registration"),formData,
                 {
                         transformRequest: angular.identity,
                         headers: {'Content-Type': undefined}
@@ -533,7 +533,7 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
                             {
                                 window.sessionStorage.setItem("registered_email", $scope.user.email);
                                 // Redirect to select store page.
-                                window.location = "http://" + $scope.site_url.concat("/account/select_store");
+                                window.location =  $scope.site_url.concat("/account/select_store");
                             }
 
                             if(!result.data.success)
@@ -563,14 +563,14 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
             formData.append("password", $scope.user.password);
             formData.append("rememberme", $scope.user.rememberme ? 1 : 0);
             // Send request to server to get optimized list 	
-            $http.post("http://"+ $scope.site_url.concat("/account/perform_login"), 
+            $http.post( $scope.site_url.concat("/account/perform_login"), 
             formData, { transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(
             function(response)
             {
                 if(response.data.success)
                 {
                     // redirect to home page. 
-                    window.location = "http://" + $scope.site_url.concat("/" + response.data.redirect);
+                    window.location =  $scope.site_url.concat("/" + response.data.redirect);
                 }
                 else
                 {
@@ -583,12 +583,12 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
     $scope.logout = function()
     {
         // Send request to server to get optimized list 	
-        $http.post("http://"+ $scope.site_url.concat("/account/logout"), 
+        $http.post( $scope.site_url.concat("/account/logout"), 
         null, { transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(
         function(response)
         {
             // redirect to home page. 
-            window.location = "http://" + $scope.site_url.concat("/home");
+            window.location =  $scope.site_url.concat("/home");
             
         });
     };

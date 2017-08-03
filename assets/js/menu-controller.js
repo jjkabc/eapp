@@ -15,7 +15,7 @@ angular.module("eappApp").controller("MenuController", ["$rootScope", "$http", "
     {
         window.sessionStorage.removeItem("store_id");
         window.sessionStorage.removeItem("category_id");
-        window.location = "http://" + $rootScope.site_url.concat("/shop");
+        window.location =  $rootScope.site_url.concat("/shop");
     };
 
 	

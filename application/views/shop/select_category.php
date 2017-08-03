@@ -13,7 +13,7 @@ $(document).ready(function(){
 <!-- Main Script -->
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <!-- Animate CSS -->
-<link rel="stylesheet" href="http://<?php echo base_url("assets/css/shop.css")?>">
+<link rel="stylesheet" href="<?php echo base_url("assets/css/shop.css")?>">
 
 <div id="admin-container" class="container" ng-controller="ShopController">    
 
@@ -27,7 +27,7 @@ $(document).ready(function(){
                     <div class="col-md-2" style="padding-top:40px;">
                         <label class="btn item-block">
                             <md-tooltip md-direction="top">{{category.name}}</md-tooltip>
-                            <img  ng-click="select_category($event)" id="{{category.id}}" ng-src="http://<?php echo base_url("assets/img/categories/"); ?>{{category.image}}" alt="{{category.name}}" class="img-thumbnail img-check">
+                            <img  ng-click="select_category($event)" id="{{category.id}}" ng-src="<?php echo base_url("assets/img/categories/"); ?>{{category.image}}" alt="{{category.name}}" class="img-thumbnail img-check">
                             <input type="checkbox" name="category_{{category.id}}" value="{{category.id}}" class="hidden" autocomplete="off">
                         </label>
                     </div>

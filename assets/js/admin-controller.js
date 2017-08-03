@@ -60,7 +60,7 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
 	var formData = new FormData();
 	formData.append("name", searchProductText);
 
-	$http.post("http://" + $scope.site_url.concat("/admin/searchProducts"), formData, {
+	$http.post($scope.site_url.concat("/admin/searchProducts"), formData, {
 	    transformRequest: angular.identity,
 	    headers: {'Content-Type': undefined}
 	}).then(function(response)
@@ -102,7 +102,7 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
             return;
         }
         
-        var image_url = "http://" + $scope.base_url.concat("/assets/img/products/") + item.image;
+        var image_url = $scope.base_url.concat("/assets/img/products/") + item.image;
         
         $scope.api.removeAll();
         
@@ -119,7 +119,7 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
         
         if(brand.image !== null && brand.image !== '' && typeof brand.image !== 'undefined' && brand.image !== 'no_image_available.png')
         {
-            var image_url = "http://" + $scope.base_url.concat("/assets/img/brands/") + brand.image;
+            var image_url = $scope.base_url.concat("/assets/img/brands/") + brand.image;
         
             $scope.api.removeAll();
 
@@ -131,7 +131,7 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
     {
         $mdDialog.show({
             controller: DialogController,
-            templateUrl: 'http://' + $scope.base_url + 'assets/templates/create-new-brand.html',
+            templateUrl:  $scope.base_url + 'assets/templates/create-new-brand.html',
             parent: angular.element(document.body),
             targetEvent: ev,
             clickOutsideToClose:true,
@@ -171,7 +171,7 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
                     }
                 });
                 
-                $http.post("http://" + $scope.site_url.concat("/admin/create_product_brand"), formData, {transformRequest: angular.identity,
+                $http.post($scope.site_url.concat("/admin/create_product_brand"), formData, {transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}}).then(
                 function(result)
                 {
@@ -221,7 +221,7 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
                     }
                 });
                 
-                $http.post("http://" + $scope.site_url.concat("/admin/create_product"), formData, {transformRequest: angular.identity,
+                $http.post($scope.site_url.concat("/admin/create_product"), formData, {transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}}).then(
                 function(result)
                 {
@@ -248,7 +248,7 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
     {
         $mdDialog.show({
             controller: CreateProductController,
-            templateUrl: 'http://' + $scope.base_url + 'assets/templates/create-new-product.html',
+            templateUrl:  $scope.base_url + 'assets/templates/create-new-product.html',
             parent: angular.element(document.body),
             targetEvent: ev,
             clickOutsideToClose:true,
@@ -270,15 +270,15 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
         
         if($scope.continue)
         {
-            redirect_url = "http://" + $scope.site_url.concat("/admin/create_store_product");
+            redirect_url = $scope.site_url.concat("/admin/create_store_product");
             redirect_url = redirect_url.concat("#admin-container");
         }
         else
         {
-            redirect_url = "http://" + $scope.site_url.concat("/admin/store_products");
+            redirect_url =  $scope.site_url.concat("/admin/store_products");
         }
         
-        var url = "http://" + $scope.site_url.concat("/admin/create_store_product");
+        var url = $scope.site_url.concat("/admin/create_store_product");
         var form = document.getElementById("create_store_product_form");
         var formData = new FormData(form);
         // Manually add organic and in flyer form fields
@@ -341,7 +341,7 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
                 formData.append("product_id", $scope.selectedProduct.id);
                 formData.append("brand", $scope.store_product.brand);
 
-                $http.post("http://" + $scope.site_url.concat("/admin/upload_product_image"), formData, {}).then(
+                $http.post($scope.site_url.concat("/admin/upload_product_image"), formData, {}).then(
                 function(result)
                 {
                     if(result.data.success)
@@ -419,7 +419,7 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
     
     $scope.create_store = function()
     {
-        var url = "http://" + $scope.site_url.concat("/admin/create_store");
+        var url =  $scope.site_url.concat("/admin/create_store");
         var form = document.getElementById("create_store_form");
         var formData = new FormData(form);
         Form.postForm(formData, url, null);
@@ -427,7 +427,7 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
     
     $scope.upload_products = function()
     {
-        var url = "http://" + $scope.site_url.concat("/admin/upload_products");
+        var url = $scope.site_url.concat("/admin/upload_products");
         var form = document.getElementById("upload_products_form");
         var formData = new FormData(form);
         Form.postForm(formData, url, null);
@@ -435,7 +435,7 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
     
     $scope.upload_chains = function()
     {
-        var url = "http://" + $scope.site_url.concat("/admin/upload_chains");
+        var url = $scope.site_url.concat("/admin/upload_chains");
         var form = document.getElementById("upload_chains_form");
         var formData = new FormData(form);
         Form.postForm(formData, url, null);
@@ -443,7 +443,7 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
     
     $scope.upload_stores = function()
     {
-        var url = "http://" + $scope.site_url.concat("/admin/upload_stores");
+        var url = $scope.site_url.concat("/admin/upload_stores");
         var form = document.getElementById("upload_stores_form");
         var formData = new FormData(form);
         Form.postForm(formData, url, null);
@@ -451,7 +451,7 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
     
     $scope.upload_categories = function()
     {
-        var url = "http://" + $scope.site_url.concat("/admin/upload_categories");
+        var url = $scope.site_url.concat("/admin/upload_categories");
         var form = document.getElementById("upload_categories_form");
         var formData = new FormData(form);
         Form.postForm(formData, url, null);  
@@ -459,7 +459,7 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
     
     $scope.upload_subcategories = function()
     {
-        var url = "http://" + $scope.site_url.concat("/admin/upload_subcategories");
+        var url = $scope.site_url.concat("/admin/upload_subcategories");
         var form = document.getElementById("upload_categories_form");
         var formData = new FormData(form);
         Form.postForm(formData, url, null);  
@@ -467,7 +467,7 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
     
     $scope.upload_units = function()
     {
-        var url = "http://" + $scope.site_url.concat("/admin/upload_units");
+        var url = $scope.site_url.concat("/admin/upload_units");
         var form = document.getElementById("upload_units_form");
         var formData = new FormData(form);
         Form.postForm(formData, url, null);  
@@ -530,7 +530,7 @@ angular.module("eappApp").controller('ProductsTableController', ['$scope', '$q',
 
         formData.append("id", store_product_id);
 
-        $scope.promise = $http.post("http://"+ $scope.site_url.concat("/admin/delete_store_product"), formData, {
+        $scope.promise = $http.post( $scope.site_url.concat("/admin/delete_store_product"), formData, {
                         transformRequest: angular.identity,
                         headers: {'Content-Type': undefined}});
 
@@ -555,7 +555,7 @@ angular.module("eappApp").controller('ProductsTableController', ['$scope', '$q',
         formData.append("limit", $scope.query.limit);
         formData.append("filter", $scope.query.filter);
         formData.append("order", $scope.query.order);
-        $scope.promise = $http.post("http://"+ $scope.site_url.concat("/admin/get_store_products"), formData, {
+        $scope.promise = $http.post( $scope.site_url.concat("/admin/get_store_products"), formData, {
                 transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}});
 

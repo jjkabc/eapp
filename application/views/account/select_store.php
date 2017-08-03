@@ -15,7 +15,7 @@ $(document).ready(function(){
         else
         {
             // redirect to home page
-            window.location = "http://" + scope.site_url.concat("/home");
+            window.location = scope.site_url.concat("/home");
         }
     });
 })
@@ -37,7 +37,7 @@ $(document).ready(function(){
                                         <div class="col-md-2" style="padding-top:25px;">
                                             <label  class="btn item-block">
                                                 <md-tooltip md-direction="top">{{store.name}}</md-tooltip>
-                                                <img  ng-click="select_retailer($event)" id="{{store.id}}" ng-src="http://<?php echo base_url("assets/img/stores/"); ?>{{store.image}}" alt="{{store.name}}" class="img-thumbnail img-check">
+                                                <img  ng-click="select_retailer($event)" id="{{store.id}}" ng-src="<?php echo base_url("assets/img/stores/"); ?>{{store.image}}" alt="{{store.name}}" class="img-thumbnail img-check">
                                                 <input type="checkbox" name="store_{{store.id}}" value="{{store.id}}" class="hidden" autocomplete="off">
                                             </label>
                                         </div>

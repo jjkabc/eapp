@@ -68,7 +68,7 @@
                         </td>
 
                         <td md-cell>
-                            <a href><img alt="poster_1_up" class="admin-image" ng-src="http://{{base_url}}/assets/img/stores/{{item.store_product.retailer.image}}" ></a>
+                            <a href><img alt="poster_1_up" class="admin-image" ng-src="{{base_url}}/assets/img/stores/{{item.store_product.retailer.image}}" ></a>
                         </td>
 
                         <td md-cell>
@@ -83,7 +83,7 @@
                         </td>
 
                         <td md-cell>
-                            <a href><img alt="poster_1_up" class="admin-image" ng-src="http://{{base_url}}/assets/img/products/{{item.product.image}}"></a>
+                            <a href><img alt="poster_1_up" class="admin-image" ng-src="{{base_url}}/assets/img/products/{{item.product.image}}"></a>
                         </td>
 
                         <td md-cell>
@@ -133,7 +133,7 @@
                     <tr>
                         <th></th>
                         <th ng-repeat="store in close_stores">
-                            <img class="admin-image" ng-src="http://{{base_url}}/assets/img/stores/{{store.store.chain.image}}" />
+                            <img class="admin-image" ng-src="{{base_url}}/assets/img/stores/{{store.store.chain.image}}" />
                         </th>
                     </tr>
                     <tr>
@@ -153,7 +153,7 @@
                 <tbody id="store-cart-tbody">
                     <tr ng-repeat="product in cart">
                         <td>
-                            <img class="admin-image" ng-src="http://{{base_url}}/assets/img/products/{{product.product.image}}" />
+                            <img class="admin-image" ng-src="{{base_url}}/assets/img/products/{{product.product.image}}" />
                             <p style="width : auto;">{{product.product.name}}</p>
                             <md-input-container class='col-sm-6'>
                                 <label>Quantity</label>

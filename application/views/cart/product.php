@@ -36,7 +36,7 @@ $(document).ready(function()
                             <div class="col-sm-6">
                                 <div class="product-images">
                                     <div class="product-main-img">
-                                        <img  ng-src="http://<?php echo base_url("assets/img/products/"); ?>{{storeProduct.product.image}}" alt="">
+                                        <img  ng-src="<?php echo base_url("assets/img/products/"); ?>{{storeProduct.product.image}}" alt="">
                                     </div>
                                 </div>
                             </div>

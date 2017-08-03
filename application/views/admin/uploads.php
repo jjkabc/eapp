@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <!-- Main Script -->
-<script src="http://<?php echo base_url("assets/js/admin-controller.js")?>"></script>
+<script src="<?php echo base_url("assets/js/admin-controller.js")?>"></script>
 
 <script>
     $(document).ready(function()
@@ -34,9 +34,9 @@
                 </div> 
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a  href="http://<?php echo site_url("admin/uploads"); ?>">Uploads</a></li>
-                        <li><a href="http://<?php echo site_url("admin/create_store_product"); ?>">Create Product</a></li>
-                        <li><a href="http://<?php echo site_url("admin/store_products"); ?>">View Products</a></li>
+                        <li class="active"><a  href="<?php echo site_url("admin/uploads"); ?>">Uploads</a></li>
+                        <li><a href="<?php echo site_url("admin/create_store_product"); ?>">Create Product</a></li>
+                        <li><a href="<?php echo site_url("admin/store_products"); ?>">View Products</a></li>
                     </ul>
                 </div>
             </div>

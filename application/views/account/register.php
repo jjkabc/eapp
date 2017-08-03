@@ -17,7 +17,7 @@ $(document).ready(function(){
             <div class="panel panel-info">
                 <div class="panel-heading">
                     <div class="panel-title">FORMULAIRE D'INSCRIPTION</div>
-                    <div style="float:right; font-size: 85%; position: relative; top:-10px; ">Vous avez un compte!  <a id="signinlink" href="http://<?php echo addslashes(site_url("account/login")); ?>">Se connecter</a></div>
+                    <div style="float:right; font-size: 85%; position: relative; top:-10px; ">Vous avez un compte!  <a id="signinlink" href="<?php echo addslashes(site_url("account/login")); ?>">Se connecter</a></div>
                 </div>  
                 <div class="panel-body" >
                     <form id="signupForm" name="signupForm" class="form-horizontal" novalidate ng-submit="register()">

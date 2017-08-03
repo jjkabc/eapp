@@ -9,14 +9,14 @@
      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdUBJq3Y93iEd29Q6GAK5SHQJniqZiHu0"></script> 
      <!-- Angular Material style sheet -->
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.css">
-    <link rel="stylesheet" href="http://<?php echo base_url("assets/css/lf-ng-md-file-input.css")?>">
+    <link rel="stylesheet" href="<?php echo base_url("assets/css/lf-ng-md-file-input.css")?>">
       <!-- Angular Material requires Angular.js Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-aria.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-messages.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-sanitize.min.js"></script>
-    <script src="http://<?php echo base_url("assets/js/lf-ng-md-file-input.js")?>"></script>
+    <script src="<?php echo base_url("assets/js/lf-ng-md-file-input.js")?>"></script>
 
     <!-- Angular Material Library -->
     <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.js"></script>
@@ -28,28 +28,28 @@
     
     <!-- Bootstrap -->
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="http://<?php echo base_url("assets/css/bootstrap-slider.css")?>">
+    <link rel="stylesheet" href="<?php echo base_url("assets/css/bootstrap-slider.css")?>">
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="http://<?php echo base_url("assets/css/owl.carousel.css")?>">
-    <link rel="stylesheet" href="http://<?php echo base_url("assets/css/style.css")?>">
-    <link rel="stylesheet" href="http://<?php echo base_url("assets/css/responsive.css")?>">
+    <link rel="stylesheet" href="<?php echo base_url("assets/css/owl.carousel.css")?>">
+    <link rel="stylesheet" href="<?php echo base_url("assets/css/style.css")?>">
+    <link rel="stylesheet" href="<?php echo base_url("assets/css/responsive.css")?>">
     <!-- Admin CSS -->
-    <link rel="stylesheet" href="http://<?php echo base_url("assets/css/admin.css")?>">
+    <link rel="stylesheet" href="<?php echo base_url("assets/css/admin.css")?>">
     <!-- International Phone numbers CSS CSS -->
-    <link rel="stylesheet" href="http://<?php echo base_url("assets/css/intlTelInput.css")?>">
+    <link rel="stylesheet" href="<?php echo base_url("assets/css/intlTelInput.css")?>">
     
     <!-- Animate CSS -->
-    <link rel="stylesheet" href="http://<?php echo base_url("assets/css/animate.css")?>">
+    <link rel="stylesheet" href="<?php echo base_url("assets/css/animate.css")?>">
     <!-- ngNotificationsBar CSS -->
-    <link rel="stylesheet" href="http://<?php echo base_url("assets/css/ngNotificationsBar.min.css")?>">
+    <link rel="stylesheet" href="<?php echo base_url("assets/css/ngNotificationsBar.min.css")?>">
     <!-- Bootstrap Select CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
     <!-- MD Table CSS -->
-    <link rel="stylesheet" href="http://<?php echo base_url("assets/css/md-data-table.css")?>">
+    <link rel="stylesheet" href="<?php echo base_url("assets/css/md-data-table.css")?>">
     
     
     
@@ -59,49 +59,49 @@
     
     <!-- Bootstrap JS form CDN -->
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    <script src="http://<?php echo base_url("assets/js/bootstrap-slider.min.js")?>"></script>
+    <script src="<?php echo base_url("assets/js/bootstrap-slider.min.js")?>"></script>
     
     <!-- jQuery sticky menu -->
-    <script src="http://<?php echo base_url("assets/js/owl.carousel.min.js")?>"></script>
-    <script src="http://<?php echo base_url("assets/js/jquery.sticky.js")?>"></script>
+    <script src="<?php echo base_url("assets/js/owl.carousel.min.js")?>"></script>
+    <script src="<?php echo base_url("assets/js/jquery.sticky.js")?>"></script>
     
     <!-- jQuery easing -->
-    <script src="http://<?php echo base_url("assets/js/jquery.easing.1.3.min.js")?>"></script>
+    <script src="<?php echo base_url("assets/js/jquery.easing.1.3.min.js")?>"></script>
     
     <!-- Angular JS Country/State Select -->
-    <script src="http://<?php echo base_url("assets/js/md-country-select.js")?>"></script>
+    <script src="<?php echo base_url("assets/js/md-country-select.js")?>"></script>
     
     <!-- Angular JS Country/State Select -->
-    <script src="http://<?php echo base_url("assets/js/angular-country-state.js")?>"></script>
+    <script src="<?php echo base_url("assets/js/angular-country-state.js")?>"></script>
     
     <!-- Main Script -->
-    <script src="http://<?php echo base_url("assets/js/main-controller.js")?>"></script>
+    <script src="<?php echo base_url("assets/js/main-controller.js")?>"></script>
     
     <!-- Admin Script -->
-    <script src="http://<?php echo base_url("assets/js/admin.js")?>"></script>
+    <script src="<?php echo base_url("assets/js/admin.js")?>"></script>
     
     <!-- Menu Controller Script -->
-    <script src="http://<?php echo base_url("assets/js/menu-controller.js")?>"></script>
+    <script src="<?php echo base_url("assets/js/menu-controller.js")?>"></script>
     
     <!-- Menu Controller Script -->
-    <script src="http://<?php echo base_url("assets/js/cart-controller.js")?>"></script>
+    <script src="<?php echo base_url("assets/js/cart-controller.js")?>"></script>
     
     <!-- Menu Controller Script -->
-    <script src="http://<?php echo base_url("assets/js/shop-controller.js")?>"></script>
+    <script src="<?php echo base_url("assets/js/shop-controller.js")?>"></script>
     
     <!-- ngNotificationsBar Script -->
-    <script src="http://<?php echo base_url("assets/js/ngNotificationsBar.min.js")?>"></script>
+    <script src="<?php echo base_url("assets/js/ngNotificationsBar.min.js")?>"></script>
     
     <!-- File Styles Script -->
-    <script src="http://<?php echo base_url("assets/js/bootstrap-filestyle.js")?>"></script>
+    <script src="<?php echo base_url("assets/js/bootstrap-filestyle.js")?>"></script>
     
     <!-- Bootstrap Select Script -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
     
     <!-- International Phone Number Angular Module -->
-    <script src="http://<?php echo base_url("assets/js/utils.js")?>"></script>
-    <script src="http://<?php echo base_url("assets/js/intlTelInput.js")?>"></script>
-    <script src="http://<?php echo base_url("assets/js/md-data-table.js")?>"></script>
+    <script src="<?php echo base_url("assets/js/utils.js")?>"></script>
+    <script src="<?php echo base_url("assets/js/intlTelInput.js")?>"></script>
+    <script src="<?php echo base_url("assets/js/md-data-table.js")?>"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -145,9 +145,12 @@
             
             rootScope.isUserLogged = rootScope.loggedUser !== null;
             
-	  	    // THis is called for a non logged user to prompt for his zip code
-			// If that's not already the case. 
-            rootScope.promptForZipCode();
+            // THis is called for a non logged user to prompt for his zip code
+            // If that's not already the case. 
+            if(typeof rootScope.promptForZipCode !== "undefined")
+            {
+                rootScope.promptForZipCode();
+            }
             
         });
         
@@ -165,14 +168,14 @@
                         <ul>
                             <li ng-show="isUserLogged"><a href="#"><i class="fa fa-user"></i>Mon compte</a></li>
                             <li ng-show="isUserLogged"><a href="#"><i class="fa fa-heart"></i>Ma liste d'épicerie</a></li>
-                            <li><a href="http://<?php echo site_url("cart"); ?>"><i class="fa fa-user"></i>Mon panier</a></li>
-                            <li ng-hide="isUserLogged"><a href="http://<?php echo site_url("account/login"); ?>"><i class="fa fa-user"></i>s'identifier</a></li>
+                            <li><a href="<?php echo site_url("cart"); ?>"><i class="fa fa-user"></i>Mon panier</a></li>
+                            <li ng-hide="isUserLogged"><a href="<?php echo site_url("account/login"); ?>"><i class="fa fa-user"></i>s'identifier</a></li>
                             <li ng-show="isUserLogged">
 								<md-menu>
 									<a href md-menu-origin  ng-click="$mdMenu.open($event)" class="main-menu-item">Bonjour, {{loggedUser.profile.firstname}}</a>
 									<md-menu-content>
 										<md-menu-item><a href ng-click="logout()">Logout</a></md-menu-item>
-										<md-menu-item><a href="http://<?php echo site_url("account/account"); ?>">Mon Compte</a></md-menu-item>
+										<md-menu-item><a href="<?php echo site_url("account/account"); ?>">Mon Compte</a></md-menu-item>
 									</md-menu-content>
 								</md-menu>
                             </li>
@@ -210,7 +213,7 @@
                 
                 <div class="col-sm-6">
                     <div class="shopping-item">
-                        <a href="http://<?php echo site_url("cart"); ?>">Cart - <span class="cart-amunt">CAD {{get_cart_total_price() | number : 2}}</span> <i class="fa fa-shopping-cart"></i> <span class="product-count">{{get_cart_item_total()}}</span></a>
+                        <a href="<?php echo site_url("cart"); ?>">Cart - <span class="cart-amunt">CAD {{get_cart_total_price() | number : 2}}</span> <i class="fa fa-shopping-cart"></i> <span class="product-count">{{get_cart_item_total()}}</span></a>
                     </div>
                 </div>
             </div>
@@ -244,28 +247,28 @@
                 </div> 
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li><a href="http://<?php echo site_url("home"); ?>">Accueil</a></li>
+                        <li><a href="<?php echo site_url("home"); ?>">Accueil</a></li>
 			<li style="padding : 20px;">
 			    <md-menu  md-offset="0 80">
 				<a href md-menu-origin  ng-click="$mdMenu.open($event)" class="main-menu-item">Réduisez vos dépenses</a>
 				<md-menu-content>
-                                    <md-menu-item><a href="http://<?php echo site_url("account/my_grocery_list"); ?>">Votre liste d'épicerie</a></md-menu-item>
-                                    <md-menu-item><a href="http://<?php echo site_url("shop/select_flyer_store"); ?>">Les circulaires des magasins</a></md-menu-item>
-                                    <md-menu-item><a href="http://<?php echo site_url("shop/categories"); ?>">Les catégories de produits</a></md-menu-item>
+                                    <md-menu-item><a href="<?php echo site_url("account/my_grocery_list"); ?>">Votre liste d'épicerie</a></md-menu-item>
+                                    <md-menu-item><a href="<?php echo site_url("shop/select_flyer_store"); ?>">Les circulaires des magasins</a></md-menu-item>
+                                    <md-menu-item><a href="<?php echo site_url("shop/categories"); ?>">Les catégories de produits</a></md-menu-item>
 				</md-menu-content>
 			    </md-menu>
 		  	</li>
                         <li><a href ng-click="gotoShop()">Trouvez un produit</a></li>
-			<li><a href="http://<?php echo site_url("cart"); ?>">Votre panier</a></li>
+			<li><a href="<?php echo site_url("cart"); ?>">Votre panier</a></li>
                         <li style="padding : 20px;">
 				<md-menu  md-offset="0 80">
 					<a href md-menu-origin  ng-click="$mdMenu.open($event)" class="main-menu-item">Blogue</a>
 					<md-menu-content>
-					  	<md-menu-item><a href="http://<?php echo site_url("home/grocery_press"); ?>">Épicerie dans la presse</a></md-menu-item>
-					  	<md-menu-item><a href="http://<?php echo site_url("home/stats"); ?>">STAT</a></md-menu-item>
-					  	<md-menu-item><a href="http://<?php echo site_url("home/video"); ?>">Vidéo</a></md-menu-item>
-					  	<md-menu-item><a href="http://<?php echo site_url("home/store_policy"); ?>">Politiques des magasins</a></md-menu-item>
-					  	<md-menu-item><a href="http://<?php echo site_url("home/about_us"); ?>">À propos</a></md-menu-item>
+					  	<md-menu-item><a href="<?php echo site_url("home/grocery_press"); ?>">Épicerie dans la presse</a></md-menu-item>
+					  	<md-menu-item><a href="<?php echo site_url("home/stats"); ?>">STAT</a></md-menu-item>
+					  	<md-menu-item><a href="<?php echo site_url("home/video"); ?>">Vidéo</a></md-menu-item>
+					  	<md-menu-item><a href="<?php echo site_url("home/store_policy"); ?>">Politiques des magasins</a></md-menu-item>
+					  	<md-menu-item><a href="<?php echo site_url("home/about_us"); ?>">À propos</a></md-menu-item>
 					</md-menu-content>
 				</md-menu>
 			 </li>
@@ -273,7 +276,7 @@
 				<md-menu  md-offset="0 80">
 					<a href md-menu-origin ng-click="$mdMenu.open($event)" class="main-menu-item">Contact</a>
 					<md-menu-content>
-						<md-menu-item><a href="http://<?php echo site_url("home/contact"); ?>">Formulaire</a></md-menu-item>
+						<md-menu-item><a href="<?php echo site_url("home/contact"); ?>">Formulaire</a></md-menu-item>
 					</md-menu-content>
 				</md-menu>
 			 </li>

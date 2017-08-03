@@ -57,7 +57,7 @@ angular.module('eappApp').controller('ShopController', ["$scope", "$q", "$http",
           formData.append("category_id", $scope.category_id);
       }	  
       
-      $scope.promise = $http.post("http://" + $scope.site_url.concat("/shop/get_store_products"), formData, {
+      $scope.promise = $http.post( $scope.site_url.concat("/shop/get_store_products"), formData, {
           transformRequest: angular.identity,
           headers: {'Content-Type': undefined}
       }).then(function(response)
@@ -119,7 +119,7 @@ angular.module('eappApp').controller('ShopController', ["$scope", "$q", "$http",
         var element = $event.target;
 	var store_id = parseInt(element.id);
 	window.sessionStorage.setItem("store_id", store_id);    
-	window.location = "http://" + $scope.site_url.concat("/shop");
+	window.location =  $scope.site_url.concat("/shop");
     };
 	
     $scope.select_category = function($event)
@@ -128,14 +128,14 @@ angular.module('eappApp').controller('ShopController', ["$scope", "$q", "$http",
         var element = $event.target;
 	var category_id = parseInt(element.id);
 	window.sessionStorage.setItem("category_id", category_id);    
-	window.location = "http://" + $scope.site_url.concat("/shop");
+	window.location =  $scope.site_url.concat("/shop");
     };
     
     
     $scope.searchProducts = function(searchText)
     {
         window.sessionStorage.setItem("searchText", searchText);
-        window.location.href = "http://" + $scope.site_url.concat("/shop");
+        window.location.href =  $scope.site_url.concat("/shop");
     };
  
   

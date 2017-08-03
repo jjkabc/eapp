@@ -105,7 +105,7 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 	formData.append("searchAll", !$rootScope.searchInMyList);
         // Send request to server to get optimized list 	
         $scope.promise = 
-            $http.post("http://"+ $scope.site_url.concat("/cart/update_cart_list"), 
+            $http.post( $scope.site_url.concat("/cart/update_cart_list"), 
             formData, { transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(
             function(response)
             {
@@ -156,7 +156,7 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 	formData.append("searchAll", !$rootScope.searchInMyList);
         // Send request to server to get optimized list 	
         $scope.store_cart_promise = 
-            $http.post("http://"+ $scope.site_url.concat("/cart/optimize_product_list_by_store"), 
+            $http.post( $scope.site_url.concat("/cart/optimize_product_list_by_store"), 
             formData, { transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(
             function(response)
             {
@@ -290,7 +290,7 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
         
 	$.ajax({
             type: 'POST',
-            url:  "http://" + $scope.site_url.concat("/cart/insert"),
+            url:   $scope.site_url.concat("/cart/insert"),
             data: data,
             success: function(response)
             {
@@ -389,7 +389,7 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 
 	$.ajax({
             type: 'POST',
-            url:  "http://" + $scope.site_url.concat("/cart/remove"),
+            url:   $scope.site_url.concat("/cart/remove"),
             data: data,
             success: function(response)
             {
@@ -516,7 +516,7 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
         formData.append("longitude", $rootScope.longitude);
         formData.append("latitude", $rootScope.latitude);
         // Send request to server to get optimized list 	
-        $scope.promise = $http.post("http://"+ $scope.site_url.concat("/cart/get_cart_contents"), 
+        $scope.promise = $http.post( $scope.site_url.concat("/cart/get_cart_contents"), 
         formData, { transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(
         function(response)
         {
