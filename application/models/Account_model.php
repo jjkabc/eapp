@@ -81,10 +81,6 @@ class Account_model extends CI_Model
             foreach ($product_list as $item) 
             {
                 $product = $this->get_product($item->id);
-		
-				// Find Store products in flyers
-				$product->store_products = $this->get_flyer_products($item->id);
-		
                 $product->quantity = $item->quantity;
                 array_push($user_account->grocery_list, $product);
             }
@@ -92,16 +88,6 @@ class Account_model extends CI_Model
         
         return $user_account;
     }
-	
-    private function get_flyer_products($product_id)
-    {
-		$this->db->select(STORE_PRODUCT_TABLE.".*, ".PRODUCT_BRAND_TABLE.".name as brandName, ".PRODUCT_BRAND_TABLE.".id as brand_id");
-    	$this->db->where(array("product_id" => $product_id, "in_flyer" => 1));
-		$this->db->join(PRODUCT_BRAND_TABLE, PRODUCT_BRAND_TABLE.".id = ".STORE_PRODUCT_TABLE.".brand_id", "left outer");
-		$result = $this->db->get(STORE_PRODUCT_TABLE);
-		
-		return $result->result();
-    }		
 	
 	/*
      * get rows from the users table
