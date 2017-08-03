@@ -303,6 +303,22 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
         
         return count;
     };
+	
+	$scope.flyer_products_count = function()
+	{
+		var count = 0;
+        
+        for(var index in $scope.myCategories)
+        {
+			for(var i in $scope.myCategories[index].products)
+			{
+				count += $scope.myCategories[index].products[i].store_products.length;
+			}
+        }
+        return count;
+	}
+	
+    
     
     $scope.flyers_count = function()
     {
