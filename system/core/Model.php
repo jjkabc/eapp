@@ -310,8 +310,20 @@ class CI_Model {
         {
             $value->category = $this->get(CATEGORY_TABLE, $value->subcategory->product_category_id);
         }
+		 
+		 $value->store_products = $this->get_flyer_products($product_id);
 
         return $value;
+    }
+	
+    private function get_flyer_products($product_id)
+    {
+		$this->db->select(STORE_PRODUCT_TABLE.".*, ".PRODUCT_BRAND_TABLE.".name as brandName, ".PRODUCT_BRAND_TABLE.".id as brand_id");
+		$this->db->where(array("product_id" => $product_id, "in_flyer" => 1));
+		$this->db->join(PRODUCT_BRAND_TABLE, PRODUCT_BRAND_TABLE.".id = ".STORE_PRODUCT_TABLE.".brand_id", "left outer");
+		$result = $this->db->get(STORE_PRODUCT_TABLE);
+		
+		return $result->result();
     }
     
     /**
