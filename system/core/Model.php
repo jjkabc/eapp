@@ -217,7 +217,7 @@ class CI_Model {
                 
                 if(file_exists($brand_image) && !empty($store_product->brand->image) && $store_product->product != null)
                 {
-                    $store_product->product->image = $brand_image;
+                    $store_product->product->image = $store_product->brand->image;
                 }
             }
             
