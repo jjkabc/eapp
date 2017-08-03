@@ -35,9 +35,7 @@
         </div>
         
         <div class="row search-products">
-        
-            
-                <md-icon md-svg-src="{{icons.search | trustUrl}}"></md-icon>
+
                 <md-autocomplete class="col-sm-11" style="display : inline-block;"
                 md-search-text="searchProductText"
                 md-selected-item-change="product_selected(item)"
