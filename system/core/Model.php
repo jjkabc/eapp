@@ -319,7 +319,7 @@ class CI_Model {
     private function get_flyer_products($product_id)
     {
 		$this->db->select(STORE_PRODUCT_TABLE.".*, ".PRODUCT_BRAND_TABLE.".name as brandName, ".PRODUCT_BRAND_TABLE.".id as brand_id");
-		$this->db->where(array("product_id" => $product_id, "in_flyer" => 1));
+		$this->db->where(array(STORE_PRODUCT_TABLE.".product_id" => $product_id, "in_flyer" => 1));
 		$this->db->join(PRODUCT_BRAND_TABLE, PRODUCT_BRAND_TABLE.".id = ".STORE_PRODUCT_TABLE.".brand_id", "left outer");
 		$result = $this->db->get(STORE_PRODUCT_TABLE);
 		
