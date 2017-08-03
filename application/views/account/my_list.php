@@ -66,7 +66,7 @@
                 <md-subheader class="md-no-sticky">{{category.name}}</md-subheader>
                     <md-list-item ng-repeat="product in category.products" ng-click="viewProductDetails(product.id, $event)" class="noright">
                         <img alt="{{ product.name }}" ng-src="{{base_url}}/assets/img/products/{{ product.image }}" class="md-avatar" />
-                        <p>{{ product.name }}</p>
+                        <p>{{ product.name }}  <span class="badge">{{product.store_products.length}}</span></p>
                         <md-input-container class="md-secondary">
                             <input style="width: 40px;" aria-label="Qty" type="number" ng-model="product.quantity">
                         </md-input-container>
