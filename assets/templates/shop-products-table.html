@@ -56,14 +56,14 @@
             <p ng-show="product.format">Format : {{product.format}}</p>
             <p ng-show="product.unit">Unité : {{product.unit.name}}</p>
         </td>
-        <td md-cell>{{product.price}}</td>
+        <td md-cell>CAD {{product.price}}</td>
         <td md-cell>
             <md-input-container>
                 <input style="width: 40px;" aria-label="Qty" type="number" ng-model="product.quantity   ">
             </md-input-container>
         </td>
         <td md-cell>
-            {{(product.price * product.quantity) | number : 2}}
+            CAD {{(product.price * product.quantity) | number : 2}}
         </td>
         <td md-cell>
             <a href ng-click="add_product_to_cart(product.product_id)" ng-show="can_add_to_cart(product.product_id)">Add To Cart</a> 
