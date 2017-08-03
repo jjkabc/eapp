@@ -30,7 +30,7 @@
         
         <div id="row my-list-info" class="row my-list-info container" style="margin : 10px; margin: auto; padding: 20px;">
             <div class="col-sm-4"><p style="text-align : center;"><a href>Produits <span class="badge">{{my_list_count()}}</span></a><br></p></div>
-            <div class="col-sm-4"><p style="text-align : center;"><a href>Offres des circulaires <span class="badge">{{flyers_count()}}</span></a><br></p></div>
+            <div class="col-sm-4"><p style="text-align : center;"><a href>Offres des circulaires <span class="badge">{{flyer_products_count()}}</span></a><br></p></div>
             <div class="col-sm-4"><p style="text-align : center;"><a href>Coupons <span class="badge">{{coupons_count()}}</span></a><br></p></div>
         </div>
         
