@@ -67,7 +67,7 @@ class Admin extends CI_Controller
             "product_id" => $this->input->post("product_id")
         );
         
-        $this->initialize_upload_library(ASSETS_DIR_PATH.'img/brands/', uniqid().".png");
+        $this->initialize_upload_library(ASSETS_DIR_PATH.'img/products/', uniqid().".png");
         
         $response = array();
         if($this->upload->do_upload('image'))

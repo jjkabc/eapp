@@ -213,7 +213,7 @@ class CI_Model {
             
             if($store_product->brand != null)
             {
-                $brand_image = ASSETS_DIR_PATH."img/brands/".$store_product->brand->image;
+                $brand_image = ASSETS_DIR_PATH."img/products/".$store_product->brand->image;
                 
                 if(file_exists($brand_image) && !empty($store_product->brand->image) && $store_product->product != null)
                 {

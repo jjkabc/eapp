@@ -106,7 +106,7 @@
                     </td>
 
                     <td md-cell>
-                        <div class="admin-image"><a href=""><img alt="" ng-src="<?php echo base_url("assets/img/products/"); ?>{{products[store_product.product_id].image}}" ></a></div>
+                        <div class="admin-image"><a href=""><img alt="" ng-src="<?php echo base_url("assets/img/products/"); ?>{{store_product.product.image}}" ></a></div>
                     </td>
 
                     <td md-cell width="100%">

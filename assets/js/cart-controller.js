@@ -516,7 +516,7 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
         formData.append("longitude", $rootScope.longitude);
         formData.append("latitude", $rootScope.latitude);
         // Send request to server to get optimized list 	
-        $scope.promise = $http.post( $scope.site_url.concat("/cart/get_cart_contents"), 
+        $scope.promise = $http.post($scope.site_url.concat("/cart/get_cart_contents"), 
         formData, { transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(
         function(response)
         {

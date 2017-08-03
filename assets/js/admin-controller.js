@@ -119,7 +119,7 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
         
         if(brand.image !== null && brand.image !== '' && typeof brand.image !== 'undefined' && brand.image !== 'no_image_available.png')
         {
-            var image_url = $scope.base_url.concat("/assets/img/brands/") + brand.image;
+            var image_url = $scope.base_url.concat("/assets/img/products/") + brand.image;
         
             $scope.api.removeAll();
 
