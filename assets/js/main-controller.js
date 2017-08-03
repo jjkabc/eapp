@@ -239,7 +239,7 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
         if($scope.currentProduct != null &&  $scope.my_list_count() < $scope.maxNumItems)
         {
             var product = $scope.currentProduct;
-            product.quantity = 1;
+            product.quantity = ($scope.currentProduct.quantity && typeof $scope.currentProduct.quantity !== "undefined") ? $scope.currentProduct.quantity : 1;
             // get product category id
             var category = $scope.currentProduct.category;
             // Check if category exists
@@ -251,7 +251,7 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
                 var product_index = $scope.myCategories[index].products.map(function(e) { return e.id; }).indexOf($scope.currentProduct.id);
                 if(product_index !== -1)
                 {
-                    $scope.myCategories[index].products[product_index].quantity++;
+                    $scope.myCategories[index].products[product_index].quantity += $scope.currentProduct.quantity;
                 }
                 else
                 {
@@ -265,7 +265,6 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
             }
             else
             {
-                product.quantity = 1;
                 // create category
                 category.products = [];
                 category.products.push(product);
