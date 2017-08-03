@@ -103,7 +103,7 @@ class CI_Controller {
                 'site_url' => site_url(),
                 'controller' => $this->router->fetch_class(),
                 'method' => $this->router->fetch_method(),
-                'user' => json_encode($this->user)
+                'user' => addslashes(json_encode($this->user))
             );            
 	}
         
