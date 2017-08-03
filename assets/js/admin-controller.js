@@ -93,13 +93,14 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
     
     $scope.default_country = 'CA';
     
-    $scope.getSaveLabel = function(){ return parseInt($scope.store_product.id) > -1 ? "Edit" : "Create"};
+    $scope.getSaveLabel = function(){ return parseInt($scope.store_product.id) > -1 ? "Edit" : "Create";};
     
     $scope.product_selected = function(item)
     {
-        
         if(typeof item === 'undefined')
-        	return;
+        {
+            return;
+        }
         
         var image_url = "http://" + $scope.base_url.concat("/assets/img/products/") + item.image;
         
@@ -109,116 +110,158 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
 
     };
     
-    $scope.createNewBrand = function(ev, brand_name)
+    $scope.brand_selected = function(brand)
     {
+        if(typeof brand === 'undefined')
+        {
+            return;
+        }
         
+        if(brand.image !== null && brand.image !== '' && typeof brand.image !== 'undefined' && brand.image !== 'no_image_available.png')
+        {
+            var image_url = "http://" + $scope.base_url.concat("/assets/img/brands/") + brand.image;
+        
+            $scope.api.removeAll();
+
+            $scope.api.addRemoteFile(image_url, brand.image,'image'); 
+        }
+    };
+    
+    $scope.createNewBrand = function(ev)
+    {
         $mdDialog.show({
             controller: DialogController,
-            templateUrl: '../../assets/templates/create-new-brand.html',
+            templateUrl: 'http://' + $scope.base_url + 'assets/templates/create-new-brand.html',
             parent: angular.element(document.body),
             targetEvent: ev,
             clickOutsideToClose:true,
+            preserveScope:true,
+            scope : $scope,
             fullscreen: false //
           })
           .then(function(answer) {
-            $scope.status = 'You said the information was "' + answer + '".';
+                
           }, function() {
-            $scope.status = 'You cancelled the dialog.';
+                
           });
-        
-        
-        //upload the image here
-        //var formData = new FormData();
-        
-        //formData.append("name", brand_name);
-        
-//        $http.post("http://" + $scope.site_url.concat("/admin/create_new_brand"), formData, {
-//            transformRequest: angular.identity,
-//            headers: {'Content-Type': undefined}
-//        }).then(function(result)
-//        {
-//            if(result.data.success)
-//            {
-//                $scope.brands[result.data] = { id : result.data.id, name : brand_name } ;
-//                notifications.showSuccess(result.data.message);
-//            }
-//            // do sometingh                   
-//        },function(err){
-//            // do sometingh
-//        });
     };
     
-    function DialogController($scope, $mdDialog) 
+    function DialogController($scope, $mdDialog, $http) 
     {
-        $scope.hide = function() {
-          $mdDialog.hide();
+        $scope.hide = function() 
+        {
+            $mdDialog.hide();
         };
 
-        $scope.cancel = function() {
-          $mdDialog.cancel();
+        $scope.cancel = function() 
+        {
+            $mdDialog.cancel();
         };
 
-        $scope.answer = function(answer) {
-          $mdDialog.hide(answer);
+        $scope.submit = function() 
+        {
+            if($scope.createBrand.$valid)
+            {
+                var formData = new FormData();
+                formData.append("name", $scope.searchText);
+                formData.append("product_id", $scope.selectedProduct !== null ? $scope.selectedProduct.id : -1);
+                angular.forEach($scope.brand_image_files, function(obj){
+                    if(!obj.isRemote){
+                        formData.append('image', obj.lfFile);
+                    }
+                });
+                
+                $http.post("http://" + $scope.site_url.concat("/admin/create_product_brand"), formData, {transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}}).then(
+                function(result)
+                {
+                    if(result.data.success)
+                    {
+                        $scope.store_product.brand = result.data.newBrand;
+                        $scope.brands[result.data.newBrand.id] = result.data.newBrand;
+                        notifications.showSuccess(result.data.message);
+                        $mdDialog.cancel();
+                    }
+                    else
+                    {
+                    }		
+                },
+                function(err)
+                {
+                });
+            }
+                
+            };
+    };
+    
+    function CreateProductController($scope, $mdDialog, $http) 
+    {
+        $scope.hide = function() 
+        {
+            $mdDialog.hide();
         };
+
+        $scope.cancel = function() 
+        {
+            $mdDialog.cancel();
+        };
+
+        $scope.submit = function() 
+        {
+            if($scope.createProduct.$valid)
+            {
+                var formData = new FormData();
+                formData.append("name", $scope.searchProductText);
+                formData.append("subcategory_id", $scope.subCategory);
+                formData.append("unit_id", $scope.productUnit);
+                
+                angular.forEach($scope.product_image_files, function(obj){
+                    if(!obj.isRemote){
+                        formData.append('image', obj.lfFile);
+                    }
+                });
+                
+                $http.post("http://" + $scope.site_url.concat("/admin/create_product"), formData, {transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}}).then(
+                function(result)
+                {
+                    if(result.data.success)
+                    {
+                        $scope.selectedProduct = result.data.newProduct;
+                        $scope.products[$scope.selectedProduct.id] = result.data.newProduct;
+                        notifications.showSuccess(result.data.message);
+                        $mdDialog.cancel();
+                    }
+                    else
+                    {
+                    }		
+                },
+                function(err)
+                {
+                });
+            }
+                
+            };
     };
 	
-    $scope.createNewProduct = function(product_name)
+    $scope.createNewProduct = function(ev)
     {
-        //upload the image here
-        var formData = new FormData();
+        $mdDialog.show({
+            controller: CreateProductController,
+            templateUrl: 'http://' + $scope.base_url + 'assets/templates/create-new-product.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose:true,
+            preserveScope:true,
+            scope : $scope,
+            fullscreen: false //
+          })
+          .then(function(answer) {
+                
+          }, function() {
+                
+          });
         
-        formData.append("name", product_name);
-        
-        $http.post("http://" + $scope.site_url.concat("/admin/create_product"), formData, {
-            transformRequest: angular.identity,
-            headers: {'Content-Type': undefined}
-        }).then(function(result)
-        {
-		
-		if(!result.data.success)
-			return;
-		
-            	$scope.products[result.data] = { id : result.data.id, name : product_name } ;
-            
-            	notifications.showSuccess(result.data.message);
-		
-	    	// Upload product image
-	    	var formData = new FormData();
-		angular.forEach($scope.files,function(obj){
-		    if(!obj.isRemote){
-			formData.append("image", obj.lfFile);
-		    }
-		});
-        
-		if($scope.files.length > 0)
-		{
-			if($scope.selectedProduct !== null)
-			{
-				formData.append("product_id", result.data);
-
-				$http.post("http://" + $scope.site_url.concat("/admin/upload_product_image"), formData, {
-					transformRequest: angular.identity,
-					headers: {'Content-Type': undefined}
-				}).then(
-				function(response)
-				{
-					if(response.data.success)
-					{
-						notifications.showSuccess(response.data.message);
-					}
-							
-				},function(err)
-				{
-				})
-			}
-
-		}
-            
-            // do sometingh                   
-        },function(err){
-            // do sometingh
-        });
     };
     
     $scope.post_create_product = function()
@@ -242,9 +285,18 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
         formData.append("product[organic]", $scope.store_product.organic ? 1 : 0);
         formData.append("product[in_flyer]", $scope.store_product.in_flyer ? 1 : 0);
         formData.append("product[country]", $scope.store_product.country);
-        if($scope.selectedProduct != null)
+        formData.append("product[state]", $scope.store_product.state);
+        if($scope.selectedProduct !== null && typeof $scope.selectedProduct !== 'undefined')
         {
 	    formData.append("product[product_id]", $scope.selectedProduct.id);
+        }
+        if($scope.store_product.brand !== null && typeof $scope.store_product.brand !== 'undefined')
+        {
+	    formData.append("product[brand_id]", $scope.store_product.brand.id);
+        }
+        else
+        {
+            formData.append("product[brand_id]", -1);
         }
 	    
 	if($scope.continue)
@@ -264,7 +316,7 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
 		retailer_id : $scope.store_product.retailer_id,
 		period_from : $scope.store_product.period_from,
 		period_to : $scope.store_product.period_to,
-	    }
+	    };
 	    $scope.store_product = tmp;
 	    
         }
@@ -284,35 +336,32 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
         
         if($scope.files.length > 0)
         {
-			if($scope.selectedProduct !== null)
-			{
-				formData.append("product_id", $scope.selectedProduct.id);
-				formData.append("brand", $scope.store_product.brand);
+            if($scope.selectedProduct !== null)
+            {
+                formData.append("product_id", $scope.selectedProduct.id);
+                formData.append("brand", $scope.store_product.brand);
 
-				$http.post("http://" + $scope.site_url.concat("/admin/upload_product_image"), formData, {
-					transformRequest: angular.identity,
-					headers: {'Content-Type': undefined}
-				}).then(
-				function(result)
-				{
-					if(result.data.success)
-					{
-						notifications.showSuccess(result.data.message);
-						$scope.post_create_product();
-					}
-					else
-					{
-						$scope.post_create_product();
-						//notifications.showError(result.data.message);
-					}		
-		        },function(err)
-		        {
-					// do sometingh
-					$scope.post_create_product();
-		        })
-			}
-            
-		}
+                $http.post("http://" + $scope.site_url.concat("/admin/upload_product_image"), formData, {}).then(
+                function(result)
+                {
+                    if(result.data.success)
+                    {
+                        notifications.showSuccess(result.data.message);
+                        $scope.post_create_product();
+                    }
+                    else
+                    {
+                        $scope.post_create_product();
+                        //notifications.showError(result.data.message);
+                    }		
+                },
+                function(err)
+                {
+                    // do sometingh
+                    $scope.post_create_product();
+                });
+            }
+        }
     };
     
     $scope.updateQuantity = function()
@@ -441,12 +490,13 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
      */
     function createFilterFor(query) 
     {
-      var lowercaseQuery = angular.lowercase(query);
+        var lowercaseQuery = angular.lowercase(query);
 
-      return function filterFn(brand) 
-      {
-        return (angular.lowercase(brand.name).indexOf(lowercaseQuery) === 0);
-      };
+        return function filterFn(brand) 
+        {
+            return (angular.lowercase(brand.name).indexOf(lowercaseQuery) === 0 
+                && (($scope.selectedProduct !== null && parseInt($scope.selectedProduct.id) === parseInt(brand.product_id)) || parseInt(brand.product_id) === -1));
+        };
 
     };
    

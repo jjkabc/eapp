@@ -57,14 +57,87 @@ class Admin extends CI_Controller
 	echo json_encode($this->admin_model->searchProducts($product_name));
     }
     
+    public function create_product_brand() 
+    {
+        $this->load->helper('file');
+        
+        $data = array
+        (
+            "name" => $this->input->post("name"),
+            "product_id" => $this->input->post("product_id")
+        );
+        
+        $this->initialize_upload_library(ASSETS_DIR_PATH.'img/brands/', uniqid().".png");
+        
+        $response = array();
+        if($this->upload->do_upload('image'))
+        {
+            $upload_data = $this->upload->data();
+            $data['image'] = $upload_data['file_name'];
+            $response['message'] = "Image ".$upload_data['file_name']." was uploaded successfully. ";
+        }
+        else
+        {
+            $data['image'] = "no_image_available.png";
+            $response['message'] = 'Brand created sucessfully';
+        }
+        
+        $response['success'] = true;
+        
+        
+        $id = $this->admin_model->create(PRODUCT_BRAND_TABLE, $data);
+        
+        $response['newBrand'] = $this->admin_model->get(PRODUCT_BRAND_TABLE, $id);
+        
+        echo json_encode($response);
+        
+    }
+    
+    public function create_product()
+    {
+        $this->load->helper('file');
+        
+        $data = array
+        (
+            "name" => $this->input->post("name"),
+            "subcategory_id" => $this->input->post("subcategory_id"),
+            "unit_id" => $this->input->post("unit_id")
+        );
+        
+        $this->initialize_upload_library(ASSETS_DIR_PATH.'img/products/', uniqid().".png");
+        
+        $response = array();
+        
+        if($this->upload->do_upload('image'))
+        {
+            $upload_data = $this->upload->data();
+            $data['image'] = $upload_data['file_name'];
+            $response['message'] = "Image ".$upload_data['file_name']." was uploaded successfully. ";
+        }
+        else
+        {
+            $data['image'] = "no_image_available.png";
+            $response['message'] = 'Product created sucessfully';
+        }
+        
+        $response['success'] = true;
+        
+        $id = $this->admin_model->create(PRODUCT_TABLE, $data);
+        
+        $response['newProduct'] = $this->admin_model->get(PRODUCT_TABLE, $id);
+        
+        echo json_encode($response);
+        
+    }
+    
     public function upload_product_image()
     {
-		$brand = $this->input->post("brand");
-		
-		if(empty($brand) || !isset($brand))
-		{
-			$brand = null;
-		}
+        $brand = $this->input->post("brand");
+
+        if(empty($brand) || !isset($brand))
+        {
+                $brand = null;
+        }
 		
         $this->load->helper('file');
         
@@ -88,7 +161,7 @@ class Admin extends CI_Controller
 			else
 			{
 				$product_data['product_id'] = $this->input->post("product_id");
-				$product_data['brand'] = $brand
+				$product_data['brand'] = $brand;
 				$this->admin_model->create(PRODUCT_BRAND_TABLE, $product_data);
 			}
             
@@ -104,33 +177,10 @@ class Admin extends CI_Controller
         
         echo json_encode($response);
     }
-    public function create_new_brand()
-    {
-        $response = array();
-        $data = array();
-        $data['name'] = $this->input->post('name');
-        $response['id'] = $this->admin_model->create(BRANDS_TABLE, $data);
-        
-        $response['success'] = true;
-        $response['message'] = "Brand ".$data['name']." was created successfully. ";
-        
-        echo json_encode($response);
-        
-    }
+    
+
 	
-    public function create_product()
-    {
-        $response = array();
-        $data = array();
-        $data['name'] = $this->input->post('name');
-        $response['id'] = $this->admin_model->create(PRODUCT_TABLE, $data, true);
-        
-        $response['success'] = true;
-        $response['message'] = "Product ".$data['name']." was created successfully. ";
-        
-        echo json_encode($response);
-        
-    }
+    
 	
     public function create_store_product($id = null)
     {
@@ -152,7 +202,8 @@ class Admin extends CI_Controller
             $this->data['retailers'] = addslashes(json_encode($this->admin_model->get_all(CHAIN_TABLE)));
             $this->data['compareunits'] = addslashes(json_encode($this->admin_model->get_all(COMPAREUNITS_TABLE)));
             $this->data['units'] = addslashes(json_encode($this->admin_model->get_all(UNITS_TABLE)));
-            $this->data['brands'] = addslashes(json_encode($this->admin_model->get_all(BRANDS_TABLE)));
+            $this->data['brands'] = addslashes(json_encode($this->admin_model->get_all(PRODUCT_BRAND_TABLE)));
+            $this->data['subcategories'] = addslashes(json_encode($this->admin_model->get_all(SUB_CATEGORY_TABLE)));
 		
             // Define default store product
             $this->data['store_product'] = array

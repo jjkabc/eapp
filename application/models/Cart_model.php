@@ -145,10 +145,10 @@ class Cart_model extends CI_Model
             {
                 $this->db->order_by("range", "ASC");
             }
-			else
-			{
-				$this->db->order_by("price", "ASC");
-			}
+            else
+            {
+                $this->db->order_by("price", "ASC");
+            }
 			
             $query = $this->db->get_compiled_select(STORE_PRODUCT_TABLE);
             $store_product = $this->db->query($query)->row();
@@ -184,7 +184,7 @@ class Cart_model extends CI_Model
     }
     
     public function get_closest_stores($user, $distance, $products, $search_all = false, $coords = null, $limit = 5)
-	{
+    {
             $stores = array();
             
             $range = "";
@@ -271,49 +271,49 @@ class Cart_model extends CI_Model
             return $stores;
 	}
 	
-	private function compute_driving_distance($department_store, $user, $coords)
-	{
-		$driving_distance = 0;
-		
-		$distance_time = array();
+    private function compute_driving_distance($department_store, $user, $coords)
+    {
+            $driving_distance = 0;
 
-		if($user != null)
-		{
-			$distance_time = $this->geo->GetDrivingDistance($department_store->latitude, $user->profile->latitude, $department_store->longitude, $user->profile->longitude);
-		}
-		if($user == null && $coords != null && $coords["latitude"] != 0 && $coords["longitude"] != 0)
-		{
-			$distance_time = $this->geo->GetDrivingDistance($department_store->latitude, $coords["latitude"], $department_store->longitude, $coords["longitude"]);
-		}
+            $distance_time = array();
 
-		if(isset($distance_time["distance"]) != null)
-		{
-			$dist = intval(trim(str_replace("km","",$distance_time["distance"])));
-			$driving_distance = $dist;
-		}
-		
-		return $driving_distance;
-	}
+            if($user != null)
+            {
+                    $distance_time = $this->geo->GetDrivingDistance($department_store->latitude, $user->profile->latitude, $department_store->longitude, $user->profile->longitude);
+            }
+            if($user == null && $coords != null && $coords["latitude"] != 0 && $coords["longitude"] != 0)
+            {
+                    $distance_time = $this->geo->GetDrivingDistance($department_store->latitude, $coords["latitude"], $department_store->longitude, $coords["longitude"]);
+            }
+
+            if(isset($distance_time["distance"]) != null)
+            {
+                    $dist = intval(trim(str_replace("km","",$distance_time["distance"])));
+                    $driving_distance = $dist;
+            }
+
+            return $driving_distance;
+    }
         
     public function get_user_closest_retailer_store($user, $distance, $retailer_id)
-	{
-            $this->db->select(CHAIN_STORE_TABLE.".*, distance");
-            $this->db->join(CHAIN_STORE_TABLE, CHAIN_STORE_TABLE.".id = ".USER_CHAIN_STORE_TABLE.".chain_store_id");
-            $this->db->join(CHAIN_TABLE, CHAIN_TABLE.".id = ".CHAIN_STORE_TABLE.".chain_id");
-            $this->db->where(array("user_id" => $user->id, "distance <=" => $distance, CHAIN_TABLE.".id" => $retailer_id));
-            $this->db->order_by("distance", "ASC");
-            $stores = $this->db->get(USER_CHAIN_STORE_TABLE);
-            
-            if($stores != null && $stores->num_rows() > 0)
-            {
-                return $stores->row();
-            }
-            else
-            {
-                return null;
-            }
-            
-	}
+    {
+        $this->db->select(CHAIN_STORE_TABLE.".*, distance");
+        $this->db->join(CHAIN_STORE_TABLE, CHAIN_STORE_TABLE.".id = ".USER_CHAIN_STORE_TABLE.".chain_store_id");
+        $this->db->join(CHAIN_TABLE, CHAIN_TABLE.".id = ".CHAIN_STORE_TABLE.".chain_id");
+        $this->db->where(array("user_id" => $user->id, "distance <=" => $distance, CHAIN_TABLE.".id" => $retailer_id));
+        $this->db->order_by("distance", "ASC");
+        $stores = $this->db->get(USER_CHAIN_STORE_TABLE);
+
+        if($stores != null && $stores->num_rows() > 0)
+        {
+            return $stores->row();
+        }
+        else
+        {
+            return null;
+        }
+
+    }
         
     private function store_has_product($store, $products)
     {

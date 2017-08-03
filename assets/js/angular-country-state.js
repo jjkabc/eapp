@@ -4,6 +4,11 @@
     var app = angular.module('angularCountryState', []);
 
 }());
+
+var scripts = document.getElementsByTagName("script");
+var currentScriptPath = scripts[scripts.length-1].src;
+var directory = currentScriptPath.substring(0,currentScriptPath.lastIndexOf("/")+1) + "../templates/";
+
 (function() {
     "use strict";
 
@@ -12,7 +17,7 @@
         .directive("countryStateSelect", [ "$sce", function ($sce) {
             return {
                 restrict: "E",
-                templateUrl: $sce.trustAsResourceUrl("../../assets/templates/md-country-state-select.html"),
+                templateUrl: $sce.trustAsResourceUrl(directory + "md-country-state-select.html"),
                 scope: { country: '=country', countryState: '=countryState' , defaultCountry:'=?', countryClass:'=?', stateClass:'=?', showHints:'=', flag:'=' },
                 link: function (scope, element, attrs) {
                     scope.countryLabel = "Country";

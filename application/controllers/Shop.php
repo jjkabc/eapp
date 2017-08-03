@@ -56,7 +56,7 @@ class Shop extends CI_Controller {
         
         foreach ($categories as $key => $value) 
         {
-            $path = ASSETS_DIR_PATH."img/stores/".$value->image;
+            $path = ASSETS_DIR_PATH."img/categories/".$value->image;
             
             if(!file_exists($path) || empty($value->image))
             {

@@ -208,6 +208,19 @@ class CI_Model {
             {
                 $store_product->related_products = $this->get_related_products($store_product);
             }
+            
+            $store_product->brand = $this->get(PRODUCT_BRAND_TABLE, $store_product->brand_id);
+            
+            if($store_product->brand != null)
+            {
+                $brand_image = ASSETS_DIR_PATH."img/brands/".$store_product->brand->image;
+                
+                if(file_exists($brand_image) && !empty($store_product->brand->image) && $store_product->product != null)
+                {
+                    $store_product->product->image = $brand_image;
+                }
+            }
+            
         }
         
         return $store_product;
@@ -227,17 +240,17 @@ class CI_Model {
         return $result;
     }
 	
-	public function get_products()
-	{
-		$products = $this->get_all(PRODUCT_TABLE);
-		
-		foreach($products as $product)
-		{
-		
-		}
-		
-		return $products;
-	}
+    public function get_products()
+    {
+        $products = $this->get_all(PRODUCT_TABLE);
+
+        foreach($products as $product)
+        {
+
+        }
+
+        return $products;
+    }
         
     /**
      * This method gets the other store products related to this store product
@@ -291,11 +304,11 @@ class CI_Model {
         }
 
         $value->subcategory = $this->get(SUB_CATEGORY_TABLE, $value->subcategory_id);
-
+        
         // Get category
         if($value->subcategory != null)
         {
-                $value->category = $this->get(CATEGORY_TABLE, $value->subcategory->product_category_id);
+            $value->category = $this->get(CATEGORY_TABLE, $value->subcategory->product_category_id);
         }
 
         return $value;

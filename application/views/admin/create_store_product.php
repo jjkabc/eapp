@@ -15,6 +15,7 @@ $(document).ready(function()
         rootScope.menu = "admin_create_product";
         scope.store_product = JSON.parse('<?php echo $store_product; ?>');
 	scope.retailers = JSON.parse('<?php echo $retailers; ?>');
+        scope.subcategories = JSON.parse('<?php echo $subcategories; ?>');
 	scope.units = JSON.parse('<?php echo $units; ?>');
 	scope.compareunits = JSON.parse('<?php echo $compareunits; ?>');
 	scope.brands = JSON.parse('<?php echo $brands; ?>');
@@ -60,20 +61,26 @@ $(document).ready(function()
         scope.store_product.in_flyer = parseInt(scope.store_product.in_flyer) === 0 ? false : true;
         scope.products = JSON.parse('<?php echo $products; ?>');
                 
-        if(typeof scope.store_product.product_id !== "undefined")
+        if(typeof scope.store_product.product_id !== "undefined" && parseInt(scope.store_product.product_id) > 0)
         {
             scope.store_product.product_id = scope.products[parseInt(scope.store_product.product_id)].id;  
             scope.selectedProduct = scope.products[parseInt(scope.store_product.product_id)];
         }
         
-        if(typeof scope.store_product.unit_id !== "undefined")
+        if(typeof scope.store_product.unit_id !== "undefined" && parseInt(scope.store_product.unit_id) > 0)
         {
             scope.store_product.unit_id = scope.units[parseInt(scope.store_product.unit_id)].id;  
         }
 	    
-	if(typeof scope.store_product.compareunit_id !== "undefined")
+	if(typeof scope.store_product.compareunit_id !== "undefined" && parseInt(scope.store_product.compareunit_id) > 0)
         {
             scope.store_product.compareunit_id = scope.compareunits[parseInt(scope.store_product.compareunit_id)].id;  
+        }
+        
+        if(typeof scope.store_product.brand_id !== "undefined" && parseInt(scope.store_product.brand_id) > 0)
+        {
+            scope.store_product.brand_id = scope.brands[parseInt(scope.store_product.brand_id)].id;  
+            scope.store_product.brand = scope.brands[parseInt(scope.store_product.brand_id)];
         }
         
         scope.product_selected();
@@ -85,7 +92,7 @@ $(document).ready(function()
     
     <!-- Begin mainmenu area -->
     <div class="mainmenu-area" ng-controller="MenuController">
-        <div class="container">
+        <div class="">
             <div class="row">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -107,8 +114,8 @@ $(document).ready(function()
     </div> 
     <!-- End mainmenu area -->
 
-<div id="admin-container" class="container admin-container" ng-controller="AdminController">
-    <md-content layout-padding>
+<div id="admin-container" class="admin-container" ng-controller="AdminController">
+    <md-content class="container" layout-padding>
         <form id="create_store_product_form" name="create_store_product_form" ng-submit="create_store_product()">
         
         <input type="hidden" name="product[id]" value="<?php echo $id; ?>">
@@ -163,11 +170,12 @@ $(document).ready(function()
            
         <!--Section to enter the brand of the product-->
         <md-autocomplete class="col-sm-6"
-                          md-input-name="product[brand]" 
                           md-selected-item="store_product.brand" 
                           md-search-text="searchText" 
+                          md-selected-item-change="brand_selected(brand)"
                           md-items="brand in getBrandMatches(searchText)" 
                           md-item-text="brand.name" 
+                          md-no-cache="true"
                           md-floating-label="Brand">
             <md-item-template>
               <span md-highlight-text="searchText">{{brand.name}}</span>
