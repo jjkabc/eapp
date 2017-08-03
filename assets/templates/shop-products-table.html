@@ -52,9 +52,9 @@
         <td md-cell><div class="admin-image"><a href=""><img alt="" ng-src="{{base_url}}assets/img/products/{{product.product.image}}"></a></div></td>
         <td md-cell>
             <p><b>{{product.product.name}}</b></p>
-            <p>Marque : {{product.brand.name}}</p>
-            <p>Format : {{product.format}}</p>
-            <p>Unité : {{product.unit.name}}</p>
+            <p ng-show="product.brand">Marque : {{product.brand.name}}</p>
+            <p ng-show="product.format">Format : {{product.format}}</p>
+            <p ng-show="product.unit">Unité : {{product.unit.name}}</p>
         </td>
         <td md-cell>{{product.price}}</td>
         <td md-cell>
