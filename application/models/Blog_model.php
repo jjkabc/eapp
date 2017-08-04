@@ -25,6 +25,43 @@ class Blog_model extends CI_Model
         return $this->get_recent_posts(POST_TYPE_STAT);
     }
 	
+	public function like_post($post_id, $user)
+	{
+		if($user != null && isset($post_id))
+		{
+			$data = array("post_id" => $post_id, "user_account_id" => $user->id);
+			$index = $this->db->insert(BLOG_POSTS_LIKES, $data);
+			return $index;
+		}
+		
+		return FALSE;
+	}
+	
+	public function dislike_post($post_id)
+	{
+		if(isset($post_id))
+		{
+			$data = array("post_id" => $post_id);
+			$this->db->delete(BLOG_POSTS_LIKES, $data);
+			
+			return $post_id;
+		}
+		
+		return FALSE;
+	}
+	
+	public function comment_post($post_id, $user, $comment)
+	{
+		if($user != null && isset($post_id) && isset($comment))
+		{
+			$data = array("post_id" => $post_id, "user_account_id" => $user->id, "comment" => $comment);
+			$index = $this->db->insert(BLOG_POSTS_COMMENTS, $data);
+			return $index;
+		}
+		
+		return FALSE;
+	}
+	
 	/**
 	* Get all recent posts 
 	*/
