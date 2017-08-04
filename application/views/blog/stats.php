@@ -1,80 +1,5 @@
 <!DOCTYPE html>
-<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
-<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
-<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
-<!--[if (gte IE 9)|!(IE)]><!-->
-<html lang="en">
-<!--<![endif]-->
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>Épicerie à petit prix - Statistique</title>
-    
-    <!-- PORTFOLIO AND LIGHTBOX SETTINGS -->
-    <link href="bfassets/css/bootFolio.css" rel="stylesheet">
-    <link href="bfassets/css/prettyPhoto.css" rel="stylesheet">
-    <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/font-awesome.css" rel="stylesheet">
-    <link href="css/et-icons.css" rel="stylesheet">
-    <link href="css/animate.min.css" rel="stylesheet">
-    <link href="css/owl-carousel.css" rel="stylesheet">
-    <link href="css/flexslider.css" rel="stylesheet">
-    <link href="style.css" rel="stylesheet">
-    <!-- Custom font -->
-    <link href='http://font.googleapis.com/css?family=Source+Sans+Pro:400,300,600,400italic,600italic,700,700italic,900' rel='stylesheet' type='text/css'>
-    <link href='http://font.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
 
-</head>
-<body>
-
-
-    <header id="header-one" class="header">
-        <div class="container-fluid">
-            <div class="menu-wrapper">
-                <nav id="navigation" class="navbar yamm" role="navigation">
-                    <div class="navbar-inner">  
-                        <div id="navbar-collapse" class="navbar-right navbar-collapse collapse clearfix">
-                            <ul class="nav navbar-nav">
-                               <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Blogue</a>
-                                    <ul class="dropdown-menu" role="menu">
-										<li><a href="blog-epicerie.html">L'épicerie dans la presse</a></li>
-										<li><a href="blog-statistique.html">Statistique</a></li>
-										<li><a href="blog-video.html">Video</a></li>
-                                    </ul>
-                                </li>
-                            </ul><!-- end navbar-right -->
-                        </div><!-- end navbar-callopse -->
-                    </div><!-- end navbar-inner -->
-                </nav><!-- end navigation -->
-            </div><!-- menu wrapper -->
-            <div class="shadow"></div>
-        </div>
-    </header><!-- end header -->
-
-        <section class="page-white bgpatttern clearfix">
-            <div class="section-title">
-                <div class="breadcrumb-container">
-                    <ul class="breadcrumb">
-                        <li><a href="index.html">Acceuil</a></li>
-                        <li class="active">blogue</li>
-                    </ul>
-                </div>
-                <h3>Statistique</h3>
-            </div><!-- end section title -->
-        </section><!-- end section white -->
-
-        <!-- page builer -->
 
         <section class="section-white clearfix">
             <div class="container">
@@ -84,7 +9,7 @@
                             <div class="col-md-12 col-sm-12 col-xs-12 wow fadeIn first">
                                 <div class="blog-item">
                                     <div class="ImageWrapper">
-                                        <img src="img/stat1.jpg" alt="" class="img-responsive">
+                                        <img src="<?php echo base_url("assets/blog/"); ?>img/stat1.jpg" alt="" class="img-responsive">
                                         <div class="ImageOverlayLi"></div>
                                         <div class="Buttons StyleH">
                                             <a href="#" title="Like it"><span class="bubble border-radius"><i class="fa fa-heart-o"></i> 3</span></a>
@@ -109,7 +34,7 @@
                             <div class="col-md-12 col-sm-12 col-xs-12 wow fadeIn last">
                                 <div class="blog-item">
                                     <div class="ImageWrapper">
-                                        <img src="img/stat2.png" alt="" class="img-responsive">
+                                        <img src="<?php echo base_url("assets/blog/"); ?>img/stat2.png" alt="" class="img-responsive">
                                         <div class="ImageOverlayLi"></div>
                                         <div class="Buttons StyleH">
                                             <a href="#" title="Like it"><span class="bubble border-radius"><i class="fa fa-heart-o"></i> 3</span></a>
@@ -172,7 +97,7 @@
                            <div class="featured-widget">
                                 <ul>
                                     <li>
-                                        <img src="img/widget_07.jpg" alt="" class="alignleft">
+                                        <img src="<?php echo base_url("assets/blog/"); ?>img/widget_07.jpg" alt="" class="alignleft">
                                         <h3> <a href="#">20 façons simples d'économiser sur votre prochaine facture d'épicerie</a></h3>
                                         <span class="metabox">
                                             <a href="#">INFOS</a> <span>2 Janvier 2015</span>
@@ -186,7 +111,7 @@
                                         </span>
                                     </li>
                                     <li>
-                                        <img src="img/widget_09.jpg" alt="" class="alignleft">
+                                        <img src="<?php echo base_url("assets/blog/"); ?>img/widget_09.jpg" alt="" class="alignleft">
                                         <h3> <a href="#">ENQUÊTE DE PRIX : NOS RÉSULTATS </a></h3>
                                         <span class="metabox">
                                             <a href="#">INFOS</a> <span>02 Janvier 2015</span>
@@ -201,40 +126,4 @@
             </div><!-- end row -->
         </div><!-- end container -->
     </section><!-- end section white -->
-    <!-- /#wrapper -->
-    <!-- jQuery -->
-    <script src="js/jquery.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/retina.js"></script>
-    <script src="js/wow.min.js"></script>
-    <script src="js/jquery.stellar.js"></script>
-    <script src="js/jquery.fitvids.js"></script>
-    <script src="js/home-scripts.js"></script>
-    <script>
-        $(document).ready(function () {
-            // Target your .container, .wrapper, .post, etc.
-            $(".blog-item").fitVids();
-        });
-    </script>
-    <!-- Portfolio -->
-    <script src="js/jquery.isotope.min.js"></script>
-    <script src="js/portfolio_01.js"></script>
-    <!-- Carousel -->
-    <script src="js/owl.carousel.js"></script>
-    <script src="js/owl-scripts.js"></script>
-    <!-- FlexSlider Scripts-->
-    <script src="js/jquery.flexslider.js"></script>
-    <script type="text/javascript">
-        (function ($) {
-            "use strict";
-            $('.flexslider').flexslider({
-                animation: 'fade',
-                slideshow: true,
-                controlNav: false,
-                animationLoop: true,
-            });
-        })(jQuery);
-    </script>
-
-</body>
-</html>
+   
