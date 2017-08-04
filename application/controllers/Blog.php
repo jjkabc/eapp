@@ -5,12 +5,12 @@ class Blog extends CI_Controller {
 
     public function __construct()
     {
-        
         parent::__construct();
-        
+        $this->data["recentPosts"] = addslashes(json_encode($this->blog_model->get_recent_posts()));
         $this->data['css'] = $this->load->view('blog/css', $this->data, TRUE);
         $this->data['scripts'] = $this->load->view('blog/scripts', $this->data, TRUE);
 	$this->data['recent_posts'] = $this->load->view('blog/recent_posts_widget', $this->data, TRUE);
+		
     }
     
     /**
@@ -31,7 +31,37 @@ class Blog extends CI_Controller {
     public function press_release()
     {
         $this->rememberme->recordOrigPage();
-        $this->data['body'] = $this->parser->parse('blog/press-release', $this->data, TRUE);
+        $this->data['body'] = $this->parser->parse("blog/press-release", $this->data, TRUE);
         $this->parser->parse('eapp_template', $this->data);
-    }    
+    }  
+	
+    public function detail($post_id)
+    {
+        $this->rememberme->recordOrigPage();
+        $this->data["post"] = addslashes(json_encode($this->blog_model->get(BLOG_POSTS, $post_id)));
+        $this->data['body'] = $this->parser->parse("blog/stat-detail", $this->data, TRUE);
+        $this->parser->parse('eapp_template', $this->data);
+    } 
+	
+    public function stats()
+    {
+        $this->rememberme->recordOrigPage();
+        $this->data["recentStats"] = addslashes(json_encode($this->blog_model->get_recent_stat_posts()));
+        $this->data['body'] = $this->parser->parse("blog/stat", $this->data, TRUE);
+        $this->parser->parse('eapp_template', $this->data);
+    }
+	
+    public function like()
+    {
+        $id = $this->input->post("post_id");
+        $this->blog_model->like($id, $this->user);
+        echo  json_encode(addslashes($this->blog_model->get_post_data($id, BLOG_POSTS_LIKES)));	
+    }
+
+    public function dislike()
+    {
+        $id = $this->input->post("post_id");
+        $this->blog_model->dislike($id, $this->user);
+        return json_encode(addslashes($this->blog_model->get_post_data($id, BLOG_POSTS_LIKES)));	
+    }
 }

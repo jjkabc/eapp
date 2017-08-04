@@ -95,6 +95,10 @@ defined('ASSETS_DIR_PATH')          OR define('ASSETS_DIR_PATH', $_SERVER['DOCUM
 defined('STORE_LOGO_WIDTH')         OR define('STORE_LOGO_WIDTH', 1024); // highest automatically-assigned error code
 defined('STORE_LOGO_HEIGHT')        OR define('STORE_LOGO_HEIGHT', 720); // highest automatically-assigned error code
 
+defined('POST_TYPE_STAT')        OR define('POST_TYPE_STAT', 1);
+
+
+
 /* Database Tables */
 defined('CHAIN_STORE_TABLE')        OR define('CHAIN_STORE_TABLE', 'eapp_chain_store'); 
 defined('PRODUCT_TABLE')            OR define('PRODUCT_TABLE', 'eapp_product'); 
@@ -111,6 +115,9 @@ defined('USER_PROFILE_TABLE')       OR define('USER_PROFILE_TABLE', 'eapp_user_p
 defined('USER_FAVORITE_STORE_TABLE')       OR define('USER_FAVORITE_STORE_TABLE', 'eapp_user_favorite_store');
 defined('USER_GROCERY_LIST_TABLE')       OR define('USER_GROCERY_LIST_TABLE', 'eapp_user_grocery_list');
 defined('PRODUCT_BRAND_TABLE')       OR define('PRODUCT_BRAND_TABLE', 'eapp_product_brand');
+defined('BLOG_POSTS')       OR define('BLOG_POSTS', 'eapp_blog_posts');
+defined('BLOG_POSTS_COMMENTS')       OR define('BLOG_POSTS_COMMENTS', 'eapp_blog_posts_comments');
+defined('BLOG_POSTS_LIKES')       OR define('BLOG_POSTS_LIKES', 'eapp_blog_posts_likes');
 
 
 
