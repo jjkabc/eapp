@@ -1,35 +1,6 @@
 <!DOCTYPE html>
-<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
-<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
-<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
-<!--[if (gte IE 9)|!(IE)]><!-->
-<!--<![endif]-->
-
-
-    
-    <!-- PORTFOLIO AND LIGHTBOX SETTINGS -->
-    <link href="<?php echo base_url("assets/blog/bfassets/css/bootFolio.css"); ?>" rel="stylesheet">
-    <link href="<?php echo base_url("assets/blog/bfassets/css/prettyPhoto.css"); ?>" rel="stylesheet">
-    <!-- Bootstrap Core CSS -->
-    <link href="<?php echo base_url("assets/blog/css/font-awesome.css"); ?>" rel="stylesheet">
-    <link href="<?php echo base_url("assets/blog/css/et-icons.css"); ?>" rel="stylesheet">
-    <link href="<?php echo base_url("assets/blog/css/animate.min.css"); ?>" rel="stylesheet">
-    <link href="<?php echo base_url("assets/blog/css/owl-carousel.css"); ?>" rel="stylesheet">
-    <link href="<?php echo base_url("assets/blog/css/flexslider.css"); ?>" rel="stylesheet">
-    <link href="<?php echo base_url("assets/blog/style.css"); ?>" rel="stylesheet">
-    <!-- Custom font -->
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-
-
 
     <!-- page builer -->
-
     <section class="section-white clearfix blog" ng-controller="AccountController">
         <div class="container">
             <div class="row">
@@ -177,34 +148,3 @@
     </div><!-- end container -->
 </section><!-- end section white -->
 
-    <script src="<?php echo base_url("assets/blog/js/retina.js"); ?>"></script>
-    <script src="<?php echo base_url("assets/blog/"); ?>js/wow.min.js"></script>
-    <script src="<?php echo base_url("assets/blog/"); ?>js/jquery.stellar.js"></script>
-    <script src="<?php echo base_url("assets/blog/"); ?>js/jquery.fitvids.js"></script>
-    
-    <script>
-        $(document).ready(function () {
-            // Target your .container, .wrapper, .post, etc.
-            $(".blog-item").fitVids();
-        });
-    </script>
-    
-    <!-- Portfolio -->
-    <script src="<?php echo base_url("assets/blog/js/jquery.isotope.min.js"); ?>"></script>
-    <script src="<?php echo base_url("assets/blog/js/portfolio_01.js"); ?>"></script>
-    <!-- Carousel -->
-    <script src="<?php echo base_url("assets/blog/js/owl.carousel.js"); ?>"></script>
-    <script src="<?php echo base_url("assets/blog/js/owl-scripts.js"); ?>"></script>
-    <!-- FlexSlider Scripts-->
-    <script src="<?php echo base_url("assets/blog/js/jquery.flexslider.js"); ?>"></script>
-    <script type="text/javascript">
-        (function ($) {
-            "use strict";
-            $('.flexslider').flexslider({
-                animation: 'fade',
-                slideshow: true,
-                controlNav: false,
-                animationLoop: true
-            });
-        })(jQuery);
-    </script>
