@@ -96,54 +96,9 @@
                         </ul>
                     </nav>
                 </div><!-- end pull-right -->
+				
+				{recent_posts}
 
-                <div class="pull-right col-md-4 col-sm-4 col-xs-12">
-                    <div id="sidebar" class="clearfix">
-                        <div class="widget">
-                            <div id="imaginary_container" class="col-md-12"> 
-                                <div class="input-group stylish-input-group">
-                                    <md-input-container class="col-md-12">
-                                        <input aria-label="Search" ng-model="recentPostsSearchText">
-                                        <md-icon style="color: #1abc9c;"><i class="material-icons">search</i></md-icon>
-                                    </md-input-container>
-                                </div>
-                            </div>
-                        </div><!-- end widget -->
-
-
-                      <div class="widget wow fadeIn">
-                        <div class="widget-title">
-                            <h3>Posts récents</h3>
-                        </div><!-- end widget title -->
-                       <div class="featured-widget">
-                            <ul>
-                                <li>
-                                    <img src="<?php echo base_url("assets/blog/"); ?>img/widget_07.jpg" alt="" class="alignleft">
-                                    <h3> <a href="#">20 façons simples d'économiser sur votre prochaine facture d'épicerie</a></h3>
-                                    <span class="metabox">
-                                        <a href="#">INFOS</a> <span>2 Janvier 2015</span>
-                                    </span>
-                                </li>
-                                <li>
-                                    <img src="<?php echo base_url("assets/blog/"); ?>img/widget_08.jpg" alt="" class="alignleft">
-                                    <h3> <a href="#">Dollarama et l’épicerie à très bas prix</a></h3>
-                                    <span class="metabox">
-                                        <a href="#">INFOS</a> <span>2 Janvier 2015</span>
-                                    </span>
-                                </li>
-                                <li>
-                                    <img src="<?php echo base_url("assets/blog/"); ?>img/widget_09.jpg" alt="" class="alignleft">
-                                    <h3> <a href="#">ENQUÊTE DE PRIX : NOS RÉSULTATS </a></h3>
-                                    <span class="metabox">
-                                        <a href="#">INFOS</a> <span>02 Janvier 2015</span>
-                                    </span>
-                                </li>
-                            </ul>
-                        </div><!-- end featured-widget -->
-                    </div><!-- end widget -->
-
-                </div><!-- end col -->
-            </div><!-- end sidebar -->
         </div><!-- end row -->
     </div><!-- end container -->
 </section><!-- end section white -->
