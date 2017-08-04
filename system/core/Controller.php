@@ -99,6 +99,8 @@ class CI_Controller {
                 'menu_categories' => 'Categories',
                 'menu_flyers' => 'Flyers',
                 'menu_contact' => 'Contact',
+				'scripts' => '',
+				'css' => '',
                 'base_url' => base_url(),
                 'site_url' => site_url(),
                 'controller' => $this->router->fetch_class(),
