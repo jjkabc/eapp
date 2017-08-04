@@ -111,6 +111,7 @@ defined('USER_PROFILE_TABLE')       OR define('USER_PROFILE_TABLE', 'eapp_user_p
 defined('USER_FAVORITE_STORE_TABLE')       OR define('USER_FAVORITE_STORE_TABLE', 'eapp_user_favorite_store');
 defined('USER_GROCERY_LIST_TABLE')       OR define('USER_GROCERY_LIST_TABLE', 'eapp_user_grocery_list');
 defined('PRODUCT_BRAND_TABLE')       OR define('PRODUCT_BRAND_TABLE', 'eapp_product_brand');
+defined('BLOG_POSTS')       OR define('BLOG_POSTS', 'eapp_blog_posts');
 
 
 
