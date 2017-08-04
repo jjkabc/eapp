@@ -50,5 +50,23 @@ class Blog extends CI_Controller {
 		$data["recentStats"] = addslashes(json_encode($this->blog_model->get_recent_stat_posts()));
         $this->data['body'] = $this->parser->parse("blog/stat", $this->data, TRUE);
         $this->parser->parse('eapp_template', $this->data);
-    } 
+    }
+	
+	public function like()
+	{
+		$id = $this->input->post("post_id");
+		
+		$this->blog_model->like($id, $this->user))
+		
+		echo  json_encode(addslashes($this->blog_model->get_post_data($id, BLOG_POSTS_LIKES)));	
+	}
+	
+	public function dislike()
+	{
+		$id = $this->input->post("post_id");
+		
+		$this->blog_model->dislike($id, $this->user))
+		
+		return json_encode(addslashes($this->blog_model->get_post_data($id, BLOG_POSTS_LIKES)));	
+	}
 }
