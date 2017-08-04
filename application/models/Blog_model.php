@@ -17,8 +17,19 @@ class Blog_model extends CI_Model
 	    // Your own constructor code
     }
     
+	/**
+	* Get all recent posts of type statistics
+	*/
     public function get_recent_stat_posts()
     {
         return null;
     }
+	
+	/**
+	* Get all recent posts 
+	*/
+	public function get_recent_posts()
+	{
+		return null;
+	}
 }
