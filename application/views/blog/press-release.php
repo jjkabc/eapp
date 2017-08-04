@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
     <!-- page builer -->
-    <section class="section-white clearfix blog" ng-controller="AccountController">
+    <section class="section-white clearfix blog" ng-controller="BlogController">
         <div class="container">
             <div class="row">
                 <div class="pull-left col-md-8 col-sm-8 col-xs-12">
