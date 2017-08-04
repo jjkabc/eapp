@@ -93,7 +93,7 @@ class Blog_model extends CI_Model
 		return $result_array;
 	}
 	
-	private function get_post_data($post_id, $table_name)
+	public function get_post_data($post_id, $table_name)
 	{
 		$result_array = array();
 		$this->db->where(array("post_id" => $post_id));
