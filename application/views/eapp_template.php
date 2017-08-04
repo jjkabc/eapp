@@ -86,11 +86,14 @@
     <!-- Menu Controller Script -->
     <script src="<?php echo base_url("assets/js/menu-controller.js")?>"></script>
     
-    <!-- Menu Controller Script -->
+    <!-- Cart Controller Script -->
     <script src="<?php echo base_url("assets/js/cart-controller.js")?>"></script>
     
-    <!-- Menu Controller Script -->
+    <!-- Shop Controller Script -->
     <script src="<?php echo base_url("assets/js/shop-controller.js")?>"></script>
+	  
+	<!-- Blog Controller Script -->
+    <script src="<?php echo base_url("assets/js/blog-controller.js")?>"></script> 
     
     <!-- ngNotificationsBar Script -->
     <script src="<?php echo base_url("assets/js/ngNotificationsBar.min.js")?>"></script>
