@@ -7,9 +7,10 @@ class Blog extends CI_Controller {
     {
         
         parent::__construct();
+        
         $this->data['css'] = $this->load->view('blog/css', $this->data, TRUE);
         $this->data['scripts'] = $this->load->view('blog/scripts', $this->data, TRUE);
-	    $this->data['recent_posts'] = $this->load->view('blog/recent_posts_widget', $this->data, TRUE);
+	$this->data['recent_posts'] = $this->load->view('blog/recent_posts_widget', $this->data, TRUE);
     }
     
     /**
@@ -29,7 +30,7 @@ class Blog extends CI_Controller {
      */
     public function press_release()
     {
-		$this->rememberme->recordOrigPage();
+        $this->rememberme->recordOrigPage();
         $this->data['body'] = $this->parser->parse('blog/press-release', $this->data, TRUE);
         $this->parser->parse('eapp_template', $this->data);
     }    
