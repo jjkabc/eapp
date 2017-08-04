@@ -7,9 +7,11 @@ class Blog extends CI_Controller {
     {
         
         parent::__construct();
+		$data["recentPosts"] = addslashes(json_encode($this->blog_model->get_recent_posts()));
         $this->data['css'] = $this->load->view('blog/css', $this->data, TRUE);
         $this->data['scripts'] = $this->load->view('blog/scripts', $this->data, TRUE);
 	    $this->data['recent_posts'] = $this->load->view('blog/recent_posts_widget', $this->data, TRUE);
+		
     }
     
     /**
@@ -30,7 +32,23 @@ class Blog extends CI_Controller {
     public function press_release()
     {
 		$this->rememberme->recordOrigPage();
-        $this->data['body'] = $this->parser->parse('blog/press-release', $this->data, TRUE);
+        $this->data['body'] = $this->parser->parse("blog/press-release", $this->data, TRUE);
         $this->parser->parse('eapp_template', $this->data);
-    }    
+    }  
+	
+	public function detail($post_id)
+    {
+		$this->rememberme->recordOrigPage();
+		$data["post"] = addslashes(json_encode($this->blog_model->get(BLOG_POSTS, $post_id)));
+        $this->data['body'] = $this->parser->parse("blog/stat-detail", $this->data, TRUE);
+        $this->parser->parse('eapp_template', $this->data);
+    } 
+	
+	public function stats()
+    {
+		$this->rememberme->recordOrigPage();
+		$data["recentStats"] = addslashes(json_encode($this->blog_model->get_recent_stat_posts()));
+        $this->data['body'] = $this->parser->parse("blog/stat", $this->data, TRUE);
+        $this->parser->parse('eapp_template', $this->data);
+    } 
 }
