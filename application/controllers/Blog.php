@@ -5,6 +5,8 @@ class Blog extends CI_Controller {
 
      public function __construct()
     {
+		$this->data['css'] = $this->load->view('blog/css', $this->data, TRUE);
+		$this->data['scripts'] = $this->load->view('blog/scripts', $this->data, TRUE);
         parent::__construct();
     }
     
