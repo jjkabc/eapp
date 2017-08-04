@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<section class="section-white clearfix">
+<section id="blog-container" class="section-white clearfix" ng-controller="BlogController">
     <div class="container">
         <div id="blog-page" class="row clearfix">
             <div id="content" class="col-lg-8 col-md-8 col-sm-12">
@@ -41,4 +41,13 @@
     </div><!-- end container -->
 </section><!-- end section white -->
 <!-- /#wrapper -->
+
+<script>
+	var scope = angular.element($("#blog-container")).scope;
+	
+	scope.$apply(function()
+ 	{
+		scope.blog = JSON.parse('<?php echo $post; ?>');
+	});
+</script>
    
