@@ -10,17 +10,7 @@
      <!-- Angular Material style sheet -->
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.css">
     <link rel="stylesheet" href="<?php echo base_url("assets/css/lf-ng-md-file-input.css")?>">
-      <!-- Angular Material requires Angular.js Libraries -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-aria.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-messages.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-sanitize.min.js"></script>
-    <script src="<?php echo base_url("assets/js/lf-ng-md-file-input.js")?>"></script>
-
-    <!-- Angular Material Library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.js"></script>
-    
+      
     <!-- Google Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
@@ -51,11 +41,24 @@
     <!-- MD Table CSS -->
     <link rel="stylesheet" href="<?php echo base_url("assets/css/md-data-table.css")?>">
     
-    
+    {css}
     
     <!-- JS Scripts -->
-        <!-- Latest jQuery form server -->
+	 
+	<!-- Latest jQuery form server -->
     <script src="https://code.jquery.com/jquery.min.js"></script>
+	  
+	<!-- Angular Material requires Angular.js Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-messages.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-sanitize.min.js"></script>
+    <script src="<?php echo base_url("assets/js/lf-ng-md-file-input.js")?>"></script>
+
+    <!-- Angular Material Library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.js"></script>  
+        
     
     <!-- Bootstrap JS form CDN -->
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
@@ -112,49 +115,45 @@
     
      <!-- Initialize angular root scope -->
     <script>
-    $(document).ready(function()
-    {
-        var rootScope = angular.element($("html")).scope();
-        
-        rootScope.$apply(function()
-        {
-            
-			
-            rootScope.base_url = "<?php echo $base_url; ?>";
-            rootScope.site_url = "<?php echo $site_url; ?>";
-            rootScope.controller = "<?php echo $controller; ?>";
-            rootScope.method = "<?php echo $method; ?>";
-            rootScope.longitude = 0;
-            rootScope.latitude = 0;
-            rootScope.cart = [];
-            rootScope.is_loading = false;
-            rootScope.valid = true;
-            rootScope.success_message = "";
-            rootScope.error_message = "";
-            var user = '<?php echo $user; ?>';
-            if(user === "" || user == "null")
-            {
-                rootScope.loggedUser = null;
-            }
-            else
-            {
-                rootScope.loggedUser = JSON.parse(user);
-            }
-            
-            rootScope.hideSearchArea = (rootScope.controller == "account" && (rootScope.method == "login" || rootScope.method == "register"));
-            
-            rootScope.isUserLogged = rootScope.loggedUser !== null;
-            
-            // THis is called for a non logged user to prompt for his zip code
-            // If that's not already the case. 
-            if(typeof rootScope.promptForZipCode !== "undefined")
-            {
-                rootScope.promptForZipCode();
-            }
-            
-        });
-        
-    });
+		$(document).ready(function()
+		{
+			var rootScope = angular.element($("html")).scope();
+
+			rootScope.$apply(function()
+			{
+				rootScope.base_url = "<?php echo $base_url; ?>";
+				rootScope.site_url = "<?php echo $site_url; ?>";
+				rootScope.controller = "<?php echo $controller; ?>";
+				rootScope.method = "<?php echo $method; ?>";
+				rootScope.longitude = 0;
+				rootScope.latitude = 0;
+				rootScope.cart = [];
+				rootScope.is_loading = false;
+				rootScope.valid = true;
+				rootScope.success_message = "";
+				rootScope.error_message = "";
+				var user = '<?php echo $user; ?>';
+				if(user === "" || user == "null")
+				{
+					rootScope.loggedUser = null;
+				}
+				else
+				{
+					rootScope.loggedUser = JSON.parse(user);
+				}
+
+				rootScope.hideSearchArea = (rootScope.controller == "account" && (rootScope.method == "login" || rootScope.method == "register"));
+
+				rootScope.isUserLogged = rootScope.loggedUser !== null;
+
+				// THis is called for a non logged user to prompt for his zip code
+				// If that's not already the case. 
+				if(typeof rootScope.promptForZipCode !== "undefined")
+				{
+					rootScope.promptForZipCode();
+				}
+			});
+		});
     </script>
   </head>
   <body>
@@ -372,6 +371,6 @@
             </div>
         </div>
     </div> <!-- End footer bottom area -->
-   
+   {scripts}
   </body>
 </html>
