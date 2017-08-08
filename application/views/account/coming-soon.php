@@ -42,7 +42,7 @@
         </script>
     </head>    
 
-    <body class="bgimg" style="height: 100%;" ng-controller="AccountController">
+    <body class="bgimg container" style="height: 100%; width : 100%;" ng-controller="AccountController">
         <div class="row">
 			
             <div class="col-sm-6" style="margin : auto;">
@@ -54,41 +54,43 @@
         		<hr>
         		<p id="time" style="text-align: center;">35 days</p>
         
-        <form name="loginForm" class="form-horizontal" role="form" ng-submit="login()" novalidate>
+        
             <div class="row">
                 <md-content style="margin : auto; background-color: whitesmoke;" layout-padding>
-                    <div id="login-alert" class="alert alert-danger col-sm-12" ng-show="message">
-                        <p>{{message}}</p>
-                    </div>
-                    <p style="text-align: center;">Admin Login</p>
-                    <md-input-container class="md-block col-md-12" flex-gt-sm>
-                    <input required name="email" ng-model="user.email" />
-                    <div ng-messages="loginForm.email.$error">
-                        <div ng-message="required">Veillez entrer votre addresse email.</div>
-                    </div>
-                </md-input-container>
-                
-                <md-input-container class="md-block col-md-12" flex-gt-sm>
-                    <input style="border-left : none; border-right : none;border-top : none;" type="password" required name="password" ng-model="user.password" />
-                    <div ng-messages="loginForm.password.$error">
-                        <div ng-message="required">Veillez entrer un mot de passe.</div>
-                    </div>
-                </md-input-container>
-                    
-                <div class="col-sm-12">
-                    <div class="input-group checkbox">
-                        <label>
-                            <input id="login-remember" type="checkbox" ng-model="user.rememberme" name="remember"> Rester connecté
-                        </label>
-                    </div>
-                </div>
-                                                       
-                <div class="col-sm-12">
-                    <button id="btn-signup" type="submit" class="pull-right btn btn-primary"><i class=""></i> &nbsp Se connecter</button>
-                </div>
+	                <form name="loginForm" class="" role="form" ng-submit="login()" novalidate>
+	                    <div id="login-alert" class="alert alert-danger col-sm-12" ng-show="message">
+	                        <p>{{message}}</p>
+	                    </div>
+	                    <p style="text-align: center;">Admin Login</p>
+	                    <md-input-container class="md-block col-md-12" flex-gt-sm>
+	                        <input required name="email" ng-model="user.email" />
+	                        <div ng-messages="loginForm.email.$error">
+	                            <div ng-message="required">Veillez entrer votre addresse email.</div>
+	                        </div>
+	                    </md-input-container>
+	                
+		                <md-input-container class="md-block col-md-12" flex-gt-sm>
+		                    <input style="border-left : none; border-right : none;border-top : none;" type="password" required name="password" ng-model="user.password" />
+		                    <div ng-messages="loginForm.password.$error">
+		                        <div ng-message="required">Veillez entrer un mot de passe.</div>
+		                    </div>
+		                </md-input-container>
+		                    
+		                <div class="col-sm-12">
+		                    <div class="input-group checkbox">
+		                        <label>
+		                            <input id="login-remember" type="checkbox" ng-model="user.rememberme" name="remember"> Rester connecté
+		                        </label>
+		                    </div>
+		                </div>
+		                                                       
+		                <div class="col-sm-12">
+		                    <button id="btn-signup" type="submit" class="pull-right btn btn-primary"><i class=""></i> &nbsp Se connecter</button>
+		                </div>
+	                </form>
                 </md-content>
             </div>
-        </form>
+        
     </div>
     </div> 
     </body>
