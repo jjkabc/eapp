@@ -46,17 +46,16 @@
         <div class="row">
 			
             <div class="col-sm-6" style="margin : auto;">
-                <img src="<?php echo base_url("assets/img/logo.png")?>" />
+                <img src="<?php echo base_url("assets/img/logo.png")?>" style="width : 100%;" />
             </div>
     
-            <div class="col-sm-6" style="margin : auto; margin-top : 5%;">
+            <div class="col-sm-6" style="margin-top : 5%;">
         		<h1 style="text-align: center;">Site en construction</h1>
         		<hr>
         		<p id="time" style="text-align: center;">35 days</p>
-        
-        
-            <div class="row">
-                <md-content style="margin : auto; background-color: whitesmoke;" layout-padding>
+
+
+                <md-content style="margin : auto; background-color: whitesmoke; min-width : 450px;" class="col-sm-8" layout-padding>
 	                <form name="loginForm" class="" role="form" ng-submit="login()" novalidate>
 	                    <div id="login-alert" class="alert alert-danger col-sm-12" ng-show="message">
 	                        <p>{{message}}</p>
@@ -89,7 +88,7 @@
 		                </div>
 	                </form>
                 </md-content>
-            </div>
+
         
     </div>
     </div> 
