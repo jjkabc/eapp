@@ -44,14 +44,15 @@
 
     <body class="bgimg" style="height: 100%;" ng-controller="AccountController">
         <div class="row">
-            <div class="col-sm-4 offset-md-6 border-right-0" style="margin : auto;">
+			
+            <div class="col-sm-6" style="margin : auto;">
                 <img src="<?php echo base_url("assets/img/logo.png")?>" />
             </div>
     
-            <div class="offset-md-6" style="margin : auto;">
-        <h1 style="text-align: center;">Site en construction</h1>
-        <hr>
-        <p id="time" style="text-align: center;">35 days</p>
+            <div class="col-sm-6" style="margin : auto; margin-top : 5%;">
+        		<h1 style="text-align: center;">Site en construction</h1>
+        		<hr>
+        		<p id="time" style="text-align: center;">35 days</p>
         
         <form name="loginForm" class="form-horizontal" role="form" ng-submit="login()" novalidate>
             <div class="row">
