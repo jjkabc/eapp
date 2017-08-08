@@ -226,7 +226,7 @@ $(document).ready(function()
         <!-- Section to select product unit-->
         <md-input-container class="col-sm-6">
             <label>Select Unit</label>
-            <md-select name="product[unit_id]" ng-change="updateUnitPrice()" ng-model="store_product.unit_id">
+            <md-select name="product[unit_id]" ng-change="updateCompageUnit(store_product.unit_id)" ng-model="store_product.unit_id">
                 <md-option ng-value="unit.id" ng-repeat="unit in units">{{ unit.name }}</md-option>
             </md-select>
         </md-input-container>

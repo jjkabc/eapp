@@ -24,7 +24,7 @@ $(document).ready(function(){
             </div>  
             <md-content id="retailer-contents" style="padding : 10px;">
                 <div class="form-group-inline" ng-repeat="category in categories">
-                    <div class="col-md-2" style="padding-top:40px;">
+                    <div class="col-md-3" style="padding-top:40px;">
                         <label class="btn item-block">
                             <md-tooltip md-direction="top">{{category.name}}</md-tooltip>
                             <img  ng-click="select_category($event)" id="{{category.id}}" ng-src="<?php echo base_url("assets/img/categories/"); ?>{{category.image}}" alt="{{category.name}}" class="img-thumbnail img-check">

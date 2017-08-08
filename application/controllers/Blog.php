@@ -6,7 +6,6 @@ class Blog extends CI_Controller {
     public function __construct()
     {
         parent::__construct();
-        $this->data["recentPosts"] = addslashes(json_encode($this->blog_model->get_recent_posts()));
         $this->data['css'] = $this->load->view('blog/css', $this->data, TRUE);
         $this->data['scripts'] = $this->load->view('blog/scripts', $this->data, TRUE);
 	$this->data['recent_posts'] = $this->load->view('blog/recent_posts_widget', $this->data, TRUE);
@@ -33,8 +32,38 @@ class Blog extends CI_Controller {
         $this->rememberme->recordOrigPage();
         $this->data['body'] = $this->parser->parse("blog/press-release", $this->data, TRUE);
         $this->parser->parse('eapp_template', $this->data);
-    }  
-	
+    } 
+    
+    public function get_posts()
+    {
+        $offset = $this->input->post("offset");
+        
+        $result = array();
+        
+        $result["recentPosts"] = $this->blog_model->get_recent_posts(-1, 3, $offset);
+        
+        $not_in = array();
+        
+        foreach ($result["recentPosts"] as $post) 
+        {
+            array_push($not_in, $post->id);
+        }
+        
+        $result["otherPosts"] = $this->blog_model->get_other_posts(-1, 3, $not_in);
+        
+        $result["blogPostCount"] = $this->blog_model->blog_post_count();
+        
+        echo json_encode($result);
+    }
+    
+    public function search_posts() {
+        
+        $result = array();
+        $result["otherPosts"] = $this->blog_model->search_posts($this->input->post("filter"));
+        echo json_encode($result);
+    }
+
+
     public function detail($post_id)
     {
         $this->rememberme->recordOrigPage();

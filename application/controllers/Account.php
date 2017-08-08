@@ -42,6 +42,11 @@ class Account extends CI_Controller {
         $this->data['body'] = $this->load->view('account/register', $this->data, TRUE);
         $this->parser->parse('eapp_template', $this->data);
     }
+    
+    public function page_under_construction() 
+    {
+        $this->load->view('account/coming-soon', $this->data);
+    }
 	
     public function my_grocery_list() 
     {
@@ -129,7 +134,6 @@ class Account extends CI_Controller {
         
         echo json_encode($data);
     }
-
 
     /*
      * User login

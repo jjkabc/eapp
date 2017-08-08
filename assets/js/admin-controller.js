@@ -306,6 +306,7 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
             sessionStorage.setItem("period_to", convert_to_string_date($scope.store_product.period_to));
 		
 	    $scope.selectedProduct = null;
+            $scope.store_product.brand = null;
 	    $scope.api.removeAll();
 	    var tmp = 
 	    {
@@ -313,9 +314,11 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
 		organic : 0,
 		in_flyer : 0,
 		format : "1x1",
+                country : 'Canada',
+                state : 'Quebec',
 		retailer_id : $scope.store_product.retailer_id,
 		period_from : $scope.store_product.period_from,
-		period_to : $scope.store_product.period_to,
+		period_to : $scope.store_product.period_to
 	    };
 	    $scope.store_product = tmp;
 	    
@@ -395,6 +398,16 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
     $scope.updateUnitPrice = function()
     {
         $scope.store_product.unit_price =  $scope.store_product.price / $scope.updateQuantity();
+    };
+    
+    $scope.updateCompageUnit = function(unit_id)
+    {
+        var unit = $scope.units[unit_id];
+        
+        if(unit !== null)
+        {
+            $scope.store_product.compareunit_id = $scope.compareunits[unit.compareunit_id].id;
+        }
     };
     
     $scope.getEquivalent = function(unit_id, compareunit_id)
@@ -520,7 +533,7 @@ angular.module("eappApp").controller('ProductsTableController', ['$scope', '$q',
     {
         filter: '',
         limit: '25',
-        order: 'name',
+        order: 'date_modified',
         page: 1
     };
     

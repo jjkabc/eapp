@@ -87,11 +87,11 @@
                     <th md-column>&nbsp;</th>
                     <th md-column>Store Logo</th>
                     <th md-column>Image</th>
-                    <th md-column md-order-by="name">Product</th>
+                    <th md-column>Product</th>
                     <th md-column md-numeric>Price</th>
                     <th md-column md-numeric>Quantity</th>
                     <th md-column md-numeric>Unit Price</th>
-                    <th md-column md-order-by="date">Validity Period</th>
+                    <th md-column md-order-by="date_modified">Validity Period</th>
                     <th md-column>Actions</th>
                 </tr>
             </thead>

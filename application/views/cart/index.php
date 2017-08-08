@@ -130,7 +130,7 @@
                             <p>{{store.store.chain.name}}</p>
                         </th>
                     </tr>
-                    <tr>
+                    <tr id="header-stores">
                         <th></th>
                         <th ng-repeat="store in close_stores">
                             <img class="admin-image" ng-src="{{base_url}}/assets/img/stores/{{store.store.chain.image}}" />

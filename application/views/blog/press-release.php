@@ -6,19 +6,19 @@
             <div class="row">
                 <div class="pull-left col-md-8 col-sm-8 col-xs-12">
                     <div id="blog-page" class="row clearfix">
-                        <div class="col-md-12 col-sm-12 col-xs-12 wow fadeIn" ng-class="$index % 2 == 0 ? 'first' : 'last'" ng-repeat="post in RecentPosts">
+                        <div class="col-md-12 col-sm-12 col-xs-12 wow fadeIn" ng-class="$index % 2 === 0 ? 'first' : 'last'" ng-repeat="post in recentPosts">
                             <div class="blog-item">
                                 <div class="ImageWrapper">
-                                    <img src="<?php echo base_url("assets/blog/"); ?>img/posts/{{post.image}}" alt="" class="img-responsive">
+                                    <img ng-src="<?php echo base_url("assets/blog/"); ?>img/posts/{{post.image}}" alt="" class="img-responsive">
                                     <div class="ImageOverlayLi"></div>
                                     <div class="Buttons StyleH">
-                                        <a ng-show="canLike() && userLogged" href ng-click="like(post.id)" title="Aimer"><span class="bubble border-radius"><i class="fa fa-heart-o"></i> {{post.likes}}</span></a>
-										<a ng-show="!canLike() && userLogged" href ng-click="like(post.id)" title="Pas aimer"><span class="bubble border-radius"><i class="fa fa-thumbs-down"></i></span></a>
-                                        <a href="<?php echo base_url("blog/comments/")?>{{post.id}}" title="Voir Commentaires"><span class="bubble border-radius"><i class="fa fa-comment-o"></i>{{post.comments.length}}</span></a>
+                                        <a ng-show="canLike(post.id) && userLogged" href ng-click="like(post.id)" title="Aimer"><span class="bubble border-radius"><i class="fa fa-heart-o"></i> {{post.likes}}</span></a>
+                                        <a ng-show="!canLike(post.id) && userLogged" href ng-click="like(post.id)" title="Pas aimer"><span class="bubble border-radius"><i class="fa fa-thumbs-down"></i></span></a>
+                                        <a href="<?php echo base_url("blog/comments/")?>{{post.id}}" title="Voir Commentaires"><span class="bubble border-radius"><i class="fa fa-comment-o"></i> {{post.comments.length}}</span></a>
                                     </div>
                                 </div>
                                 <div class="meta">
-                                    <span><a href >INFOS</a> | {{post.date | date}}</span>
+                                    <span><a href >INFOS</a> | {{post.date_modified | date}}</span>
                                 </div><!-- end meta -->
                                 <div class="blog-title">
                                     <h3><a href="<?php echo base_url("blog/view/")?>{{post.id}}" title="">{{post.title}}</a></h3>
@@ -32,33 +32,44 @@
                             </div><!-- end blog -->
                         </div><!-- end col -->
                     </div><!-- end blog -->
-
-                    <nav class="text-center"> 
+                    
+                    <nav class="text-center" ng-show="page_list.length > 1"> 
                         <ul class="pagination">
-                            <li><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-                            <li><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
+                            <li><a href ng-click="previousPage()" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+                            
+                            <li ng-click="gotoPage(item)" ng-repeat="item in page_list"><a href ng-style="selected_page_value == item.value && {'background-color':'#17a78b'}">{{item.value}}</a></li>
+                            
                             <li>
-                                <a href="#" aria-label="Next">
+                                <a href ng-click="nextPage()"aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                                 </a>
                             </li>
                         </ul>
                     </nav>
+                    
+                    <div class="text-center" ng-show="blogPostCount === 0">
+                        <p>Aucun article de presse n'est actuellement disponible.</p>
+                    </div>
                 </div><!-- end pull-right -->
-				
-				{recent_posts}
+                {recent_posts}
 
         </div><!-- end row -->
     </div><!-- end container -->
 </section><!-- end section white -->
 
 <script>
-	var scope = angular.element($("#blog-container")).scope();
+    
+    $(document).ready(function()
+    {
+        var scope = angular.element($("#blog-container")).scope();
 	scope.$apply(function()
  	{
-		scope.recentPosts = JSON.Parse('<?php echo $recentPosts; ?>');
+            scope.baseurl = scope.base_url;
+            
+            scope.gotoPage({ value : 1});
 	});
+        
+    });
+	
 </script>
 

@@ -65,33 +65,119 @@ class Blog_model extends CI_Model
 	/**
 	* Get all recent posts 
 	*/
-	public function get_recent_posts($type = -1)
+	public function get_recent_posts($type = -1, $limit = null, $offset = null)
 	{
-		$result_array = array();
-		
-		if($type = -1)
-		{
-			$this->db->where(array("type" => $type));
-			$result = $this->db->get(BLOG_POSTS);
-		}
-		else
-		{
-			$result = $this->db->get(BLOG_POSTS);
-		}
-		
-		foreach($result->result() as $post)
-		{
-			// get post comments
-			$post->comments = $this->get_post_data($post->id, BLOG_POSTS_COMMENTS);
-			
-			// get post likes
-			$post->likes = $this->get_post_data($post->id, BLOG_POSTS_LIKES);;
-			
-			$result_array[$post->id] = $post;
-		}
-		
-		return $result_array;
+            $result_array = array();
+            
+            if($limit != null)
+            {
+                if($offset == null)
+                {
+                    $offset = 0;
+                }
+                
+                $this->db->limit($limit, $offset);
+            }
+            
+            $this->db->order_by('date_modified', 'DESC');
+            
+            if($type != -1)
+            {
+                $this->db->where(array("type" => $type));
+                $result = $this->db->get(BLOG_POSTS);
+            }
+            else
+            {
+                $result = $this->db->get(BLOG_POSTS);
+            }
+
+            foreach($result->result() as $post)
+            {
+                // get post comments
+                $post->comments = $this->get_post_data($post->id, BLOG_POSTS_COMMENTS);
+
+                // get post likes
+                $post->likes = $this->get_post_data($post->id, BLOG_POSTS_LIKES);;
+
+                $result_array[$post->id] = $post;
+            }
+
+            return $result_array;
 	}
+        
+        public function get_other_posts($type = -1, $limit = 3, $not_in = null) 
+        {
+            $result_array = array();
+            
+            if($limit != null)
+            {
+                $this->db->limit($limit);
+            }
+            
+            $this->db->order_by('date_modified', 'DESC');
+            
+            $this->db->where_not_in('id', $not_in);
+            
+            if($type != -1)
+            {
+                $this->db->where(array("type" => $type));
+                $result = $this->db->get(BLOG_POSTS);
+            }
+            else
+            {
+                $result = $this->db->get(BLOG_POSTS);
+            }
+            
+            foreach($result->result() as $post)
+            {
+                // get post comments
+                $post->comments = $this->get_post_data($post->id, BLOG_POSTS_COMMENTS);
+
+                // get post likes
+                $post->likes = $this->get_post_data($post->id, BLOG_POSTS_LIKES);;
+
+                $result_array[$post->id] = $post;
+            }
+
+            return $result_array;
+            
+        }
+        
+        public function search_posts($filter, $limit = 3) 
+        {
+            $result_array = array();
+            $this->db->limit($limit);
+            $this->db->like('title', $filter);
+            $result = $this->db->get(BLOG_POSTS);
+            
+            foreach($result->result() as $post)
+            {
+                // get post comments
+                $post->comments = $this->get_post_data($post->id, BLOG_POSTS_COMMENTS);
+
+                // get post likes
+                $post->likes = $this->get_post_data($post->id, BLOG_POSTS_LIKES);
+
+                $result_array[$post->id] = $post;
+            }
+
+            return $result_array;
+        }
+        
+        public function blog_post_count($type = -1) 
+        {
+            if($type != -1)
+            {
+                $this->db->where(array("type" => $type));
+                $result = $this->db->get(BLOG_POSTS);
+            }
+            else
+            {
+                $result = $this->db->get(BLOG_POSTS);
+            }
+            
+            return $result->num_rows();
+        }
 	
 	public function get_post_data($post_id, $table_name)
 	{
