@@ -29,7 +29,7 @@ var x = setInterval(function() {
 
 var pageApp = angular.module('pageApp', ['ngMaterial']);
 
-pageApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$rootScope", function($scope, $http, $mdToast, $q, $rootScope) 
+pageApp.controller('AccountController', ["$scope", "$http", function($scope, $http) 
 {
     $scope.login = function()
     {
