@@ -45,7 +45,7 @@ class Account extends CI_Controller {
     
     public function page_under_construction() 
     {
-        $this->load->view('account/coming-soon', $this->data);
+        $this->load->view('/account/coming-soon', $this->data);
     }
 	
     public function my_grocery_list() 
@@ -175,6 +175,7 @@ class Account extends CI_Controller {
         }
         
         echo json_encode($data);
+        exit;
     }
     
     /*

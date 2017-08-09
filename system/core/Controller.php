@@ -108,7 +108,7 @@ class CI_Controller {
                 'user' => addslashes(json_encode($this->user))
             ); 
             
-            if(($this->user == null || $this->user->subscription == 0) && ($this->router->fetch_method() != 'page_under_construction'))
+            if(($this->user == null) && ($this->router->fetch_method() != 'page_under_construction' && $this->router->fetch_method() != 'perform_login'))
             {
                 header('Location: '.  site_url('/account/page_under_construction'));
             }

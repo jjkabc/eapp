@@ -39,6 +39,8 @@ pageApp.controller('AccountController', ["$scope", "$http", function($scope, $ht
             formData.append("email", $scope.user.email);
             formData.append("password", $scope.user.password);
             formData.append("rememberme", $scope.user.rememberme ? 1 : 0);
+            
+            
             // Send request to server to get optimized list 	
             $http.post( $scope.site_url.concat("/account/perform_login"), 
             formData, { transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(

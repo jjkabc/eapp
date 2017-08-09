@@ -55,8 +55,8 @@
         
         <form name="loginForm" class="form-horizontal" role="form" ng-submit="login()" novalidate>
             <div class="row">
-                <md-content style="margin : auto; background-color: whitesmoke;" layout-padding>
-                    <div id="login-alert" class="alert alert-danger col-sm-12" ng-show="message">
+                <md-content style="background-color: whitesmoke;" layout-padding>
+                    <div id="login-alert" class="alert alert-danger" ng-show="message">
                         <p>{{message}}</p>
                     </div>
                     <p style="text-align: center;">Admin Login</p>

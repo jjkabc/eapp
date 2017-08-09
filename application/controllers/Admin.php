@@ -7,6 +7,11 @@ class Admin extends CI_Controller
         parent::__construct();
         $this->load->library('upload');
         $this->load->helper('text');
+        
+        if($this->user->subscription === 0)
+        {
+            header('Location: '.  site_url('/home'));
+        }
     }
     
     private function initialize_upload_library($uploadDirectory, $fileName)
@@ -178,12 +183,14 @@ class Admin extends CI_Controller
         echo json_encode($response);
     }
     
-
-	
-    
-	
     public function create_store_product($id = null)
     {
+        
+        if($this->user->subscription == 0)
+        {
+            header('Location: '.  site_url('/home'));
+        }
+        
         if ($_SERVER['REQUEST_METHOD'] === 'POST') 
         {
             $store_product = $this->input->post('product');
@@ -271,6 +278,12 @@ class Admin extends CI_Controller
     }
     public function upload_chains() 
     {
+        
+        if($this->user->subscription != 2)
+        {
+            return;
+        }
+        
         if ($this->input->method(TRUE) === 'POST') 
         {
             $this->upload_csv_database('chains', CHAIN_TABLE, null);
@@ -284,6 +297,12 @@ class Admin extends CI_Controller
     
     public function upload_stores() 
     {
+        
+        if($this->user->subscription != 2)
+        {
+            return;
+        }
+        
         if ($this->input->method(TRUE) === 'POST') 
         {
             $this->upload_csv_database('stores', CHAIN_STORE_TABLE, null);
@@ -297,6 +316,12 @@ class Admin extends CI_Controller
     
     public function upload_units() 
     {
+        
+        if($this->user->subscription != 2)
+        {
+            return;
+        }
+        
         if ($this->input->method(TRUE) === 'POST') 
         {
             $this->upload_csv_database('units', UNITS_TABLE, null);
@@ -313,6 +338,12 @@ class Admin extends CI_Controller
      */
     public function upload_products() 
     {
+        
+        if($this->user->subscription != 2)
+        {
+            return;
+        }
+        
         if ($this->input->method(TRUE) === 'POST') 
         {
             $this->upload_csv_database('products', PRODUCT_TABLE, null);
@@ -326,6 +357,12 @@ class Admin extends CI_Controller
     
     public function upload_categories() 
     {
+        
+        if($this->user->subscription != 2)
+        {
+            return;
+        }
+        
         if ($this->input->method(TRUE) === 'POST') 
         {
             $this->upload_csv_database('categories', CATEGORY_TABLE, null);
@@ -339,6 +376,12 @@ class Admin extends CI_Controller
     
     public function upload_subcategories() 
     {
+        
+        if($this->user->subscription != 2)
+        {
+            return;
+        }
+        
         if ($this->input->method(TRUE) === 'POST') 
         {
             $this->upload_csv_database('subcategories', SUB_CATEGORY_TABLE, null);
@@ -358,6 +401,11 @@ class Admin extends CI_Controller
      */
     private function upload_csv_database($fileName, $databaseTableName, $data)
     {
+        if($this->user->subscription != 2)
+        {
+            return;
+        }
+        
         // Initialize the Upload Library
             $config['upload_path'] = ASSETS_DIR_PATH."files/";
             $config['file_name'] = $fileName.'-'.date("Y-m-d").'.csv';
@@ -405,6 +453,11 @@ class Admin extends CI_Controller
     }
     public function uploads() 
     {
+        if($this->user->subscription < 2)
+        {
+            header('Location: '.  site_url('/admin/create_store_product'));
+        }
+        
         $this->rememberme->recordOrigPage();
         $this->data['body'] = $this->load->view('admin/uploads', $this->data, TRUE);
         $this->parser->parse('eapp_template', $this->data);

@@ -37,7 +37,7 @@
                 </div> 
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li><a  href="<?php echo site_url("admin/uploads"); ?>">Uploads</a></li>
+                        <li ng-show="loggedUser.subscription == 2"><a  href="<?php echo site_url("admin/uploads"); ?>">Uploads</a></li>
                         <li><a href="<?php echo site_url("admin/create_store_product"); ?>">Create Product</a></li>
                         <li class="active"><a href="<?php echo site_url("admin/store_products"); ?>">View Products</a></li>
                     </ul>
