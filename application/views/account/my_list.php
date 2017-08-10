@@ -57,11 +57,13 @@
                 <md-icon md-svg-src="{{icons.add | trustUrl}}"></md-icon>
             </md-button>
         </div>
-        
-        <p>Ma liste d’épicerie</p>
-        <md-divider></md-divider>
-        
+                
         <div class="row my-grocery-list md-whiteframe-3dp" style="margin : 10px; min-height: 100px;" >
+            <md-toolbar>
+                <div>
+                    <h2 class="md-toolbar-tools">Ma liste d’épicerie</h2>
+                </div>
+            </md-toolbar>
             <div ng-repeat="category in myCategories">
                 <md-subheader class="md-no-sticky">{{category.name}}</md-subheader>
                     <md-list-item ng-repeat="product in category.products" ng-click="viewProductDetails(product.id, $event)" class="noright">
@@ -79,15 +81,20 @@
             <h4 layout layout-align="center" ng-show="myCategories.length === 0" layout-padding>Votre liste est vide. </h4>
         </div>
 		
-		<div class="row">
-		  <md-list-item class="md-2-line" ng-repeat="store in getUserListStorePrices()">
-          	<img ng-src="{{base_url}}/assets/img/stores/{{ store.image }}" class="md-avatar" alt="{{store.name}}" />
-			  <div class="md-list-item-text md-offset">
-				<h3> Prix total a {{store.name}} : CAD {{ store.price }} </h3>
-				<p> Nombre d'items disponibles : {{ store.count }} </p>
-			  </div>
-        	</md-list-item>
-		</div>
+        <div  class="row my-grocery-list md-whiteframe-3dp" style="margin : 10px; min-height: 100px;" >
+            <md-toolbar>
+                <div>
+                    <h2 class="md-toolbar-tools">Votre liste d'épicerie dans vos magasins préférés cette semaine</h2>
+                </div>
+            </md-toolbar>
+            <md-list-item class="md-2-line" ng-repeat="store in getUserListStorePrices()">
+                <img ng-src="{{base_url}}/assets/img/stores/{{ store.image }}" class="md-avatar" alt="{{store.name}}" />
+                <div class="md-list-item-text md-offset" ng-show="store.price > 0">
+                      <h3> Prix total a {{store.name}} : <b>CAD {{ store.price | number : 2 }}</b> </h3>
+                      <p> Nombre d'items disponibles : {{ store.count }} </p>
+                </div>
+            </md-list-item>
+        </div>
         
         <div class="row actions-section">
             <div class="col-sm-6">

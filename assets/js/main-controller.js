@@ -234,35 +234,43 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
         
     };
 	
-	$scope.getUserListStorePrices = function()
-	{
-		var stores = [];
-		
-		if($scope.loggedUser !== null)
+    $scope.getUserListStorePrices = function()
+    {
+        var stores = [];
+
+        if($scope.loggedUser !== null && typeof $scope.loggedUser !== "undefined" && typeof $scope.loggedUser.grocery_list !== "undefined")
         {
-			
+
             for(var i in $scope.loggedUser.grocery_list)
             {
                 var product = $scope.loggedUser.grocery_list[i];
                 
-				if(typeof stores[product.store.id] === 'undefined') {
-					
-					stores[product.store.id] = product.store;
-					stores[product.store.id].price = 0;
-					stores[product.store.id].count = 0;
-				}
-				
-				if(typeof stores[product.store.id].store_product !== "undefined")
-				{
-					stores[product.store.id].price += stores[product.store.id].store_product.price;
+                for (var x in product.store)
+                {
+                    var productStore = product.store[x];
+                    
+                    var index = stores.map(function(e) { return e.id; }).indexOf(productStore.id);
 
-					stores[product.store.id].count++;
-				}
+                    if(index === -1) {
+
+                        productStore.price = 0;
+                        productStore.count = 0;
+                        stores.push(productStore);
+                        index = stores.length - 1;
+                    }
+
+                    if(typeof stores[index].store_product !== "undefined")
+                    {
+                        stores[index].price += parseFloat(stores[index].store_product.price);
+                        stores[index].count++;
+                    }
+                }
+                
             }
         }
-		
-		return stores;
-	}
+
+        return stores;
+    };
 	
     $rootScope.AddProductToList = function()
     {
