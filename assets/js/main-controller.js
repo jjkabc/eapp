@@ -234,6 +234,36 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
         
     };
 	
+	$scope.getUserListStorePrices = function()
+	{
+		var stores = [];
+		
+		if($scope.loggedUser !== null)
+        {
+			
+            for(var i in $scope.loggedUser.grocery_list)
+            {
+                var product = $scope.loggedUser.grocery_list[i];
+                
+				if(typeof stores[product.store.id] === 'undefined') {
+					
+					stores[product.store.id] = product.store;
+					stores[product.store.id].price = 0;
+					stores[product.store.id].count = 0;
+				}
+				
+				if(typeof stores[product.store.id].store_product !== "undefined")
+				{
+					stores[product.store.id].price += stores[product.store.id].store_product.price;
+
+					stores[product.store.id].count++;
+				}
+            }
+        }
+		
+		return stores;
+	}
+	
     $rootScope.AddProductToList = function()
     {
         if($scope.currentProduct != null &&  $scope.my_list_count() < $scope.maxNumItems)
