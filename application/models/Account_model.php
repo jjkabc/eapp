@@ -65,8 +65,9 @@ class Account_model extends CI_Model
         
         $user_account->profile = $this->get_specific(USER_PROFILE_TABLE, array("user_account_id" => $user_account->id));
         
-        
         $product_list = $this->get_specific(USER_GROCERY_LIST_TABLE, array("user_account_id" => $user_account->id));
+		
+		$favorite_store = $this->get_favorite_stores($this->user);
         
         if($product_list == null)
         {
@@ -81,6 +82,22 @@ class Account_model extends CI_Model
             foreach ($product_list as $item) 
             {
                 $product = $this->get_product($item->id);
+				
+				$product->store = array();
+				
+				// For each favorite store, get the store_product and price of the product
+				foreach($store in $favorite_store)
+				{
+					$product->store[$favorite_store->id] = $favorite_store;
+					
+					$store_product = $this->get_specific(STORE_PRODUCT_TABLE, array("retailer_id" => $favorite_store->id, "product_id" => $product->id));
+					
+					if($store_product != null)
+					{
+						$product->store[$favorite_store->id]->store_product = $store_product;
+					}
+				}
+				
                 $product->quantity = $item->quantity;
                 array_push($user_account->grocery_list, $product);
             }
