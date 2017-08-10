@@ -30,26 +30,51 @@ class Blog extends CI_Controller {
     public function press_release()
     {
         $this->rememberme->recordOrigPage();
+        $this->data["post_type"] = 0;
         $this->data['body'] = $this->parser->parse("blog/press-release", $this->data, TRUE);
         $this->parser->parse('eapp_template', $this->data);
     } 
     
+    public function stats()
+    {
+        $this->rememberme->recordOrigPage();
+        $this->data["post_type"] = 1;
+        $this->data['body'] = $this->parser->parse("blog/press-release", $this->data, TRUE);
+        $this->parser->parse('eapp_template', $this->data);
+    }
+    
+    public function videos()
+    {
+        $this->rememberme->recordOrigPage();
+        $this->data["post_type"] = 2;
+        $this->data['body'] = $this->parser->parse("blog/press-release", $this->data, TRUE);
+        $this->parser->parse('eapp_template', $this->data);
+    }
+    
     public function get_posts()
     {
+        $type = $this->input->post("type");
+        
         $offset = $this->input->post("offset");
         
         $result = array();
         
-        $result["recentPosts"] = $this->blog_model->get_recent_posts(-1, 3, $offset);
+        $result["recentPosts"] = $this->blog_model->get_recent_posts($type, 3, $offset);
         
         $not_in = array();
-        
+                
         foreach ($result["recentPosts"] as $post) 
         {
             array_push($not_in, $post->id);
         }
+            
+        $result["otherPosts"] = array();
         
-        $result["otherPosts"] = $this->blog_model->get_other_posts(-1, 3, $not_in);
+        if(sizeof($not_in) > 0)
+        {
+            $result["otherPosts"] = $this->blog_model->get_other_posts($type, 3, $not_in);
+        }
+        
         
         $result["blogPostCount"] = $this->blog_model->blog_post_count();
         
@@ -59,7 +84,7 @@ class Blog extends CI_Controller {
     public function search_posts() {
         
         $result = array();
-        $result["otherPosts"] = $this->blog_model->search_posts($this->input->post("filter"));
+        $result["otherPosts"] = $this->blog_model->search_posts($this->input->post("type"), $this->input->post("filter"));
         echo json_encode($result);
     }
 
@@ -71,15 +96,7 @@ class Blog extends CI_Controller {
         $this->data['body'] = $this->parser->parse("blog/stat-detail", $this->data, TRUE);
         $this->parser->parse('eapp_template', $this->data);
     } 
-	
-    public function stats()
-    {
-        $this->rememberme->recordOrigPage();
-        $this->data["recentStats"] = addslashes(json_encode($this->blog_model->get_recent_stat_posts()));
-        $this->data['body'] = $this->parser->parse("blog/stat", $this->data, TRUE);
-        $this->parser->parse('eapp_template', $this->data);
-    }
-	
+		
     public function like()
     {
         $id = $this->input->post("post_id");
@@ -92,5 +109,25 @@ class Blog extends CI_Controller {
         $id = $this->input->post("post_id");
         $this->blog_model->dislike($id, $this->user);
         return json_encode(addslashes($this->blog_model->get_post_data($id, BLOG_POSTS_LIKES)));	
+    }
+    
+    public function read($id) 
+    {
+        
+        $post = $this->blog_model->get_post($id);
+        // get article
+        $this->data['post'] = addslashes(json_encode($post));
+        // get other posts
+        $this->data["otherPosts"] = addslashes(json_encode($this->blog_model->get_other_posts($post->type, 3, array($id))));
+        $this->rememberme->recordOrigPage();
+        $this->data['body'] = $this->parser->parse("blog/read", $this->data, TRUE);
+        $this->parser->parse('eapp_template', $this->data);
+        
+        // display it
+    }
+    
+    public function view($id) 
+    {
+        $this->read($id);
     }
 }

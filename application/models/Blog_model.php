@@ -61,6 +61,22 @@ class Blog_model extends CI_Model
 		
 		return FALSE;
 	}
+        
+        public function get_post($post_id) 
+        {
+            $this->db->where(array("id" => $post_id));
+            $post = $this->db->get(BLOG_POSTS)->row();
+            
+            if($post != null)
+            {
+                // get post comments
+                $post->comments = $this->get_post_data($post->id, BLOG_POSTS_COMMENTS);
+                // get post likes
+                $post->likes = $this->get_post_data($post->id, BLOG_POSTS_LIKES);
+            }
+            
+            return $post;
+        }
 	
 	/**
 	* Get all recent posts 
@@ -97,7 +113,7 @@ class Blog_model extends CI_Model
                 $post->comments = $this->get_post_data($post->id, BLOG_POSTS_COMMENTS);
 
                 // get post likes
-                $post->likes = $this->get_post_data($post->id, BLOG_POSTS_LIKES);;
+                $post->likes = $this->get_post_data($post->id, BLOG_POSTS_LIKES);
 
                 $result_array[$post->id] = $post;
             }
@@ -143,10 +159,11 @@ class Blog_model extends CI_Model
             
         }
         
-        public function search_posts($filter, $limit = 3) 
+        public function search_posts($type, $filter, $limit = 3) 
         {
             $result_array = array();
             $this->db->limit($limit);
+            $this->db->where(array("type" => $type));
             $this->db->like('title', $filter);
             $result = $this->db->get(BLOG_POSTS);
             
@@ -181,15 +198,15 @@ class Blog_model extends CI_Model
 	
 	public function get_post_data($post_id, $table_name)
 	{
-		$result_array = array();
-		$this->db->where(array("post_id" => $post_id));
-		$res = $this->db->get($table_name);
-		
-		foreach($res->result() as $data)
-		{
-			$result_array[$data->id] = $data;
-		}
-		
-		return $result_array;
+            $result_array = array();
+            $this->db->where(array("post_id" => $post_id));
+            $res = $this->db->get($table_name);
+
+            foreach($res->result() as $data)
+            {
+                $result_array[$data->id] = $data;
+            }
+
+            return $result_array;
 	}
 }

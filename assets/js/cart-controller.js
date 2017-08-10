@@ -465,7 +465,7 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
         $rootScope.longitude = window.localStorage.getItem("longitude");
         $rootScope.latitude = window.localStorage.getItem("latitude");
 
-        if(!window.localStorage.getItem("longitude") && !window.localStorage.getItem("latitude"))
+        if(!window.localStorage.getItem("longitude") && !window.localStorage.getItem("latitude") && !$scope.isUserLogged)
         {
             // Appending dialog to document.body to cover sidenav in docs app
             var confirm = $mdDialog.prompt()

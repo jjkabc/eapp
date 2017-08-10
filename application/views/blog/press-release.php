@@ -8,7 +8,7 @@
                     <div id="blog-page" class="row clearfix">
                         <div class="col-md-12 col-sm-12 col-xs-12 wow fadeIn" ng-class="$index % 2 === 0 ? 'first' : 'last'" ng-repeat="post in recentPosts">
                             <div class="blog-item">
-                                <div class="ImageWrapper">
+                                <div class="ImageWrapper" ng-hide="post.type == 2">
                                     <img ng-src="<?php echo base_url("assets/blog/"); ?>img/posts/{{post.image}}" alt="" class="img-responsive">
                                     <div class="ImageOverlayLi"></div>
                                     <div class="Buttons StyleH">
@@ -17,8 +17,12 @@
                                         <a href="<?php echo base_url("blog/comments/")?>{{post.id}}" title="Voir Commentaires"><span class="bubble border-radius"><i class="fa fa-comment-o"></i> {{post.comments.length}}</span></a>
                                     </div>
                                 </div>
+                                <div class="ImageWrapper" ng-show="post.type == 2">
+                                    <iframe width="560" height="315" ng-src="{{getiFrameSrc(post.image)}}" frameborder="0" allowfullscreen></iframe>
+                                </div>
                                 <div class="meta">
-                                    <span><a href >INFOS</a> | {{post.date_modified | date}}</span>
+                                    <span ng-hide="post.type == 2"><a href="<?php echo site_url("blog/read/")?>{{post.id}}" >INFOS</a> | {{post.date_modified | date}}</span>
+                                    <span ng-show="post.type == 2"><a href="<?php echo site_url("blog/view/")?>{{post.id}}" >INFOS</a> | {{post.date_modified | date}}</span>
                                 </div><!-- end meta -->
                                 <div class="blog-title">
                                     <h3><a href="<?php echo base_url("blog/view/")?>{{post.id}}" title="">{{post.title}}</a></h3>
@@ -26,8 +30,11 @@
                                 <div class="blog-desc">
                                     <p>{{post.description}}</p>
                                 </div><!-- end desc -->
-                                <div class="blog-button">
-                                    <a href="<?php echo base_url("blog/comments/")?>{{post.id}} title="" class="btn btn-primary border-radius">Lire</a>
+                                <div  ng-hide="post.type == 2" class="blog-button">
+                                    <a href="<?php echo site_url("blog/read/")?>{{post.id}}" title="" class="btn btn-primary border-radius">Lire</a>
+                                </div><!-- end button -->
+                                <div  ng-show="post.type == 2" class="blog-button">
+                                    <a href="<?php echo site_url("blog/view/")?>{{post.id}}" title="" class="btn btn-primary border-radius">Voir details</a>
                                 </div><!-- end button -->
                             </div><!-- end blog -->
                         </div><!-- end col -->
@@ -47,7 +54,7 @@
                         </ul>
                     </nav>
                     
-                    <div class="text-center" ng-show="blogPostCount === 0">
+                    <div class="text-center" ng-show="recentPosts.length === 0">
                         <p>Aucun article de presse n'est actuellement disponible.</p>
                     </div>
                 </div><!-- end pull-right -->
@@ -65,6 +72,8 @@
 	scope.$apply(function()
  	{
             scope.baseurl = scope.base_url;
+            
+            scope.postType = parseInt('<?php echo $post_type; ?>');
             
             scope.gotoPage({ value : 1});
 	});

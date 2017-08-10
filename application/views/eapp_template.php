@@ -267,8 +267,8 @@
 					<a href md-menu-origin  ng-click="$mdMenu.open($event)" class="main-menu-item">Blogue</a>
 					<md-menu-content>
 					  	<md-menu-item><a href="<?php echo site_url("blog/press_release"); ?>">Épicerie dans la presse</a></md-menu-item>
-					  	<md-menu-item><a href="<?php echo site_url("home/stats"); ?>">STAT</a></md-menu-item>
-					  	<md-menu-item><a href="<?php echo site_url("home/video"); ?>">Vidéo</a></md-menu-item>
+					  	<md-menu-item><a href="<?php echo site_url("blog/stats"); ?>">STAT</a></md-menu-item>
+					  	<md-menu-item><a href="<?php echo site_url("blog/videos"); ?>">Vidéo</a></md-menu-item>
 					  	<!--<md-menu-item><a href="<?php echo site_url("home/store_policy"); ?>">Politiques des magasins</a></md-menu-item>-->
 					  	<md-menu-item><a href="<?php echo site_url("home/about_us"); ?>">À propos</a></md-menu-item>
 					</md-menu-content>

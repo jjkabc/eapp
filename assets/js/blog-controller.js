@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-angular.module("eappApp").controller("BlogController", ["$scope", "$http", function($scope, $http) 
+angular.module("eappApp").controller("BlogController", ["$scope", "$http", "$sce", function($scope, $http, $sce) 
 {
     
     $scope.blogPostCount = 0;
@@ -16,6 +16,11 @@ angular.module("eappApp").controller("BlogController", ["$scope", "$http", funct
     $scope.page_list = [];
     
     $scope.maxPageCount = parseInt(parseInt($scope.blogPostCount) / 3);
+    
+    $scope.getiFrameSrc = function(name)
+    {
+        return $sce.trustAsResourceUrl("https://www.youtube.com/embed/" + name);
+    };
     
     $scope.get_page_list = function()
     {
@@ -99,6 +104,7 @@ angular.module("eappApp").controller("BlogController", ["$scope", "$http", funct
         
         var formdata = new FormData();
         formdata.append("filter", searchText);
+        formdata.append("type", $scope.postType);
 
         $http.post( $scope.site_url.concat("/blog/search_posts"), 
         formdata, { transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(
@@ -121,6 +127,7 @@ angular.module("eappApp").controller("BlogController", ["$scope", "$http", funct
         
         var formdata = new FormData();
         formdata.append("offset", ($scope.selected_page_value - 1) * 3);
+        formdata.append("type", $scope.postType);
 
         $http.post( $scope.site_url.concat("/blog/get_posts"), 
         formdata, { transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(
@@ -129,9 +136,10 @@ angular.module("eappApp").controller("BlogController", ["$scope", "$http", funct
             
             $scope.blogPostCount = parseInt(response.data.blogPostCount);
             
-            $scope.recentPosts = response.data.recentPosts;
-            
-            $scope.otherPosts = response.data.otherPosts;
+            $scope.recentPosts = $.map(response.data.recentPosts, function(value, index) 
+            {
+                return [value];
+            });
             
             $scope.otherPosts = $.map(response.data.otherPosts, function(value, index) 
             {

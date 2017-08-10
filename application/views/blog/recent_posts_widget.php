@@ -17,7 +17,8 @@
                             <img ng-src="<?php echo base_url("assets/blog/img/article.png")?>" alt="{{post.title}}" class="alignleft" style="height : 93px; width: 93px;">
                             <h3> <a href="#">{{post.title}}</a></h3>
                             <span class="metabox">
-                                    <a href ng-click="viewPost(post)">INFOS</a> <span>{{post.date_modified}}</span>
+                                <span ng-hide="post.type == 2"><a href="<?php echo site_url("blog/read/")?>{{post.id}}" >INFOS</a> | {{post.date_modified | date}}</span>
+                                <span ng-show="post.type == 2"><a href="<?php echo site_url("blog/view/")?>{{post.id}}" >INFOS</a> | {{post.date_modified | date}}</span>
                             </span>
                         </li>
                     </ul>
