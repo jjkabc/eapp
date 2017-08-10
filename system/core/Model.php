@@ -577,6 +577,17 @@ class CI_Model {
 
         return $this->db->get($table_name)->result();
     }
+	
+	/*
+	* Method to get for a given user the different stores
+	*/
+	public function get_favorite_stores($user)
+	{
+		$this->db->select(CHAIN_TABLE.".*");
+		$this->db->join(USER_FAVORITE_STORE_TABLE, USER_FAVORITE_STORE_TABLE.'.retailer_id = '.CHAIN_TABLE.'.id');
+		$this->db->where(array("user_account_id" => $user->id));
+		return $this->db->get(CHAIN_TABLE)->result();
+	}
     
     public function delete($table_name, $data)
     {
