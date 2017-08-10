@@ -78,6 +78,16 @@
             </div>
             <h4 layout layout-align="center" ng-show="myCategories.length === 0" layout-padding>Votre liste est vide. </h4>
         </div>
+		
+		<div class="row">
+		  <md-list-item class="md-2-line" ng-repeat="store in getUserListStorePrices()">
+          	<img ng-src="{{base_url}}/assets/img/stores/{{ store.image }}" class="md-avatar" alt="{{store.name}}" />
+			  <div class="md-list-item-text md-offset">
+				<h3> Prix total a {{store.name}} : CAD {{ store.price }} </h3>
+				<p> Nombre d'items disponibles : {{ store.count }} </p>
+			  </div>
+        	</md-list-item>
+		</div>
         
         <div class="row actions-section">
             <div class="col-sm-6">
