@@ -607,5 +607,15 @@ class CI_Model {
         $this->db->where($data);
         $this->db->delete($table_name);
     }
+	
+	/*
+	* This is called when an item is clicked on the front end
+	*/
+	public function hit($table_name, $id)
+	{
+		$this->db->set('hit', 'hit + 1');
+		$this->db->where(array("id" => $id));
+		$this->db->update($table_name);
+	}
 
 }
