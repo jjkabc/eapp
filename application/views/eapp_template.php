@@ -161,133 +161,100 @@
   </head>
   <body>
     <notifications-bar class="notifications"></notifications-bar>
-    <!-- Begin Header Section -->   
-    <div class="header-area" ng-controller="AccountController">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="user-menu">
-                        <ul>
-                            <li ng-show="isUserLogged"><a href="#"><i class="fa fa-user"></i>Mon compte</a></li>
-                            <li ng-show="isUserLogged"><a href="#"><i class="fa fa-heart"></i>Ma liste d'épicerie</a></li>
-                            <li><a href="<?php echo site_url("cart"); ?>"><i class="fa fa-user"></i>Mon panier</a></li>
-                            <li ng-hide="isUserLogged"><a href="<?php echo site_url("account/login"); ?>"><i class="fa fa-user"></i>s'identifier</a></li>
-                            <li ng-show="isUserLogged">
-								<md-menu>
-									<a href md-menu-origin  ng-click="$mdMenu.open($event)" class="main-menu-item">Bonjour, {{loggedUser.profile.firstname}}</a>
-									<md-menu-content>
-										<md-menu-item><a href ng-click="logout()">Logout</a></md-menu-item>
-										<md-menu-item><a href="<?php echo site_url("account/account"); ?>">Mon Compte</a></md-menu-item>
-									</md-menu-content>
-								</md-menu>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <div class="header-right">
-                        <ul class="list-unstyled list-inline">
-                            <li class="dropdown dropdown-small">
-                                <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span class="key">Langue :</span><span class="value">Anglais </span><b class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">Anglais</a></li>
-                                    <li><a href="#">Français</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> 
-    <!-- End header area -->
-    
-    <!-- Begin Site Branding Section -->
-    <div class="site-branding-area" ng-controller="CartController" ng-hide="hideSearchArea">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="logo">
-                        <h1><a href="index.html">Epicery<span></span></a></h1>
-                    </div>
-                </div>
-                
-                <div class="col-sm-6">
-                    <div class="shopping-item">
-                        <a href="<?php echo site_url("cart"); ?>">Cart - <span class="cart-amunt">CAD {{get_cart_total_price() | number : 2}}</span> <i class="fa fa-shopping-cart"></i> <span class="product-count">{{get_cart_item_total()}}</span></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> 
-    <!-- End site branding area -->
-    <div class="container search-box" id="search-box" ng-controller="ShopController" ng-hide="hideSearchArea">
+
+    <div class="container search-box" id="search-box" ng-controller="ShopController" ng-hide="hideSearchArea" style="margin-top: 60px;">
         <div class="row">
-            <form ng-submit="searchProducts(searchText)">
-                <div class="col-md-11 single-sidebar">
-                    <input type="text" placeholder="Search products..." ng-model="searchText">
-                </div>
-                <div class="col-md-1">
-                    <input type="submit" value="Search">
+            <form ng-submit="searchProducts(searchText)" class="col-md-12 col-sm-12">
+                <div class="row">
+                    <md-input-container class="col-md-12 col-sm-12">
+                        <label>Rechercher articles</label>
+                        <input name="searchText" ng-model="searchText" aria-label="Search" />
+                        <md-icon><i class="material-icons">search</i></icon>
+                    </md-input-container>
                 </div>
             </form>
+            
         </div>
     </div>
-		
-		<!-- Begin mainmenu area -->
-    <div id="mainmenu-area" class="mainmenu-area" ng-controller="MenuController">
-        <div class="container">
-            <div class="row">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+    
+    <div id="mainmenu-area" class="mainmenu-area" class="navbar-wrapper">
+        <div class="container-fluid">
+            <nav class="navbar navbar-fixed-top">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
-                    </button>
-                </div> 
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li><a href="<?php echo site_url("home"); ?>">Accueil</a></li>
-			<li style="padding : 20px;">
-			    <md-menu  md-offset="0 80">
-				<a href md-menu-origin  ng-click="$mdMenu.open($event)" class="main-menu-item">Réduisez vos dépenses</a>
-				<md-menu-content>
-                                    <md-menu-item><a href="<?php echo site_url("account/my_grocery_list"); ?>">Votre liste d'épicerie</a></md-menu-item>
-                                    <md-menu-item><a href="<?php echo site_url("shop/select_flyer_store"); ?>">Les circulaires des magasins</a></md-menu-item>
-                                    <md-menu-item><a href="<?php echo site_url("shop/categories"); ?>">Les catégories de produits</a></md-menu-item>
-				</md-menu-content>
-			    </md-menu>
-		  	</li>
-                        <li><a href ng-click="gotoShop()">Trouvez un produit</a></li>
-			<li><a href="<?php echo site_url("cart"); ?>">Votre panier</a></li>
-                        <li style="padding : 20px;">
-				<md-menu  md-offset="0 80">
-					<a href md-menu-origin  ng-click="$mdMenu.open($event)" class="main-menu-item">Blogue</a>
-					<md-menu-content>
-					  	<md-menu-item><a href="<?php echo site_url("blog/press_release"); ?>">Épicerie dans la presse</a></md-menu-item>
-					  	<md-menu-item><a href="<?php echo site_url("blog/stats"); ?>">STAT</a></md-menu-item>
-					  	<md-menu-item><a href="<?php echo site_url("blog/videos"); ?>">Vidéo</a></md-menu-item>
-					  	<!--<md-menu-item><a href="<?php echo site_url("home/store_policy"); ?>">Politiques des magasins</a></md-menu-item>-->
-					  	<md-menu-item><a href="<?php echo site_url("home/about_us"); ?>">À propos</a></md-menu-item>
-					</md-menu-content>
-				</md-menu>
-			 </li>
-			 <li style="padding : 20px;">
-				<md-menu  md-offset="0 80">
-					<a href md-menu-origin ng-click="$mdMenu.open($event)" class="main-menu-item">Contact</a>
-					<md-menu-content>
-						<md-menu-item><a href="<?php echo site_url("home/contact"); ?>">Formulaire</a></md-menu-item>
-					</md-menu-content>
-				</md-menu>
-			 </li>
+                        </button>
+                        <a class="navbar-brand" href="#"><img src="<?php echo base_url("assets/img/logo.png"); ?>" class="eapp-logo" /></a>
+                    </div>
+                    
+                    <div id="navbar" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav"  ng-controller="MenuController">
+                            
+                            <li class=" dropdown" ng-show="loggedUser.subscription > 0">
+                                <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li ng-show="loggedUser.subscription == 2"><a  href="<?php echo addslashes(site_url("admin/uploads")); ?>">Uploads</a></li>
+                                    <li><a href="<?php echo addslashes(site_url("admin/create_store_product")); ?>">Create Product</a></li>
+                                    <li><a href="<?php echo addslashes(site_url("admin/store_products")); ?>">View Products</a></li>
+                                </ul>
+                            </li>
+                            
+                            <li class="active"><a href="<?php echo site_url("home"); ?>" class="">Accueil</a></li>
+                            
+                            <li class=" dropdown">
+                                <a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Réduisez vos dépenses<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="<?php echo site_url("account/my_grocery_list"); ?>">Votre liste d'épicerie</a></li>
+                                    <li><a href="<?php echo site_url("shop/select_flyer_store"); ?>">Les circulaires des magasins</a></li>
+                                    <li><a href="<?php echo site_url("shop/categories"); ?>">Les catégories de produits</a></li>
+                                </ul>
+                            </li>
+                            <li><a href ng-click="gotoShop()">Trouvez un produit</a></li>
+                            <li><a href="<?php echo site_url("cart"); ?>">Votre panier</a></li>
+                            <li class=" dropdown"><a href="#" class="dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Blogue<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="<?php echo site_url("blog/press_release"); ?>">Épicerie dans la presse</a></li>
+                                    <li><a href="<?php echo site_url("blog/stats"); ?>">STAT</a></li>
+                                    <li><a href="<?php echo site_url("blog/videos"); ?>">Vidéo</a></li>
+                                    <!--<li><a href="<?php echo site_url("home/store_policy"); ?>">Politiques des magasins</a></li>-->
+                                    <li><a href="<?php echo site_url("home/about_us"); ?>">À propos</a></li>
+                                </ul>
+                            </li>
+                            <li class=" dropdown"><a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Contact <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="<?php echo site_url("home/contact"); ?>">Formulaire</a></li>
+                                </ul>
+                            </li>
 
-                    </ul>
-                </div>
+                        </ul>
+                        <ul class="nav navbar-nav pull-right"  ng-controller="AccountController">
+                            <li ng-hide="isUserLogged"><a href="<?php echo site_url("account/login"); ?>"><i class="fa fa-user"></i>s'identifier</a></li>
+                            <li ng-hide="isUserLogged"><a href="<?php echo site_url("account/register"); ?>"><i class="fa fa-user"></i>créer un compte</a></li>
+                            <li ng-show="isUserLogged" class=" dropdown"><a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Bonjour <span ng-show="loggedUser.profile.firstname">{{loggedUser.profile.firstname}},</span> {{loggedUser.profile.lastname}}  <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a  href="<?php echo site_url("account/account"); ?>"><i class="fa fa-user"></i>Mon compte</a></li>
+                                    <li><a href="#"><i class="fa fa-heart"></i>Ma liste d'épicerie</a></li>
+                                    <li><a href ng-click="logout()">Logout</a></li>
+                                </ul>
+                            </li>
+                            
+                            <li>
+                                <a href="<?php echo site_url("cart"); ?>" class="md-icon-button" aria-label="Cart">
+                                    <md-icon style="color: white;"><i class="material-icons">shopping_cart</i> </md-icon>
+                                    <span class="badge" ng-show="get_cart_item_total() > 0">{{get_cart_item_total()}} | CAD {{get_cart_total_price() | number : 2}}</span>
+                                </a>
+                                
+                            </li>
+                        </ul>
+                    </div>
             </div>
-        </div>
-    </div> 
+        </nav>
+    </div>
+</div>
 	  
     <!-- End mainmenu area -->
     <div id="main-body">	

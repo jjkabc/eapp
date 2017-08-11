@@ -19,17 +19,22 @@ $(document).ready(function(){
 
       <div id="signupbox" style=" margin-top:50px" class="container">
         <div class="panel panel-info">
-            <div class="panel-heading">
-                <div class="panel-title">Sélectionnez une categorie pour voire son contenu </div>
-            </div>  
+            
+            <md-toolbar style="background-color: #1abc9c;">
+                <div>
+                    <h2 class="md-toolbar-tools">Sélectionnez une categorie pour voire son contenu</h2>
+                </div>
+            </md-toolbar>
+           
             <md-content id="retailer-contents" style="padding : 10px;">
                 <div class="form-group-inline" ng-repeat="category in categories">
+                    
                     <div class="col-md-3" style="padding-top:40px;">
                         <label class="btn item-block">
-                            <md-tooltip md-direction="top">{{category.name}}</md-tooltip>
-                            <img  ng-click="select_category($event)" id="{{category.id}}" ng-src="<?php echo base_url("assets/img/categories/"); ?>{{category.image}}" alt="{{category.name}}" class="img-thumbnail img-check">
+                            <img  ng-click="select_category($event)" id="{{category.id}}" ng-src="<?php echo base_url("assets/img/categories/"); ?>{{category.image}}" alt="{{category.name}}" class="category-block img-check">
                             <input type="checkbox" name="category_{{category.id}}" value="{{category.id}}" class="hidden" autocomplete="off">
                         </label>
+                        <b><p style="text-align: center;">{{category.name}}</p></b>
                     </div>
                 </div>
             </md-content>

@@ -1,7 +1,6 @@
 jQuery(document).ready(function($){
     
-    // jQuery sticky Menu
-    $(".mainmenu-area").sticky({topSpacing:0});
+    
     
     $('.product-carousel').owlCarousel({
         loop:true,
@@ -269,14 +268,14 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
             }
         }
 	    
-		// remove all stores with no items 
-		var index = stores.map(function(e) { return e.count; }).indexOf(0);
+        // remove all stores with no items 
+        var index = stores.map(function(e) { return e.count; }).indexOf(0);
 
-		while(index > -1)
-		{
-			stores.splice(index, 1);
-			var index = stores.map(function(e) { return e.count; }).indexOf(0);
-		}    
+        while(index > -1)
+        {
+            stores.splice(index, 1);
+            var index = stores.map(function(e) { return e.count; }).indexOf(0);
+        }    
 
         return stores;
     };

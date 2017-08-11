@@ -292,7 +292,7 @@ class CI_Model {
         return $result;
     }
     
-     public function get_product($product_id) 
+     public function get_product($product_id, $get_store_products = true) 
     {
         $value = $this->get(PRODUCT_TABLE, $product_id);
         
@@ -310,8 +310,12 @@ class CI_Model {
         {
             $value->category = $this->get(CATEGORY_TABLE, $value->subcategory->product_category_id);
         }
-		 
-		 $value->store_products = $this->get_flyer_products($product_id);
+        
+        if($get_store_products)
+        {
+            $value->store_products = $this->get_flyer_products($product_id);
+        }	 
+        
 
         return $value;
     }
@@ -372,7 +376,7 @@ class CI_Model {
             {
                 $order = str_replace("-", "", $order);
                 
-                if($order = 'date_modified')
+                if($order == 'date_modified')
                 {
                     $order = STORE_PRODUCT_TABLE.".".$order;
                 }
@@ -381,7 +385,7 @@ class CI_Model {
             }
             else
             {
-                if($order = 'date_modified')
+                if($order == 'date_modified')
                 {
                     $order = STORE_PRODUCT_TABLE.".".$order;
                 }

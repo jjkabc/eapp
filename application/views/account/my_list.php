@@ -31,7 +31,7 @@
         <div id="row my-list-info" class="row my-list-info container" style="margin : 10px; margin: auto; padding: 20px;">
             <div class="col-sm-4"><p style="text-align : center;"><a href>Produits <span class="badge">{{my_list_count()}}</span></a><br></p></div>
             <div class="col-sm-4"><p style="text-align : center;"><a href>Offres des circulaires <span class="badge">{{flyer_products_count()}}</span></a><br></p></div>
-            <div class="col-sm-4"><p style="text-align : center;"><a href>Coupons <span class="badge">{{coupons_count()}}</span></a><br></p></div>
+            <div ng-hide="true" class="col-sm-4"><p style="text-align : center;"><a href>Coupons <span class="badge">{{coupons_count()}}</span></a><br></p></div>
         </div>
         
         <div class="row search-products">
@@ -59,7 +59,7 @@
         </div>
                 
         <div class="row my-grocery-list md-whiteframe-3dp" style="margin : 10px; min-height: 100px;" >
-            <md-toolbar>
+            <md-toolbar style="background-color: #1abc9c;">
                 <div>
                     <h2 class="md-toolbar-tools">Ma liste d’épicerie</h2>
                 </div>
@@ -82,7 +82,7 @@
         </div>
 		
         <div  class="row my-grocery-list md-whiteframe-3dp" style="margin : 10px; min-height: 100px;" >
-            <md-toolbar>
+            <md-toolbar style="background-color: #1abc9c;">
                 <div>
                     <h2 class="md-toolbar-tools">Votre liste d'épicerie dans vos magasins préférés cette semaine</h2>
                 </div>

@@ -91,28 +91,26 @@
         <div class="zigzag-bottom"></div>
         <div class="container">
             <div class="row">
-                <div class="col-md-3 col-sm-6">
+                <div class="col-md-4 col-sm-8">
                     <div class="single-promo">
-                        <i class="fa fa-binoculars"></i>
-                        <p>Find products</p>
+                        
+                        <h2>Votre liste d'épicerie</h2>
+<!--                        <i class="fa fa-heart"></i>-->
+                        <p>Créez votre liste d'épicerie et économisez sur les dépenses.</p>
                     </div>
                 </div>
-                <div class="col-md-3 col-sm-6">
+                <div class="col-md-4 col-sm-8">
                     <div class="single-promo">
-                        <i class="fa fa-heart"></i>
-                        <p>Easy to use</p>
+<!--                        <i class="fa fa-unlock"></i>-->
+                        <h2>Les Circulaires</h2>
+                        <p>Utilisez nos circulaires pour créer votre panier d'épicerie et économisez sur les dépenses</p>
                     </div>
                 </div>
-                <div class="col-md-3 col-sm-6">
+                <div class="col-md-4 col-sm-8">
                     <div class="single-promo">
-                        <i class="fa fa-unlock"></i>
-                        <p>Free</p>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="single-promo">
-                        <i class="fa fa-calendar"></i>
-                        <p>Weekly Updates</p>
+                        <h2>Les catégories de produits</h2>
+<!--                        <i class="fa fa-calendar"></i>-->
+                        <p>Utilisez nos catégories de produits pour créer votre panier d'épicerie et économiser sur les dépenses.</p>
                     </div>
                 </div>
             </div>

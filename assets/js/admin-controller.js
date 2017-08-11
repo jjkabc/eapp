@@ -533,7 +533,7 @@ angular.module("eappApp").controller('ProductsTableController', ['$scope', '$q',
     {
         filter: '',
         limit: '25',
-        order: 'date_modified',
+        order: 'period_from',
         page: 1
     };
     
@@ -553,6 +553,8 @@ angular.module("eappApp").controller('ProductsTableController', ['$scope', '$q',
                 $scope.getProducts();
         });
     };
+    
+    $scope.prev_order = "period_from";
 	
     $scope.getProducts = function () 
     {
@@ -560,6 +562,12 @@ angular.module("eappApp").controller('ProductsTableController', ['$scope', '$q',
         {
             // Not ready
             return;
+        }
+        
+        if($scope.prev_order != $scope.query.order)
+        {
+            $scope.query.page = 1;
+            $scope.prev_order = $scope.query.order
         }
         
         var formData = new FormData();

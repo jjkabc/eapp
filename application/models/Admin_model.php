@@ -73,24 +73,30 @@ class Admin_model extends CI_Model
 	    
         foreach ($query->result() as $value) 
         {
-            $store_image_path = ASSETS_DIR_PATH."img/products/".$value->image;
-            if(!file_exists($store_image_path) || empty($value->image))
-            {
-                $value->image = "no_image_available.png";
-            }
-            
-            $value->subcategory = $this->get(SUB_CATEGORY_TABLE, $value->subcategory_id);
-
-            // Get category
-            if($value->subcategory != null)
-            {
-                    $value->category = $this->get(CATEGORY_TABLE, $value->subcategory->product_category_id);
-            }
-			
-            $result[$value->id] = $value;
+            $result[$value->id] = $this->get_product($value->id, false);
         }
         
-        return $result;
+        $begining_products = array();
+        
+        foreach ($result as $product)
+        {
+            if (0 === strpos(strtolower($product->name), strtolower($name))) 
+            {
+                array_push($begining_products, $product);
+                
+                $index = array_search($product, $result);
+                
+                if($index)
+                {
+                    array_splice($result, $index, 1);
+                }
+            }
+        }
+        
+        $resorted_result = array_merge($begining_products, $result);
+        
+        return $resorted_result;
+        
     }
     
    
