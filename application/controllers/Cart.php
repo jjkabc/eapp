@@ -149,7 +149,7 @@ class Cart extends CI_Controller {
     {
 		$optimizedList = array();    
 		// convert km to mile
-    	$distance = $this->input->post("distance") * 0.621371;
+    	$distance = $this->input->post("distance");
 		$products = json_decode($this->input->post("products"));
         $search_all = $this->input->post("searchAll");
         $coords = array("longitude" => $this->input->post("longitude"), "latitude" => $this->input->post("latitude"));
@@ -218,7 +218,7 @@ class Cart extends CI_Controller {
     {
 		$result = array();
 		// convert km to mile
-    	$distance = $this->input->post("distance") * 0.621371;
+    	$distance = $this->input->post("distance");
 		$products = json_decode($this->input->post("products"));
 		$coords = array("longitude" => $this->input->post("longitude"), "latitude" => $this->input->post("latitude"));  
 		$search_all = $this->input->post("searchAll");

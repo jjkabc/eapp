@@ -381,6 +381,11 @@ class CI_Model {
                     $order = STORE_PRODUCT_TABLE.".".$order;
                 }
                 
+                if($order == 'name')
+                {
+                    $order = PRODUCT_TABLE.".".$order;
+                }
+                
                 $this->db->order_by($order, "DESC");
             }
             else
@@ -388,6 +393,11 @@ class CI_Model {
                 if($order == 'date_modified')
                 {
                     $order = STORE_PRODUCT_TABLE.".".$order;
+                }
+                
+                if($order == 'name')
+                {
+                    $order = PRODUCT_TABLE.".".$order;
                 }
                 
                 $this->db->order_by($order, "ASC");
@@ -440,6 +450,7 @@ class CI_Model {
     private function get_distinct_latest_products($filter, $store_id, $category_id)
     {
         $this->db->join(PRODUCT_TABLE, $this->store_product_product_join);
+        
         if($filter != null)
         {
             $this->db->like("name", $filter);
@@ -451,7 +462,6 @@ class CI_Model {
         }
         if($category_id != null)
         {
-            $this->db->join(PRODUCT_TABLE, $this->store_product_product_join);
             $this->db->join(SUB_CATEGORY_TABLE, $this->store_product_subcategory_join);	
             $this->db->where(array(SUB_CATEGORY_TABLE.".product_category_id" => $category_id));
         }    
@@ -521,7 +531,6 @@ class CI_Model {
 	
     private function get_distinct_products($filter, $store_id, $category_id)
     {
-        $this->db->join(PRODUCT_TABLE, $this->store_product_product_join);
         if($filter != null)
         {
             $this->db->like("name", $filter);

@@ -244,8 +244,8 @@
                             
                             <li>
                                 <a href="<?php echo site_url("cart"); ?>" class="md-icon-button" aria-label="Cart">
-                                    <md-icon style="color: white;"><i class="material-icons">shopping_cart</i> </md-icon>
-                                    <span class="badge" ng-show="get_cart_item_total() > 0">{{get_cart_item_total()}} | CAD {{get_cart_total_price() | number : 2}}</span>
+                                    <md-icon style="color: #1abc9c;"><i class="material-icons">shopping_cart</i> </md-icon>
+                                    <span class="badge"  style="background-color: #1abc9c; color : #333;" ng-show="get_cart_item_total() > 0">{{get_cart_item_total()}} | CAD {{get_cart_total_price() | number : 2}}</span>
                                 </a>
                                 
                             </li>

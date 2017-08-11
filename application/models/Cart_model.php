@@ -107,12 +107,12 @@ class Cart_model extends CI_Model
             
             if($user != null)
             {
-                $range = '(3958*3.1415926*sqrt((latitude-'.$user->profile->latitude.')*(latitude-'.$user->profile->latitude.') + cos(latitude/57.29578)*cos('.$user->profile->latitude.'/57.29578)*(longitude-'.$user->profile->longitude.')*(longitude-'.$user->profile->longitude.'))/180)';
+                $range = '(6371*3.1415926*sqrt((latitude-'.$user->profile->latitude.')*(latitude-'.$user->profile->latitude.') + cos(latitude/57.29578)*cos('.$user->profile->latitude.'/57.29578)*(longitude-'.$user->profile->longitude.')*(longitude-'.$user->profile->longitude.'))/180)';
             }
             
             if($user == null && $coords != null && $coords["latitude"] != 0 && $coords["longitude"] != 0)
             {
-                $range = '(3958*3.1415926*sqrt((latitude-'.$coords["latitude"].')*(latitude-'.$coords["latitude"].') + cos(latitude/57.29578)*cos('.$coords["latitude"].'/57.29578)*(longitude-'.$coords["longitude"].')*(longitude-'.$coords["longitude"].'))/180)';
+                $range = '(6371*3.1415926*sqrt((latitude-'.$coords["latitude"].')*(latitude-'.$coords["latitude"].') + cos(latitude/57.29578)*cos('.$coords["latitude"].'/57.29578)*(longitude-'.$coords["longitude"].')*(longitude-'.$coords["longitude"].'))/180)';
             }
             
             $range_select = empty($range) ? "" : ", (".$range.") AS 'range'";
@@ -125,18 +125,18 @@ class Cart_model extends CI_Model
             {
                 $this->db->join(USER_FAVORITE_STORE_TABLE, USER_FAVORITE_STORE_TABLE.'.retailer_id = '.CHAIN_TABLE.'.id');
                 $this->db->where(array("user_account_id" => $user->id));
-                $this->db->where(array('(3958*3.1415926*sqrt((latitude-'.$user->profile->latitude.')*(latitude-'.$user->profile->latitude.') + cos(latitude/57.29578)*cos('.$user->profile->latitude.'/57.29578)*(longitude-'.$user->profile->longitude.')*(longitude-'.$user->profile->longitude.'))/180) <=' => $distance));
+                $this->db->where(array('(6371*3.1415926*sqrt((latitude-'.$user->profile->latitude.')*(latitude-'.$user->profile->latitude.') + cos(latitude/57.29578)*cos('.$user->profile->latitude.'/57.29578)*(longitude-'.$user->profile->longitude.')*(longitude-'.$user->profile->longitude.'))/180) <=' => $distance));
             }
             
             if($search_all && $user != null)
             {
-                $this->db->where(array('(3958*3.1415926*sqrt((latitude-'.$user->profile->latitude.')*(latitude-'.$user->profile->latitude.') + cos(latitude/57.29578)*cos('.$user->profile->latitude.'/57.29578)*(longitude-'.$user->profile->longitude.')*(longitude-'.$user->profile->longitude.'))/180) <=' => $distance));
+                $this->db->where(array('(6371*3.1415926*sqrt((latitude-'.$user->profile->latitude.')*(latitude-'.$user->profile->latitude.') + cos(latitude/57.29578)*cos('.$user->profile->latitude.'/57.29578)*(longitude-'.$user->profile->longitude.')*(longitude-'.$user->profile->longitude.'))/180) <=' => $distance));
             }
             
             // Check if coordinates are set
             if($user == null && $coords != null && $coords["latitude"] != 0 && $coords["longitude"] != 0)
             {
-                $this->db->where(array('(3958*3.1415926*sqrt((latitude-'.$coords["latitude"].')*(latitude-'.$coords["latitude"].') + cos(latitude/57.29578)*cos('.$coords["latitude"].'/57.29578)*(longitude-'.$coords["longitude"].')*(longitude-'.$coords["longitude"].'))/180) <=' => $distance));
+                $this->db->where(array('(6371*3.1415926*sqrt((latitude-'.$coords["latitude"].')*(latitude-'.$coords["latitude"].') + cos(latitude/57.29578)*cos('.$coords["latitude"].'/57.29578)*(longitude-'.$coords["longitude"].')*(longitude-'.$coords["longitude"].'))/180) <=' => $distance));
             }
 
             $this->db->where(array("product_id" => $product_id));
