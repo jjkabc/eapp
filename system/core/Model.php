@@ -613,7 +613,7 @@ class CI_Model {
 	*/
 	public function hit($table_name, $id)
 	{
-		$this->db->set('hit', 'hit + 1');
+		$this->db->set('hits', 'hits + 1');
 		$this->db->where(array("id" => $id));
 		$this->db->update($table_name);
 	}
