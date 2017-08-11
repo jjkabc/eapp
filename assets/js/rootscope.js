@@ -306,6 +306,30 @@ $(document).ready(function()
             rootScope.getCartContents();
         }
     };
+    
+    rootScope.getCartContents = function()
+    {   
+        var formData = new FormData();
+        formData.append("longitude", rootScope.longitude);
+        formData.append("latitude", rootScope.latitude);
+        
+        $.post(rootScope.site_url.concat("/cart/get_cart_contents"),{ longitude : rootScope.longitude, latitude : rootScope.latitude})
+        .done(function(data)
+        {
+            var parsedData = JSON.parse(data);
+            
+            if(parsedData)
+            {
+                var scope = angular.element($("html")).scope();
+
+                scope.$apply(function()
+                {
+                    rootScope.cart = parsedData;
+                });
+                
+            }
+        });
+    };
 		
 		
 	
@@ -362,11 +386,12 @@ $(document).ready(function()
 		
 	/*ACCOUNT END*/
         
-        
-        				
-
-        
-        
+        // THis is called for a non logged user to prompt for his zip code
+        // If that's not already the case. 
+        if(typeof rootScope.promptForZipCode !== "undefined")
+        {
+                rootScope.promptForZipCode();
+        }
         
     });
 
