@@ -468,4 +468,9 @@ class Admin extends CI_Controller
     {
         $row = array_combine($header, $row);
     }
+	
+	public function hit()
+	{
+		$this->admin_model->hit($this->input->post("table_name"), $this->input->post("id"));
+	}
 }
