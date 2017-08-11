@@ -156,8 +156,211 @@ $(document).ready(function()
             async:true
         });
     };
+		
+	rootScope.can_add_to_cart = function(product_id)
+     {
+        for(var key in rootScope.cart)
+		{
+			if(parseInt(rootScope.cart[key].store_product.product_id) === parseInt(product_id))
+			{
+				return false;
+			}
+		}
+
+		return true;
+    };
+		
+	rootScope.getRowID = function(product_id)
+    {
+        var rowid = -1;
         
-        /* CART END*/
+        for(var key in rootScope.cart)
+		{
+            if(parseInt(rootScope.cart[key].store_product.product_id) === parseInt(product_id))
+            {
+                rowid = rootScope.cart[key].rowid;
+                break;
+            }
+		}
+        
+        return rowid;
+    };
+		
+	rootScope.removeItemFromCart = function(product_id)
+    {
+        var index = -1;
+        
+        for(var key in rootScope.cart)
+		{
+			if(parseInt(rootScope.cart[key].store_product.product_id) === parseInt(product_id))
+			{
+				index = key;
+				break;
+			}
+		}
+        
+        if(index > -1)
+        {
+            rootScope.cart.splice(index, 1);
+        }
+    };
+		
+	rootScope.remove_product_from_cart = function(product_id)
+    {
+        
+        var data = 
+		{
+				rowid : rootScope.getRowID(product_id)
+		};
+
+		$.ajax({
+				type: 'POST',
+				url:   rootScope.site_url.concat("/cart/remove"),
+				data: data,
+				success: function(response)
+				{
+					var response_data = JSON.parse(response);
+
+					if(Boolean(response_data.success))
+					{
+						// Remove from Global Cart list
+						// Get the root scope. That's where the cart will reside. 
+						var scope = angular.element($("html")).scope();
+
+						scope.$apply(function()
+						{
+							rootScope.removeItemFromCart(product_id);
+						});
+					}
+				},
+				async:true
+		});
+    };
+	
+	rootScope.getUserCoordinates = function()
+    {
+        // Get the current geo location only if it's not yet the case
+        if ('https:' == document.location.protocol && "geolocation" in navigator && !window.localStorage.getItem("longitude") && !window.localStorage.getItem("latitude")) 
+        {
+            navigator.geolocation.getCurrentPosition(function(position) 
+            {
+                rootScope.longitude = position.coords.longitude;
+                rootScope.latitude = position.coords.latitude;
+                window.localStorage.setItem("longitude", rootScope.longitude);
+                window.localStorage.setItem("latitude", rootScope.latitude);
+                rootScope.getCartContents();
+            });
+        }
+        else
+        {
+			rootScope.getCartContents();
+        }
+    };
+        
+	rootScope.promptForZipCode = function(ev) 
+    {
+        rootScope.longitude = window.localStorage.getItem("longitude");
+        rootScope.latitude = window.localStorage.getItem("latitude");
+
+        if(!window.localStorage.getItem("longitude") && !window.localStorage.getItem("latitude") && !rootScope.isUserLogged)
+        {
+            // Appending dialog to document.body to cover sidenav in docs app
+            var confirm = $mdDialog.prompt()
+              .title('Veillez entrer votre code postale. ')
+              .textContent('Ceci vas aider a optimiser les resultats.')
+              .placeholder('Votre Code Postale E.g. H1H 1H1')
+              .ariaLabel('Code Postale')
+              .initialValue('')
+              .targetEvent(ev)
+              .ok('Valider!')
+              .cancel('Annuler');
+
+            $mdDialog.show(confirm).then(function(result) 
+            {
+                    var address = result;
+                    var geocoder = new google.maps.Geocoder();
+                    geocoder.geocode( { 'address': address}, function(results, status) 
+                    {
+                            if (status === google.maps.GeocoderStatus.OK) 
+                            {
+								 rootScope.latitude = results[0].geometry.location.lat();
+								 rootScope.longitude = results[0].geometry.location.lng();
+								 window.localStorage.setItem("longitude", rootScope.longitude);
+								 window.localStorage.setItem("latitude", rootScope.latitude);
+								 rootScope.getCartContents();
+                            }
+                            else
+                            {
+								rootScope.getUserCoordinates();
+                            }
+                    });
+
+
+            }, function() 
+            {
+                rootScope.getUserCoordinates();
+            });
+        }
+        else
+        {
+            rootScope.getCartContents();
+        }
+    };
+		
+		
+	
+		
+		
+	/* CART END*/
+		
+	/* ACCOUNT */
+		
+		rootScope.addToMyList = function(product)
+		{
+			product.quantity = 1;
+
+			rootScope.currentProduct = product;
+
+			rootScope.AddProductToList();
+
+			rootScope.saveMyList();
+		};
+
+		rootScope.removeFromMyList = function(product)
+		{
+			rootScope.removeProductFromList(product.id, null);
+			rootScope.saveMyList();
+		};
+
+		rootScope.favoriteChanged = function(product)
+		{
+			if(product.favorite)
+			{
+				rootScope.addToMyList(product);
+			}
+			else
+			{
+				rootScope.removeFromMyList(product);
+			}
+		};
+		
+		rootScope.inMyList = function(product_id)
+		{
+			if(rootScope.isUserLogged)
+			{
+				for(var key in rootScope.loggedUser.grocery_list)
+				{
+					if(parseInt(rootScope.loggedUser.grocery_list[key].id) === parseInt(product_id))
+					{
+						return true;
+					}
+				}
+			}
+
+			return false;
+		};
+		
+	/*ACCOUNT END*/
         
         
         				
