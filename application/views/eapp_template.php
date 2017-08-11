@@ -124,27 +124,15 @@
 
 			rootScope.$apply(function()
 			{
-				
-				
 				rootScope.base_url = "<?php echo $base_url; ?>";
 				rootScope.site_url = "<?php echo $site_url; ?>";
 				rootScope.controller = "<?php echo $controller; ?>";
 				rootScope.method = "<?php echo $method; ?>";
-				rootScope.hit = function(table_name, id)
-				{
-					var formData = new FormData();
-					formData.append("table_name", table_name);
-					formData.append("id", id);
-					
-					$.post(rootScope.site_url.concat("admin/hit"), {table_name : table_name, id : id});
-				};
+				
 				rootScope.longitude = 0;
 				rootScope.latitude = 0;
 				rootScope.cart = [];
-				rootScope.is_loading = false;
-				rootScope.valid = true;
-				rootScope.success_message = "";
-				rootScope.error_message = "";
+				
 				var user = '<?php echo $user; ?>';
 				if(user === "" || user == "null")
 				{
@@ -168,6 +156,10 @@
 			});
 		});
     </script>
+	  
+  <!-- Rootscope Script -->
+  <script src="<?php echo base_url("assets/js/rootscope.js")?>"></script> 
+	  
   </head>
   <body>
     <notifications-bar class="notifications"></notifications-bar>
