@@ -92,14 +92,13 @@ $(document).ready(function()
     
 <div id="admin-container" class="admin-container" ng-controller="AdminController">
 	
-	
-    <div class="container">
+    <md-content class="container">
 	    
-	   <md-toolbar style="background-color: #1abc9c; margin-bottom : 10px;">
-		<div>
-			<h2 class="md-toolbar-tools">Create Store Product</h2>
-		</div>
-	</md-toolbar>
+	   <md-toolbar style="background-color: #1abc9c; margin-bottom : 40px;">
+			<div>
+				<h2 class="md-toolbar-tools">Create Store Product</h2>
+			</div>
+		</md-toolbar>
 	    
         <form id="create_store_product_form" name="create_store_product_form" ng-submit="create_store_product()">
         
@@ -252,5 +251,5 @@ $(document).ready(function()
             <input type="submit" value="{{getSaveLabel()}} and Continue" ng-click="continue = true">
         </div>
     </form>
-    </div>
+    </md-content>
 </div>
