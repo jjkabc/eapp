@@ -93,7 +93,7 @@ $(document).ready(function()
 <div id="admin-container" class="admin-container" ng-controller="AdminController">
 	
 	
-    <md-content class="container" layout-padding>
+    <div class="container">
 	    
 	   <md-toolbar style="background-color: #1abc9c; margin-bottom : 10px;">
 		<div>
@@ -252,5 +252,5 @@ $(document).ready(function()
             <input type="submit" value="{{getSaveLabel()}} and Continue" ng-click="continue = true">
         </div>
     </form>
-    </md-content>
+    </div>
 </div>
