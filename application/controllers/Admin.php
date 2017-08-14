@@ -152,7 +152,7 @@ class Admin extends CI_Controller
             $product_data = array();
             $product_data['image'] = $upload_data['file_name'];
             
-			$product_data['product_id'] = $this->input->post("product_id");
+			$product_data['product_id'] = $this->input->post("id");
 			$this->admin_model->create(PRODUCT_TABLE, $product_data);
             
             $response['success'] = true;
