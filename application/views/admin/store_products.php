@@ -26,9 +26,14 @@
 
 <div id="admin-container" class="admin-container" ng-controller="ProductsTableController">
     
+	<md-toolbar style="background-color: #1abc9c;">
+		<div>
+		    <h2 class="md-toolbar-tools">Products</h2>
+		</div>
+	</md-toolbar>
+	
     <md-toolbar class="md-table-toolbar md-default" ng-hide="selected.length || filter.show">
         <div class="md-toolbar-tools">
-        <h2 class="md-title">Products</h2>
         <div flex></div>
         <md-button class="md-icon-button" ng-click="filter.show = true">
             <md-icon>filter_list</md-icon>
