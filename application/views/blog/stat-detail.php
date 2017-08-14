@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<div class="product-big-title-area">
+<div class="product-big-title-area" ng-controller="BlogController">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <div class="product-bit-title text-center">
-                    <h2>Details</h2>
+                    <div class="breadcrumb-container">
+						<ul class="breadcrumb">
+						<li><a href="index.html">Statistiques</a></li>
+						<li class="active">{{post.name}}</li>
+						</ul>
+					</div>
                 </div>
             </div>
         </div>
