@@ -347,9 +347,8 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
             if($scope.selectedProduct !== null)
             {
                 formData.append("product_id", $scope.selectedProduct.id);
-                formData.append("brand", $scope.store_product.brand);
-
-                $http.post($scope.site_url.concat("/admin/upload_product_image"), formData, {}).then(
+				$http.post($scope.site_url.concat("/admin/upload_product_image"), formData, {transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}}).then(
                 function(result)
                 {
                     if(result.data.success)
