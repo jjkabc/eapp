@@ -26,11 +26,7 @@
 
 <div id="admin-container" class="admin-container" ng-controller="ProductsTableController">
     
-	<md-toolbar style="background-color: #1abc9c;">
-		<div>
-		    <h2 class="md-toolbar-tools">Products</h2>
-		</div>
-	</md-toolbar>
+	
 	
     <md-toolbar class="md-table-toolbar md-default" ng-hide="selected.length || filter.show">
         <div class="md-toolbar-tools">
@@ -63,6 +59,11 @@
     </md-toolbar>
     
     <md-table-container class="container">
+	    <md-toolbar style="background-color: #1abc9c; margin-bottom : 10px;">
+		<div>
+		    <h2 class="md-toolbar-tools">Products</h2>
+		</div>
+	</md-toolbar>
         <table  md-table md-row-select multiple cellspacing="0" ng-model="selected"  md-progress="promise">
             <thead md-head md-order="query.order" md-on-reorder="getProducts">
                 <tr md-row>
