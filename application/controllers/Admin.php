@@ -139,13 +139,7 @@ class Admin extends CI_Controller
     
     public function upload_product_image()
     {
-        $brand = $this->input->post("brand");
 
-        if(empty($brand) || !isset($brand))
-        {
-            $brand = null;
-        }
-		
         $this->load->helper('file');
         
         $this->initialize_upload_library(ASSETS_DIR_PATH.'img/products/', uniqid().".png");
@@ -158,20 +152,8 @@ class Admin extends CI_Controller
             $product_data = array();
             $product_data['image'] = $upload_data['file_name'];
             
-			
-            // Image uploaded is not related to a brand
-            if($brand == null)
-            {
-                $product_data['id'] = $this->input->post("product_id");
-                $this->admin_model->create(PRODUCT_TABLE, $product_data);
-            }
-            else
-            {
-                $product_data['product_id'] = $this->input->post("product_id");
-                $product_data['brand'] = $brand;
-                $this->admin_model->create(PRODUCT_BRAND_TABLE, $product_data);
-            }
-            
+			$product_data['product_id'] = $this->input->post("product_id");
+			$this->admin_model->create(PRODUCT_TABLE, $product_data);
             
             $response['success'] = true;
             $response['message'] = "Image ".$upload_data['file_name']." was uploaded successfully. ";
