@@ -24,7 +24,7 @@
 </script>
 
 
-<div id="admin-container" class="container admin-container" ng-controller="ProductsTableController">
+<div id="admin-container" class="admin-container" ng-controller="ProductsTableController">
     
     <md-toolbar class="md-table-toolbar md-default" ng-hide="selected.length || filter.show">
         <div class="md-toolbar-tools">
@@ -57,7 +57,7 @@
       </div>
     </md-toolbar>
     
-    <md-table-container>
+    <md-table-container class="container">
         <table  md-table md-row-select multiple cellspacing="0" ng-model="selected"  md-progress="promise">
             <thead md-head md-order="query.order" md-on-reorder="getProducts">
                 <tr md-row>
