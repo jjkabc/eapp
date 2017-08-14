@@ -40,7 +40,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
     <!-- MD Table CSS -->
     <link rel="stylesheet" href="<?php echo base_url("assets/css/md-data-table.css")?>">
-    <link rel="stylesheet" href="<?php echo base_url("assets/css/dropify.css")?>">
     
     {css}
     
@@ -74,8 +73,6 @@
     
     <!-- Angular JS Country/State Select -->
     <script src="<?php echo base_url("assets/js/md-country-select.js")?>"></script>
-    
-    <script src="<?php echo base_url("assets/js/dropify.js")?>"></script>
     
     <!-- Angular JS Country/State Select -->
     <script src="<?php echo base_url("assets/js/angular-country-state.js")?>"></script>
