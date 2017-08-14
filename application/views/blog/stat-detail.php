@@ -1,23 +1,13 @@
 <!DOCTYPE html>
-<div class="product-big-title-area" ng-controller="BlogController">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="product-bit-title text-center">
-                    <div class="breadcrumb-container">
-						<ul class="breadcrumb">
-						<li><a href="index.html">Statistiques</a></li>
-						<li class="active">{{post.name}}</li>
-						</ul>
-					</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> <!-- End Page title area -->
 
 <section id="blog-container" class="section-white clearfix" ng-controller="BlogController">
     <div class="container">
+		<div class="breadcrumb-container">
+			<ul class="breadcrumb">
+				<li><a href="index.html">Presse</a></li>
+				<li class="active">{{post.title}}</li>
+			</ul>
+		</div>
         <div id="blog-page" class="row clearfix">
             <div id="content" class="col-lg-8 col-md-8 col-sm-12">
                 <div class="blog-item">
