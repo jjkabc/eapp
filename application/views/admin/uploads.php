@@ -21,9 +21,18 @@
 </script>
 
 
-<div id="admin-container" class="container admin-container" ng-controller="AdminController">
+<div id="admin-container" class="admin-container" ng-controller="AdminController">
     
-    <!-- Upload Chains Section -->
+	<md-content class="container">
+		
+		<md-toolbar style="background-color: #1abc9c; margin-bottom : 10px;">
+			<div>
+				<h2 class="md-toolbar-tools">Upload CSV File</h2>
+			</div>
+		</md-toolbar>
+		
+		
+		<!-- Upload Chains Section -->
     <fieldset>
         <legend>Upload Chains</legend>
         <form id="upload_chains_form" ng-submit="upload_chains()">
@@ -118,7 +127,9 @@
             </div>
         </form>
     </fieldset>
-    
+		
+	</md-content>
+	
 </div>
 
 <script>
