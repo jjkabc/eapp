@@ -113,6 +113,8 @@ class Admin extends CI_Controller
         
         $response = array();
         
+        
+        
         if($this->upload->do_upload('image'))
         {
             $upload_data = $this->upload->data();
@@ -144,14 +146,13 @@ class Admin extends CI_Controller
             $brand = null;
         }
 		
-        $a = $_FILES;
         $this->load->helper('file');
         
         $this->initialize_upload_library(ASSETS_DIR_PATH.'img/products/', uniqid().".png");
         
         $response = array();
-        
-        if($this->upload->do_upload('image'))
+                
+        if($this->upload->do_upload('product_image'))
         {
             $upload_data = $this->upload->data();
             $product_data = array();
@@ -161,14 +162,14 @@ class Admin extends CI_Controller
             // Image uploaded is not related to a brand
             if($brand == null)
             {
-                    $product_data['id'] = $this->input->post("product_id");
-                    $this->admin_model->create(PRODUCT_TABLE, $product_data);
+                $product_data['id'] = $this->input->post("product_id");
+                $this->admin_model->create(PRODUCT_TABLE, $product_data);
             }
             else
             {
-                    $product_data['product_id'] = $this->input->post("product_id");
-                    $product_data['brand'] = $brand;
-                    $this->admin_model->create(PRODUCT_BRAND_TABLE, $product_data);
+                $product_data['product_id'] = $this->input->post("product_id");
+                $product_data['brand'] = $brand;
+                $this->admin_model->create(PRODUCT_BRAND_TABLE, $product_data);
             }
             
             
@@ -469,8 +470,8 @@ class Admin extends CI_Controller
         $row = array_combine($header, $row);
     }
 	
-	public function hit()
-	{
-		$this->admin_model->hit($this->input->post("table_name"), $this->input->post("id"));
-	}
+    public function hit()
+    {
+        $this->admin_model->hit($this->input->post("table_name"), $this->input->post("id"));
+    }
 }

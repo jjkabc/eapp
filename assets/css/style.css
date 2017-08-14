@@ -272,7 +272,6 @@ z-index: 9;
 .single-product 
 {
   overflow: hidden;
-  width: 200px;
 }
 .single-product:hover {}
 .single-product:hover .product-hover a.add-to-cart-link {top: 32%;}
@@ -1119,8 +1118,7 @@ div.cart-collaterals ul.products li.product:hover .add_to_cart_button{background
 
 .navbar, .dropdown-menu
 {
-    /* background:rgba(0,184,147,0.85); */
-    background: none repeat scroll 0 0 #333;
+    background:rgba(0,184,147,0.85);
     color : #fff;
     border: none;
 }

@@ -1,4 +1,16 @@
+<!DOCTYPE html>
 
+<script>
+    $(document).ready(function()
+    {
+        var scope = angular.element($("#admin-container")).scope();
+        
+        scope.$apply(function()
+        {
+            scope.optimization_preference_changed();
+        });
+    })
+</script>
     
 <div class="product-big-title-area">
     <div class="container">
@@ -12,7 +24,7 @@
     </div>
 </div> <!-- End Page title area -->
 
-<md-content class="admin-container" ng-controller="CartController">
+<md-content id="admin-container" class="admin-container" ng-controller="CartController">
     
     <div>
         <md-content class="eapp-container">
@@ -24,7 +36,7 @@
                 </md-radio-group>
 
                 <h4 class="search-preference">Rechercher dans ...</h4>
-                <md-radio-group ng-model="searchInMyList" ng-change="optimization_preference_changed()">
+                <md-radio-group ng-model="searchInMyList.value" ng-change="optimization_preference_changed()">
                     <md-radio-button ng-value="true_value" ng-disabled="!isUserLogged">Votre liste prefere</md-radio-button>
                     <md-radio-button ng-value="false_value">Tout les magasins</md-radio-button>
                 </md-radio-group>
@@ -33,7 +45,7 @@
                     <div flex="15" layout layout-align="center center">
                       <span class="md-body-1">Distance : {{distance}} Km</span>
                     </div>
-                    <md-slider flex class="md-primary" md-discrete ng-model="distance" step="1" min="1" max="50" aria-label="Distance">
+                    <md-slider flex class="md-primary" md-discrete ng-model="distance" step="1" min="1" max="100" aria-label="Distance">
                     </md-slider>
                     <md-button class="md-raised" ng-click="optimization_preference_changed()">Mettre à jour</md-button>
                 </div>
@@ -68,7 +80,7 @@
                         </td>
 
                         <td md-cell>
-                            <a href><img alt="poster_1_up" class="admin-image" ng-src="{{base_url}}/assets/img/stores/{{item.store_product.retailer.image}}" ></a>
+                            <a href><img alt="item.store_product.product.name" class="admin-image" ng-src="{{base_url}}/assets/img/stores/{{item.store_product.retailer.image}}" ></a>
                         </td>
 
                         <td md-cell>
@@ -77,13 +89,13 @@
                                 <p>{{item.store_product.department_store.city}}, {{item.store_product.department_store.state}} , {{item.store_product.department_store.postcode }}</p>
                                 <p> < {{item.store_product.department_store.distance}} Km en voiture</p>
                             </div>
-							<div ng-show="item.store_product.department_store.distance == 0">
-								<p>Le produit n'est pas disponible près de chez vous.</p>
-							</div>
+                            <div ng-show="item.store_product.department_store.distance == 0">
+                                <p style="color : #F64747;">Le produit n'est pas disponible près de chez vous.</p>
+                            </div>
                         </td>
 
                         <td md-cell>
-                            <a href><img alt="poster_1_up" class="admin-image" ng-src="{{base_url}}/assets/img/products/{{item.product.image}}"></a>
+                            <a href><img alt="poster_1_up" class="admin-image" ng-src="{{base_url}}/assets/img/products/{{item.store_product.product.image}}"></a>
                         </td>
 
                         <td md-cell>
@@ -153,14 +165,14 @@
                 <tbody id="store-cart-tbody">
                     <tr ng-repeat="product in cart">
                         <td>
-                            <img class="admin-image" ng-src="{{base_url}}/assets/img/products/{{product.product.image}}" />
+                            <img class="admin-image" ng-src="{{base_url}}/assets/img/products/{{product.store_product.product.image}}" />
                             <p style="width : auto;">{{product.product.name}}</p>
                             <md-input-container class='col-sm-6'>
                                 <label>Quantity</label>
                                 <input aria-label="Qty" type="number" ng-model="product.quantity">
                             </md-input-container>
                         </td>
-                        <td ng-repeat="store_product in product.store_products">{{store_product.price == 0 ? 'Item pas disponible' : 'CAD ' + store_product.price * product.quantity}}</td>
+                        <td ng-repeat="store_product in product.store_products">{{get_price_label(store_product, product)}}</td>
                     </tr>
                     <tr>
                         <td class="store-total-caption"><b>Total</b></td>

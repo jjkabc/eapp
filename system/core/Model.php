@@ -182,8 +182,8 @@ class CI_Model {
         // Get the store product object
 	if($latestProduct)
 	{
-		$array = array('period_from <=' => date("Y-m-d"), 'period_to >=' => date("Y-m-d"));
-		$this->db->where($array);
+            $array = array('period_from <=' => date("Y-m-d"), 'period_to >=' => date("Y-m-d"));
+            $this->db->where($array);
 	}
 	
         $store_product = $this->get(STORE_PRODUCT_TABLE, $id);
@@ -192,7 +192,6 @@ class CI_Model {
         {
             // Get associated product
             $store_product->product = $this->get_product($store_product->product_id);
-            
             
             // Get product store
             $store_product->retailer = $this->get(CHAIN_TABLE, $store_product->retailer_id);
@@ -453,7 +452,7 @@ class CI_Model {
         
         if($filter != null)
         {
-            $this->db->like("name", $filter);
+            $this->db->like(PRODUCT_TABLE.".name", $filter);
         }
 
         if($store_id != null)
@@ -531,9 +530,11 @@ class CI_Model {
 	
     private function get_distinct_products($filter, $store_id, $category_id)
     {
+        $this->db->join(PRODUCT_TABLE, $this->store_product_product_join);
+        
         if($filter != null)
         {
-            $this->db->like("name", $filter);
+            $this->db->like(PRODUCT_TABLE.".name", $filter);
         }
         if($store_id != null)
         {
@@ -541,7 +542,6 @@ class CI_Model {
         }
         if($category_id != null)
         {
-            $this->db->join(PRODUCT_TABLE, $this->store_product_product_join);
             $this->db->join(SUB_CATEGORY_TABLE, $this->store_product_subcategory_join);	
             $this->db->where(array(SUB_CATEGORY_TABLE.".product_category_id" => $category_id));
         }
@@ -608,14 +608,22 @@ class CI_Model {
         $this->db->delete($table_name);
     }
 	
-	/*
-	* This is called when an item is clicked on the front end
-	*/
-	public function hit($table_name, $id)
-	{
-		$this->db->set('hits', 'hits + 1');
-		$this->db->where(array("id" => $id));
-		$this->db->update($table_name);
-	}
+    /*
+    * This is called when an item is clicked on the front end
+    */
+    public function hit($table_name, $id)
+    {
+        $this->db->set('hits', 'hits + 1', FALSE);
+        $this->db->where("id", $id);
+        $this->db->update($table_name);
+    }
+    
+    public function get_mostviewed_categories() 
+    {
+        $this->db->order_by("hits", "DESC");
+        $this->db->limit(5);
+        $query = $this->db->get_compiled_select(CATEGORY_TABLE);
+        return $this->db->query($query)->result();
+    }
 
 }

@@ -4,14 +4,6 @@ $(document).ready(function()
     
     rootScope.$apply(function()
     {
-        rootScope.hit = function(table_name, id)
-        {
-            var formData = new FormData();
-            formData.append("table_name", table_name);
-            formData.append("id", id);
-            
-            $.post(rootScope.site_url.concat("admin/hit"), {table_name : table_name, id : id});
-        };
         
         rootScope.is_loading = false;
         rootScope.valid = true;
@@ -27,17 +19,12 @@ $(document).ready(function()
          */
         rootScope.viewing_cart_optimization = { value: true};
 
-        rootScope.searchInMyList = false;
+        rootScope.searchInMyList = { value: false};
         
         /**
          * List of optimized cart store product items
          */
         rootScope.optimized_cart = [];
-        
-        /**
-         * List of selected cart items
-         */
-        rootScope.cart = [];
         
         /**
          * When this variable is true, the application is loading store optimizations. 
@@ -46,6 +33,40 @@ $(document).ready(function()
         rootScope.loading_store_products = false;
 
         rootScope.travel_distance = 0;
+        
+        /**
+         *  This is called whenever we want to record a click
+         *  on an item
+         * @param {type} table_name
+         * @param {type} id
+         */
+        rootScope.hit = function(table_name, id)
+        {
+            var formData = new FormData();
+            formData.append("table_name", table_name);
+            formData.append("id", id);
+            
+            $.post(rootScope.site_url.concat("/admin/hit"), {table_name : table_name, id : id}).then(function(data)
+            {
+                
+            });
+        };
+        
+        rootScope.clearSessionItems = function()
+        {
+            window.sessionStorage.removeItem("store_id");
+            window.sessionStorage.removeItem("category_id");
+        };
+        
+        rootScope.select_category = function($event)
+        {
+            rootScope.clearSessionItems();
+            var element = $event.target;
+            var category_id = parseInt(element.id);
+            rootScope.hit("eapp_product_category ",category_id);
+            window.sessionStorage.setItem("category_id", category_id);    
+            window.location =  rootScope.site_url.concat("/shop");
+        };
         
         rootScope.get_store_total = function(store_index)
         {        
@@ -56,8 +77,8 @@ $(document).ready(function()
                 //$rootScope.store_products[index].store_products
                 total += 
                         !rootScope.viewing_cart_optimization.value ? 
-                            rootScope.cart[key].store_products[store_index].price * rootScope.cart[key].quantity : 
-                            rootScope.cart[key].store_product.price * rootScope.cart[key].quantity;
+                        rootScope.cart[key].store_products[store_index].price * rootScope.cart[key].quantity : 
+                        rootScope.cart[key].store_product.price * rootScope.cart[key].quantity;
             }
 
             return total;
@@ -69,7 +90,7 @@ $(document).ready(function()
 
             for(var key in rootScope.cart)
             {
-                    total += parseFloat(rootScope.cart[key].quantity * rootScope.cart[key].store_product.price);
+                total += parseFloat(rootScope.cart[key].quantity * rootScope.cart[key].store_product.price);
             }
 
             return total;
@@ -105,284 +126,234 @@ $(document).ready(function()
             return total;
         };
         
-    rootScope.add_product_to_cart = function(product_id)
-    {
-        var data = 
+        rootScope.add_product_to_cart = function(product_id)
         {
-            product_id : product_id,
-            longitude : rootScope.longitude,
-            latitude : rootScope.latitude
-        };
-        
-	    $.ajax({
-            type: 'POST',
-            url:   rootScope.site_url.concat("/cart/insert"),
-            data: data,
-            success: function(response)
+            var data = 
             {
-                var response_data = JSON.parse(response);
+                product_id : product_id,
+                longitude : rootScope.longitude,
+                latitude : rootScope.latitude
+            };
 
-                if(Boolean(response_data.success))
+                $.ajax({
+                type: 'POST',
+                url:   rootScope.site_url.concat("/cart/insert"),
+                data: data,
+                success: function(response)
                 {
-                    // Add Global Cart list
-                    var cart_item = 
-                    {
-                        rowid : response_data.rowid,
-                        store_product : response_data.store_product,
-                        top_five_store_products : [],
-                        quantity : 1
-                    };
+                    var response_data = JSON.parse(response);
 
-                    // Get the root scope. That's where the cart will reside. 
-                    var scope = angular.element($("html")).scope();
-
-                    scope.$apply(function()
+                    if(Boolean(response_data.success))
                     {
-                        if (typeof scope.cart === 'undefined') 
+                        // Add Global Cart list
+                        var cart_item = 
                         {
-                            // Create new cart. 
-                            scope.cart = [];
-                        }
-                        
-                        if(scope.cart == null || typeof scope.cart === 'undefined')
+                            rowid : response_data.rowid,
+                            store_product : response_data.store_product,
+                            top_five_store_products : [],
+                            quantity : 1
+                        };
+
+
+                        rootScope.$apply(function()
                         {
-                            scope.cart = [];
-                        }
-                        
-                        scope.cart.push(cart_item);
-                    });
-                }
-            },
-            async:true
-        });
-    };
+                            if(rootScope.cart === null || typeof rootScope.cart === 'undefined')
+                            {
+                                rootScope.cart = [];
+                            }
+                            
+                            rootScope.cart.push(cart_item);
+                        });
+                    }
+                },
+                async:true
+            });
+        };
 		
 	rootScope.can_add_to_cart = function(product_id)
-     {
-        for(var key in rootScope.cart)
-		{
-			if(parseInt(rootScope.cart[key].store_product.product_id) === parseInt(product_id))
-			{
-				return false;
-			}
-		}
+        {
+           for(var key in rootScope.cart)
+            {
+                if(parseInt(rootScope.cart[key].store_product.product_id) === parseInt(product_id))
+                {
+                    return false;
+                }
+            }
 
-		return true;
-    };
+            return true;
+       };
 		
 	rootScope.getRowID = function(product_id)
-    {
-        var rowid = -1;
-        
-        for(var key in rootScope.cart)
-		{
-            if(parseInt(rootScope.cart[key].store_product.product_id) === parseInt(product_id))
+        {
+            var rowid = -1;
+
+            for(var key in rootScope.cart)
             {
-                rowid = rootScope.cart[key].rowid;
-                break;
+                if(parseInt(rootScope.cart[key].store_product.product_id) === parseInt(product_id))
+                {
+                    rowid = rootScope.cart[key].rowid;
+                    break;
+                }
             }
-		}
-        
-        return rowid;
-    };
+
+            return rowid;
+        };
 		
 	rootScope.removeItemFromCart = function(product_id)
-    {
-        var index = -1;
-        
-        for(var key in rootScope.cart)
-		{
-			if(parseInt(rootScope.cart[key].store_product.product_id) === parseInt(product_id))
-			{
-				index = key;
-				break;
-			}
-		}
-        
-        if(index > -1)
         {
-            rootScope.cart.splice(index, 1);
-        }
-    };
+            var index = -1;
+
+            for(var key in rootScope.cart)
+            {
+                if(parseInt(rootScope.cart[key].store_product.product_id) === parseInt(product_id))
+                {
+                    index = key;
+                    break;
+                }
+            }
+
+            if(index > -1)
+            {
+                rootScope.cart.splice(index, 1);
+            }
+        };
 		
 	rootScope.remove_product_from_cart = function(product_id)
-    {
-        
-        var data = 
-		{
-				rowid : rootScope.getRowID(product_id)
-		};
+        {
 
-		$.ajax({
-				type: 'POST',
-				url:   rootScope.site_url.concat("/cart/remove"),
-				data: data,
-				success: function(response)
-				{
-					var response_data = JSON.parse(response);
+            var data = 
+            {
+                rowid : rootScope.getRowID(product_id)
+            };
 
-					if(Boolean(response_data.success))
-					{
-						// Remove from Global Cart list
-						// Get the root scope. That's where the cart will reside. 
-						var scope = angular.element($("html")).scope();
+            $.ajax({
+                type: 'POST',
+                url:   rootScope.site_url.concat("/cart/remove"),
+                data: data,
+                success: function(response)
+                {
+                    var response_data = JSON.parse(response);
 
-						scope.$apply(function()
-						{
-							rootScope.removeItemFromCart(product_id);
-						});
-					}
-				},
-				async:true
-		});
-    };
+                    if(Boolean(response_data.success))
+                    {
+                        rootScope.$apply(function()
+                        {
+                            rootScope.removeItemFromCart(product_id);
+                        });
+                    }
+                },
+                async:true
+            });
+        };
 	
 	rootScope.getUserCoordinates = function()
-    {
-        // Get the current geo location only if it's not yet the case
-        if ('https:' == document.location.protocol && "geolocation" in navigator && !window.localStorage.getItem("longitude") && !window.localStorage.getItem("latitude")) 
         {
-            navigator.geolocation.getCurrentPosition(function(position) 
+            // Get the current geo location only if it's not yet the case
+            if ('https:' === document.location.protocol && "geolocation" in navigator && !window.localStorage.getItem("longitude") && !window.localStorage.getItem("latitude")) 
             {
-                rootScope.longitude = position.coords.longitude;
-                rootScope.latitude = position.coords.latitude;
-                window.localStorage.setItem("longitude", rootScope.longitude);
-                window.localStorage.setItem("latitude", rootScope.latitude);
-                rootScope.getCartContents();
-            });
-        }
-        else
-        {
-			rootScope.getCartContents();
-        }
-    };
+                navigator.geolocation.getCurrentPosition(function(position) 
+                {
+                    rootScope.longitude = position.coords.longitude;
+                    rootScope.latitude = position.coords.latitude;
+                    window.localStorage.setItem("longitude", rootScope.longitude);
+                    window.localStorage.setItem("latitude", rootScope.latitude);
+                });
+            }
+        };
         
 	rootScope.promptForZipCode = function(ev) 
-    {
-        rootScope.longitude = window.localStorage.getItem("longitude");
-        rootScope.latitude = window.localStorage.getItem("latitude");
-
-        if(!window.localStorage.getItem("longitude") && !window.localStorage.getItem("latitude") && !rootScope.isUserLogged)
         {
-            // Appending dialog to document.body to cover sidenav in docs app
-            var confirm = $mdDialog.prompt()
-              .title('Veillez entrer votre code postale. ')
-              .textContent('Ceci vas aider a optimiser les resultats.')
-              .placeholder('Votre Code Postale E.g. H1H 1H1')
-              .ariaLabel('Code Postale')
-              .initialValue('')
-              .targetEvent(ev)
-              .ok('Valider!')
-              .cancel('Annuler');
+            rootScope.longitude = window.localStorage.getItem("longitude");
+            rootScope.latitude = window.localStorage.getItem("latitude");
 
-            $mdDialog.show(confirm).then(function(result) 
+            if(!window.localStorage.getItem("longitude") && !window.localStorage.getItem("latitude") && !rootScope.isUserLogged && false)
             {
+                // Appending dialog to document.body to cover sidenav in docs app
+                var confirm = $mdDialog.prompt()
+                  .title('Veillez entrer votre code postale. ')
+                  .textContent('Ceci vas aider a optimiser les resultats.')
+                  .placeholder('Votre Code Postale E.g. H1H 1H1')
+                  .ariaLabel('Code Postale')
+                  .initialValue('')
+                  .targetEvent(ev)
+                  .ok('Valider!')
+                  .cancel('Annuler');
+
+                $mdDialog.show(confirm).then(function(result) 
+                {
                     var address = result;
                     var geocoder = new google.maps.Geocoder();
                     geocoder.geocode( { 'address': address}, function(results, status) 
                     {
-                            if (status === google.maps.GeocoderStatus.OK) 
-                            {
-								 rootScope.latitude = results[0].geometry.location.lat();
-								 rootScope.longitude = results[0].geometry.location.lng();
-								 window.localStorage.setItem("longitude", rootScope.longitude);
-								 window.localStorage.setItem("latitude", rootScope.latitude);
-								 rootScope.getCartContents();
-                            }
-                            else
-                            {
-								rootScope.getUserCoordinates();
-                            }
+                        if (status === google.maps.GeocoderStatus.OK) 
+                        {
+                            rootScope.latitude = results[0].geometry.location.lat();
+                            rootScope.longitude = results[0].geometry.location.lng();
+                            window.localStorage.setItem("longitude", rootScope.longitude);
+                            window.localStorage.setItem("latitude", rootScope.latitude);
+                            rootScope.getCartContents();
+                        }
+                        else
+                        {
+                            rootScope.getUserCoordinates();
+                        }
                     });
 
-
-            }, function() 
-            {
-                rootScope.getUserCoordinates();
-            });
-        }
-        else
-        {
-            rootScope.getCartContents();
-        }
-    };
-    
-    rootScope.getCartContents = function()
-    {   
-        var formData = new FormData();
-        formData.append("longitude", rootScope.longitude);
-        formData.append("latitude", rootScope.latitude);
-        
-        $.post(rootScope.site_url.concat("/cart/get_cart_contents"),{ longitude : rootScope.longitude, latitude : rootScope.latitude})
-        .done(function(data)
-        {
-            var parsedData = JSON.parse(data);
-            
-            if(parsedData)
-            {
-                var scope = angular.element($("html")).scope();
-
-                scope.$apply(function()
+                }, function() 
                 {
-                    rootScope.cart = parsedData;
+                    rootScope.getUserCoordinates();
                 });
-                
             }
-        });
-    };
-		
-		
-	
-		
-		
+        };
+    	
 	/* CART END*/
 		
 	/* ACCOUNT */
 		
-		rootScope.addToMyList = function(product)
-		{
-			product.quantity = 1;
+        rootScope.addToMyList = function(product)
+        {
+            product.quantity = 1;
 
-			rootScope.currentProduct = product;
+            rootScope.currentProduct = product;
 
-			rootScope.AddProductToList();
+            rootScope.AddProductToList();
 
-			rootScope.saveMyList();
-		};
+            rootScope.saveMyList();
+        };
 
-		rootScope.removeFromMyList = function(product)
-		{
-			rootScope.removeProductFromList(product.id, null);
-			rootScope.saveMyList();
-		};
+        rootScope.removeFromMyList = function(product)
+        {
+            rootScope.removeProductFromList(product.id, null);
+            rootScope.saveMyList();
+        };
 
-		rootScope.favoriteChanged = function(product)
-		{
-			if(product.favorite)
-			{
-				rootScope.addToMyList(product);
-			}
-			else
-			{
-				rootScope.removeFromMyList(product);
-			}
-		};
+        rootScope.favoriteChanged = function(product)
+        {
+            if(product.favorite)
+            {
+                rootScope.addToMyList(product);
+            }
+            else
+            {
+                rootScope.removeFromMyList(product);
+            }
+        };
 		
-		rootScope.inMyList = function(product_id)
-		{
-			if(rootScope.isUserLogged)
-			{
-				for(var key in rootScope.loggedUser.grocery_list)
-				{
-					if(parseInt(rootScope.loggedUser.grocery_list[key].id) === parseInt(product_id))
-					{
-						return true;
-					}
-				}
-			}
+        rootScope.inMyList = function(product_id)
+        {
+            if(rootScope.isUserLogged)
+            {
+                for(var key in rootScope.loggedUser.grocery_list)
+                {
+                    if(parseInt(rootScope.loggedUser.grocery_list[key].id) === parseInt(product_id))
+                    {
+                        return true;
+                    }
+                }
+            }
 
-			return false;
-		};
+            return false;
+        };
 		
 	/*ACCOUNT END*/
         
@@ -390,7 +361,7 @@ $(document).ready(function()
         // If that's not already the case. 
         if(typeof rootScope.promptForZipCode !== "undefined")
         {
-                rootScope.promptForZipCode();
+            rootScope.promptForZipCode();
         }
         
     });

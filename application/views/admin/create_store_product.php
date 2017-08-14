@@ -163,8 +163,10 @@ $(document).ready(function()
         </md-autocomplete>
         
         <!-- Section to upload product image-->
-        <lf-ng-md-file-input lf-files="files" lf-api="api" style="width:100%" preview>
+        <lf-ng-md-file-input lf-files="product_image" lf-api="api" style="width:100%" preview>
         </lf-ng-md-file-input>
+        
+        <input type="file" id="dpf" class="dropify" data-default-file="url_of_your_file" />
         
        
         <!--Select the country and state origin of the product-->

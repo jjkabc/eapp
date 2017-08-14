@@ -124,9 +124,9 @@
                 <div class="col-md-12">
                     <div class="latest-product" ng-controller="CartController">
                         <h2 class="section-title">Derniers Produits</h2>
-                        <div class="product-carousel">
+                        <div class="product-carousel row">
                             <?php foreach($latestProducts as $product): ?>
-                                <div class="single-product">
+                                <div class="single-product col-md-12 col-sm-12">
                                     <div class="product-f-image">
                                         <img ng-src="<?php echo base_url("assets/img/products/").$product->product->image;?>" style="height: 100%;" alt="">
                                         <div class="product-hover">

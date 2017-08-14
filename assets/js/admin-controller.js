@@ -4,6 +4,11 @@
  * and open the template in the editor.
  */
 
+$(document).ready(function()
+{
+    $('.dropify').dropify();
+});
+
 angular.module("eappApp").directive('apsUploadFile', apsUploadFile);
 
 function apsUploadFile() {
@@ -331,13 +336,13 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
     {
         //upload the image here
         var formData = new FormData();
-        angular.forEach($scope.files,function(obj){
+        angular.forEach($scope.product_image,function(obj){
             if(!obj.isRemote){
-                formData.append('image', obj.lfFile);
+                formData.append('product_image', obj.lfFile);
             }
         });
         
-        if($scope.files.length > 0)
+        if($scope.product_image.length > 0)
         {
             if($scope.selectedProduct !== null)
             {

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "$http", "$mdDialog", function($scope, $rootScope, $http, $mdDialog) 
+angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "$http", "$mdDialog", "$sce", function($scope, $rootScope, $http, $mdDialog, $sce) 
 {
     /**
      * List of selected cart items. 
@@ -37,10 +37,6 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
             $scope.update_product_list_by_store();
         }
     };
-    
-    
-    
-    
     
     /**
      * Set distance
@@ -79,7 +75,7 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
         formData.append("distance", $scope.distance);
         formData.append("longitude", $scope.longitude);
         formData.append("latitude", $scope.latitude);
-	formData.append("searchAll", !$rootScope.searchInMyList);
+	formData.append("searchAll", !$rootScope.searchInMyList.value);
         // Send request to server to get optimized list 	
         $scope.promise = 
             $http.post( $scope.site_url.concat("/cart/update_cart_list"), 
@@ -155,6 +151,11 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
                 
             });
         
+    };
+    
+    $scope.get_price_label = function(store_product, product)
+    {
+        return parseFloat(store_product.price) === 0 ? "Item pas disponible" : "CAD " + store_product.price * product.quantity;
     };
     
     /**

@@ -105,7 +105,9 @@ class CI_Controller {
                 'site_url' => site_url(),
                 'controller' => $this->router->fetch_class(),
                 'method' => $this->router->fetch_method(),
-                'user' => addslashes(json_encode($this->user))
+                'user' => addslashes(json_encode($this->user)),
+                'cart' => $this->get_cached_cart_contents(),
+                'mostviewed_categories' => addslashes(json_encode($this->home_model->get_mostviewed_categories()))
             ); 
             
             if(($this->user == null) && ($this->router->fetch_method() != 'page_under_construction' && $this->router->fetch_method() != 'perform_login'))
@@ -126,15 +128,13 @@ class CI_Controller {
 	 */
 	public static function &get_instance()
 	{
-		return self::$instance;
+            return self::$instance;
 	}
         
         public function get_cached_cart_contents()
         {
             $cart = array();
             
-            $coords = array("longitude" => $this->input->post("longitude"), "latitude" => $this->input->post("latitude"));
-
             foreach ($this->cart->contents() as $item) 
             {
                 $cart_item = array();
@@ -142,7 +142,7 @@ class CI_Controller {
                 $product_id = $item['id'];
                 $rowid = $item['rowid'];
                 // Get best match close to user
-                $store_product = $this->cart_model->get_best_store_product($product_id, DEFAULT_DISTANCE, MAX_DISTANCE, $this->user, true, $coords);
+                $store_product = $this->cart_model->get_cheapest_store_product($product_id);
                 
                 if($store_product === null)
                 {
@@ -159,37 +159,37 @@ class CI_Controller {
             
             if(sizeof($cart) > 0)
             {
-                return json_encode($cart);
+                return addslashes(json_encode($cart));
             }
             else
             {
-                return json_encode(array());
+                return addslashes(json_encode(array()));
             }
         }
         
         public function set_user()
         {
-            	$this->user = null;
-		
-	    	// user is still null, check if remember me was checked
-		$cookie_user = $this->rememberme->verifyCookie();
-		
-		if ($cookie_user) 
-		{
-			$condition = array('email'=>$this->input->post($cookie_user));
-			// find user account of cookie_user stored in application database
-			$checkLogin = $this->account_model->get_specific(USER_ACCOUNT_TABLE, $condition);
-			// set session if necessary
-			if (!$this->session->userdata('userId')) 
-			{
-			    $this->session->set_userdata('userId', $checkLogin->id);
-			}
-			$this->user = $this->account_model->get_user($this->session->userdata('userId'));
-		 }
-		 else if ($this->session->userdata('isUserLoggedIn')) 
-		 {
-		     $this->user = $this->account_model->get_user($this->session->userdata('userId'));
-		 }
+            $this->user = null;
+
+            // user is still null, check if remember me was checked
+            $cookie_user = $this->rememberme->verifyCookie();
+
+            if ($cookie_user) 
+            {
+                $condition = array('email'=>$this->input->post($cookie_user));
+                // find user account of cookie_user stored in application database
+                $checkLogin = $this->account_model->get_specific(USER_ACCOUNT_TABLE, $condition);
+                // set session if necessary
+                if (!$this->session->userdata('userId')) 
+                {
+                    $this->session->set_userdata('userId', $checkLogin->id);
+                }
+                $this->user = $this->account_model->get_user($this->session->userdata('userId'));
+             }
+             else if ($this->session->userdata('isUserLoggedIn')) 
+             {
+                 $this->user = $this->account_model->get_user($this->session->userdata('userId'));
+             }
 	    
         }
        

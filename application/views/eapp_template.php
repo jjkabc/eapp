@@ -40,6 +40,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
     <!-- MD Table CSS -->
     <link rel="stylesheet" href="<?php echo base_url("assets/css/md-data-table.css")?>">
+    <link rel="stylesheet" href="<?php echo base_url("assets/css/dropify.css")?>">
     
     {css}
     
@@ -74,6 +75,8 @@
     <!-- Angular JS Country/State Select -->
     <script src="<?php echo base_url("assets/js/md-country-select.js")?>"></script>
     
+    <script src="<?php echo base_url("assets/js/dropify.js")?>"></script>
+    
     <!-- Angular JS Country/State Select -->
     <script src="<?php echo base_url("assets/js/angular-country-state.js")?>"></script>
     
@@ -92,8 +95,10 @@
     <!-- Shop Controller Script -->
     <script src="<?php echo base_url("assets/js/shop-controller.js")?>"></script>
 	  
-	<!-- Blog Controller Script -->
+    <!-- Blog Controller Script -->
     <script src="<?php echo base_url("assets/js/blog-controller.js")?>"></script> 
+    
+    <script src="<?php echo base_url("assets/js/footer-controller.js")?>"></script> 
     
     <!-- ngNotificationsBar Script -->
     <script src="<?php echo base_url("assets/js/ngNotificationsBar.min.js")?>"></script>
@@ -118,38 +123,45 @@
     
      <!-- Initialize angular root scope -->
     <script>
-		$(document).ready(function()
-		{
-			var rootScope = angular.element($("html")).scope();
+        $(document).ready(function()
+        {
+            var rootScope = angular.element($("html")).scope();
 
-			rootScope.$apply(function()
-			{
-				rootScope.base_url = "<?php echo $base_url; ?>";
-				rootScope.site_url = "<?php echo $site_url; ?>";
-				rootScope.controller = "<?php echo $controller; ?>";
-				rootScope.method = "<?php echo $method; ?>";
-				
-				rootScope.longitude = 0;
-				rootScope.latitude = 0;
-				rootScope.cart = [];
-				
-				var user = '<?php echo $user; ?>';
-				if(user === "" || user == "null")
-				{
-					rootScope.loggedUser = null;
-				}
-				else
-				{
-					rootScope.loggedUser = JSON.parse(user);
-				}
+            rootScope.$apply(function()
+            {
+                rootScope.base_url = "<?php echo $base_url; ?>";
+                rootScope.site_url = "<?php echo $site_url; ?>";
+                rootScope.controller = "<?php echo $controller; ?>";
+                rootScope.method = "<?php echo $method; ?>";
 
-				rootScope.hideSearchArea = (rootScope.controller == "account" && (rootScope.method == "login" || rootScope.method == "register"));
+                rootScope.longitude = 0;
+                rootScope.latitude = 0;
+                rootScope.cart = JSON.parse('<?php echo $cart; ?>');
 
-				rootScope.isUserLogged = rootScope.loggedUser !== null;
+                var user = '<?php echo $user; ?>';
+                if(user === "" || user == "null")
+                {
+                        rootScope.loggedUser = null;
+                }
+                else
+                {
+                        rootScope.loggedUser = JSON.parse(user);
+                }
 
-				
-			});
-		});
+                rootScope.hideSearchArea = (rootScope.controller == "account" && (rootScope.method == "login" || rootScope.method == "register"));
+
+                rootScope.isUserLogged = rootScope.loggedUser !== null;
+
+
+            });
+            
+            var footerScope = angular.element($("#eapp-footer")).scope();
+            
+            footerScope.$apply(function()
+            {
+                footerScope.categories = JSON.parse('<?php echo $mostviewed_categories; ?>');
+            });
+        });
     </script>
 	  
   <!-- Rootscope Script -->
@@ -164,7 +176,7 @@
             <form ng-submit="searchProducts(searchText)" class="col-md-12 col-sm-12">
                 <div class="row">
                     <md-input-container class="col-md-12 col-sm-12">
-                        <label>Rechercher articles</label>
+                        <label>Rechercher produits</label>
                         <input name="searchText" ng-model="searchText" aria-label="Search" />
                         <md-icon><i class="material-icons">search</i></icon>
                     </md-input-container>
@@ -241,8 +253,8 @@
                             
                             <li>
                                 <a href="<?php echo site_url("cart"); ?>" class="md-icon-button" aria-label="Cart">
-                                    <md-icon style="color: #1abc9c;"><i class="material-icons">shopping_cart</i> </md-icon>
-                                    <span class="badge"  style="background-color: #1abc9c; color : #333;" ng-show="get_cart_item_total() > 0">{{get_cart_item_total()}} | CAD {{get_cart_total_price() | number : 2}}</span>
+                                    <md-icon><i class="material-icons">shopping_cart</i> </md-icon>
+                                    <span class="badge" ng-show="get_cart_item_total() > 0">{{get_cart_item_total()}} | CAD {{get_cart_total_price() | number : 2}}</span>
                                 </a>
                                 
                             </li>
@@ -258,13 +270,13 @@
     	{body}
     </div>
 
-    <div class="footer-top-area">
+    <div id="eapp-footer" class="footer-top-area" ng-controller="FooterController">
         <div class="zigzag-bottom"></div>
         <div class="container">
             <div class="row">
                 <div class="col-md-3 col-sm-6">
                     <div class="footer-about-us">
-                        <h2>e<span>Electronics</span></h2>
+                        <h2>oti<span>Prix</span></h2>
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis sunt id doloribus vero quam laborum quas alias dolores blanditiis iusto consequatur, modi aliquid eveniet eligendi iure eaque ipsam iste, pariatur omnis sint! Suscipit, debitis, quisquam. Laborum commodi veritatis magni at?</p>
                         <div class="footer-social">
                             <a href="#" target="_blank"><i class="fa fa-facebook"></i></a>
@@ -280,11 +292,11 @@
                     <div class="footer-menu">
                         <h2 class="footer-wid-title">User Navigation </h2>
                         <ul>
-                            <li><a href="#">My account</a></li>
-                            <li><a href="#">Order history</a></li>
-                            <li><a href="#">Wishlist</a></li>
-                            <li><a href="#">Vendor contact</a></li>
-                            <li><a href="#">Front page</a></li>
+                            <li><a href="#">Mon compte</a></li>
+                            <li><a href="#">Ma liste d'epicerie</a></li>
+                            <li><a href="#">Presse</a></li>
+                            <li><a href="#">Contacter nous</a></li>
+                            <li><a href="#">Terme et conditions</a></li>
                         </ul>                        
                     </div>
                 </div>
@@ -293,11 +305,7 @@
                     <div class="footer-menu">
                         <h2 class="footer-wid-title">Categories</h2>
                         <ul>
-                            <li><a href="#">Mobile Phone</a></li>
-                            <li><a href="#">Home accesseries</a></li>
-                            <li><a href="#">LED TV</a></li>
-                            <li><a href="#">Computer</a></li>
-                            <li><a href="#">Gadets</a></li>
+                            <li   ng-click="select_category($event)" id="{{category.id}}"  ng-repeat="category in categories"><a href="#">{{category.name}}</a></li>
                         </ul>                        
                     </div>
                 </div>
@@ -323,11 +331,11 @@
             <div class="row">
                 <div class="col-md-8">
                     <div class="copyright">
-                        <p>&copy; 2015 eElectronics. All Rights Reserved. Coded with <i class="fa fa-heart"></i> by <a href="http://wpexpand.com" target="_blank">WP Expand</a></p>
+                        <p>&copy; 2017 otiPrix. All Rights Reserved.</p>
                     </div>
                 </div>
                 
-                <div class="col-md-4">
+                <div class="col-md-4" ng-show="false">
                     <div class="footer-card-icon">
                         <i class="fa fa-cc-discover"></i>
                         <i class="fa fa-cc-mastercard"></i>
