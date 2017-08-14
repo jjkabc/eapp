@@ -92,13 +92,14 @@ $(document).ready(function()
     
 <div id="admin-container" class="admin-container" ng-controller="AdminController">
 	
-	<md-toolbar style="background-color: #1abc9c;">
+	
+    <md-content class="container" layout-padding>
+	    
+	   <md-toolbar style="background-color: #1abc9c; margin-bottom : 10px;">
 		<div>
 			<h2 class="md-toolbar-tools">Create Store Product</h2>
 		</div>
 	</md-toolbar>
-    <md-content class="container" layout-padding>
-	    
 	    
         <form id="create_store_product_form" name="create_store_product_form" ng-submit="create_store_product()">
         
@@ -173,10 +174,7 @@ $(document).ready(function()
         <!-- Section to upload product image-->
         <lf-ng-md-file-input lf-files="product_image" lf-api="api" style="width:100%" preview>
         </lf-ng-md-file-input>
-        
-        <input type="file" id="dpf" class="dropify" data-default-file="url_of_your_file" />
-        
-       
+                
         <!--Select the country and state origin of the product-->
         <country-state-select country="store_product.country" flag="flag" country-state="store_product.state"></country-state-select>
         
