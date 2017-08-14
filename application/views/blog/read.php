@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 
 <section  id="blog-container" class="section-white clearfix" ng-controller="BlogController">
     <div class="container">
