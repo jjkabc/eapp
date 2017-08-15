@@ -120,6 +120,7 @@ angular.module('eappApp').controller('ShopController', ["$scope", "$q", "$http",
 	
     $scope.searchProducts = function(searchText)
     {
+        $scope.clearSessionItems();
         window.sessionStorage.setItem("searchText", searchText);
         window.location.href =  $scope.site_url.concat("/shop");
     };

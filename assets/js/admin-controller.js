@@ -4,11 +4,6 @@
  * and open the template in the editor.
  */
 
-$(document).ready(function()
-{
-    $('.dropify').dropify();
-});
-
 angular.module("eappApp").directive('apsUploadFile', apsUploadFile);
 
 function apsUploadFile() {

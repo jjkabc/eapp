@@ -1180,6 +1180,21 @@ div.cart-collaterals ul.products li.product:hover .add_to_cart_button{background
     filter: alpha(opacity=100);
 }
 
+.breadcrumb
+{
+    text-align: center;
+    padding: 0 0 0 0;
+}
+
+
+
+.eapp-breadcrumb 
+{
+    list-style: none;
+    background-color: white;
+}
+
+
 /* LOGO END */
 
 

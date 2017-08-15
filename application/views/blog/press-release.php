@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="product-bit-title text-center">
-                    <h2>Press Release</h2>
+                    <h2>Épicerie dans la presse</h2>
                 </div>
             </div>
         </div>

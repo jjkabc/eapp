@@ -15,6 +15,19 @@ $(document).ready(function(){
 <!-- Animate CSS -->
 <link rel="stylesheet" href="<?php echo base_url("assets/css/shop.css")?>">
 
+
+<div class="product-big-title-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="product-bit-title text-center">
+                    <h2>Categories</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- End Page title area -->
+
 <div id="admin-container" class="container" ng-controller="ShopController">    
 
       <div id="signupbox" style=" margin-top:50px" class="container">
