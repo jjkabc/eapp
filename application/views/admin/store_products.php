@@ -27,10 +27,10 @@
 <div id="admin-container" class="admin-container" ng-controller="ProductsTableController">
     
     <md-table-container class="container">
-	    <md-toolbar style="background-color: #1abc9c; margin-bottom : 10px;">
-		<div>
-		    <h2 class="md-toolbar-tools">Products</h2>
-		</div>
+        <md-toolbar style="background-color: #1abc9c; margin-bottom : 10px;">
+            <div>
+                <h2 class="md-toolbar-tools">Products</h2>
+            </div>
 	</md-toolbar>
 	    
 	    <md-toolbar class="md-table-toolbar md-default" ng-hide="selected.length || filter.show">

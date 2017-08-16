@@ -169,18 +169,15 @@
     <notifications-bar class="notifications"></notifications-bar>
 
     <div class="container search-box" id="search-box" ng-controller="ShopController" ng-hide="hideSearchArea" style="margin-top: 60px;">
-        <div class="row">
-            <form ng-submit="searchProducts(searchText)" class="col-md-12 col-sm-12">
-                <div class="row">
-                    <md-input-container class="col-md-12 col-sm-12">
-                        <label>Rechercher produits</label>
-                        <input name="searchText" ng-model="searchText" aria-label="Search" />
-                        <md-icon><i class="material-icons">search</i></icon>
-                    </md-input-container>
-                </div>
-            </form>
-            
-        </div>
+        <form ng-submit="searchProducts(searchText)" class="col-md-12 col-sm-12">
+            <div class="row">
+                <md-input-container class="col-md-12 col-sm-12">
+                    <label>Rechercher produits</label>
+                    <input name="searchText" ng-model="searchText" aria-label="Search" />
+                    <md-icon><i class="material-icons">search</i></icon>
+                </md-input-container>
+            </div>
+        </form>
     </div>
     
     <div id="mainmenu-area" class="mainmenu-area" class="navbar-wrapper">
@@ -242,7 +239,7 @@
                             <li ng-hide="isUserLogged"><a href="<?php echo site_url("account/register"); ?>"><i class="fa fa-user"></i>créer un compte</a></li>
                             <li ng-show="isUserLogged" class=" dropdown"><a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Bonjour <span ng-show="loggedUser.profile.firstname">{{loggedUser.profile.firstname}},</span> {{loggedUser.profile.lastname}}  <span class="caret"></span></a>
                                 <ul class="dropdown-menu">
-                                    <li><a  href="<?php echo site_url("account/account"); ?>"><i class="fa fa-user"></i> Mon compte</a></li>
+                                    <li><a  href="<?php echo site_url("account"); ?>"><i class="fa fa-user"></i> Mon compte</a></li>
                                     <li><a href="#"><i class="fa fa-heart"></i> Ma liste d'épicerie</a></li>
                                     <li><a href ng-click="logout()">Logout</a></li>
                                 </ul>

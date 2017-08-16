@@ -33,6 +33,18 @@ class Account extends CI_Controller {
     
     public function index() 
     {
+        $retailers = $this->admin_model->get_all(CHAIN_TABLE);
+        
+        foreach ($retailers as $key => $value) 
+        {
+            $path = ASSETS_DIR_PATH."img/stores/".$value->image;
+            
+            if(!file_exists($path))
+            {
+                $retailers[$key]->image = "no_image_available.png";
+            }
+        }
+        $this->data['retailers'] = addslashes(json_encode($retailers));
         $this->data['body'] = $this->load->view('account/index', $this->data, TRUE);
         $this->parser->parse('eapp_template', $this->data);
     }
@@ -234,6 +246,91 @@ class Account extends CI_Controller {
         }
         
         echo json_encode($data);
+    }
+    
+    public function save_profile() 
+    {
+        $result = array("success" => false);
+        if($this->user != null && $_SERVER['REQUEST_METHOD'] === 'POST')
+        {
+            $user_profile = $this->input->post('profile');
+            $user_profile['id'] = $this->user->profile->id;
+            
+            $insert = $this->account_model->create(USER_PROFILE_TABLE, $user_profile);
+            
+            if($insert)
+            {
+                $this->set_user();
+                $result['success'] = true;
+                $result['user'] = $this->user;
+            }
+        }
+        
+        echo json_encode($result);
+        
+    }
+    
+    public function change_password() 
+    {
+        $result = array("success" => false);
+        
+        if($this->user != null && $_SERVER['REQUEST_METHOD'] === 'POST')
+        {
+            $condition = array(
+                'email'=>   $this->user->email,
+                'password' => md5($this->input->post('old_password'))
+            );
+            
+            $checkLogin = $this->account_model->get_specific(USER_ACCOUNT_TABLE, $condition);
+            
+            if($checkLogin)
+            {
+                $user_account = array();
+                $user_account['password'] = md5($this->input->post('password'));
+                $user_account['id'] = $this->user->id;
+                $insert = $this->account_model->create(USER_ACCOUNT_TABLE, $user_account);
+                
+                $result["message"] = "Une erreur de serveur est survenue. Veuillez réessayer plus tard.";
+                
+                if($insert)
+                {
+                    $result["success"] = true;
+                    $result["message"] = "Votre mot de passe a été changé.";
+                }
+            }
+            else
+            {
+                $result["success"] = false;
+                $result["message"] = "Le mot de passe saisi est incorrect.";
+            }
+        }
+        
+        echo json_encode($result);
+        
+    }
+    
+    public function change_security_qa() 
+    {
+        $result = array("success" => false);
+        
+        if($this->user != null && $_SERVER['REQUEST_METHOD'] === 'POST')
+        {
+            $user_account = array();
+            $user_account['security_question_answer'] = $this->input->post('security_question_answer');
+            $user_account['security_question_id'] = $this->input->post('security_question_id');
+            $user_account['id'] = $this->user->id;
+            $insert = $this->account_model->create(USER_ACCOUNT_TABLE, $user_account);
+
+            $result["message"] = "Une erreur de serveur est survenue. Veuillez réessayer plus tard.";
+
+            if($insert)
+            {
+                $result["success"] = true;
+                $result["message"] = "Votre question de sécurité et votre réponse ont été modifiées..";
+            }
+        }
+        
+        echo json_encode($result);
     }
     
     /*

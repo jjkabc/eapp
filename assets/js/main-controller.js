@@ -350,19 +350,19 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
         return count;
     };
 	
-	$scope.flyer_products_count = function()
-	{
-		var count = 0;
-        
+    $scope.flyer_products_count = function()
+    {
+        var count = 0;
+
         for(var index in $scope.myCategories)
         {
-			for(var i in $scope.myCategories[index].products)
-			{
-				count += $scope.myCategories[index].products[i].store_products.length;
-			}
+            for(var i in $scope.myCategories[index].products)
+            {
+                    count += $scope.myCategories[index].products[i].store_products.length;
+            }
         }
         return count;
-	}
+    };
 	
     
     
@@ -491,7 +491,7 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
         
     $scope.selected_retailers = [];
     
-    $scope.max_stores = 5;
+    $scope.max_stores = 3;
 
     $scope.select_retailer = function($event)
     {
@@ -515,7 +515,7 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
             }
             else
             {
-                $scope.showSimpleToast("Vous ne pouvez pas sélectionner plus de "+$scope.max_stores+" magasins.", "signupform");
+                $scope.showSimpleToast("Vous ne pouvez pas sélectionner plus de "+$scope.max_stores+" magasins.", "select-store-box");
             }
 
         }
@@ -523,9 +523,10 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
     
     $scope.submit_favorite_stores = function()
     {
+        $scope.listChangedSuccess = false;
         if($scope.selected_retailers.length < $scope.max_stores)
         {
-            $scope.showSimpleToast("Vous devez sélectionner au moins "+$scope.max_stores+" magasins.", "signupform");
+            $scope.showSimpleToast("Vous devez sélectionner au moins "+$scope.max_stores+" magasins.", "select-store-box");
         }
         else
         {
@@ -541,12 +542,21 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
                 if(response.data.success)
                 {
                     // redirect to login. 
-                    window.sessionStorage.setItem("accountCreated", "Votre compte a été créé avec succès.");
-                    window.location =  $scope.site_url.concat("/account/login");
+                    if(!$scope.isUserLogged)
+                    {
+                        window.sessionStorage.setItem("accountCreated", "Votre compte a été créé avec succès.");
+                        window.location =  $scope.site_url.concat("/account/login");
+                    }
+                    else
+                    {
+                        $scope.listChangedSuccess = true;
+                        $scope.listChangedSuccessMessage = "Votre liste de magasins a été modifiée.";
+                    }
+                    
                 }
                 else
                 {
-                    $scope.showSimpleToast("une erreur inattendue est apparue. Veuillez réessayer plus tard.", "signupform");
+                    $scope.showSimpleToast("une erreur inattendue est apparue. Veuillez réessayer plus tard.", "select-store-box");
                 }
                 
                 $scope.registering_user = false;
@@ -651,6 +661,107 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
             // redirect to home page. 
             window.location =  $scope.site_url.concat("/home");
             
+        });
+    };
+    
+    $scope.saveProfile = function()
+    {
+        if(!$scope.userInfoForm.$valid)
+        {
+            return;
+        }
+        
+        $scope.saveProfileError = false;
+        $scope.saveProfileSucess = false;
+        var formData = new FormData();
+        formData.append("profile[firstname]", $scope.loggedUser.profile.firstname);
+        formData.append("profile[lastname]", $scope.loggedUser.profile.lastname);
+        formData.append("profile[country]", $scope.loggedUser.profile.country);
+        formData.append("profile[state]", $scope.loggedUser.profile.state);
+        formData.append("profile[city]", $scope.loggedUser.profile.city);
+        formData.append("profile[address]", $scope.loggedUser.profile.address);
+        formData.append("profile[postcode]", $scope.loggedUser.profile.postcode);
+        formData.append("profile[phone1]", $scope.loggedUser.profile.phone1);
+        formData.append("profile[phone2]", $scope.loggedUser.profile.phone2);
+        
+        $http.post( $scope.site_url.concat("/account/save_profile"), 
+        formData, { transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(
+        function(response)
+        {
+            if(response.data.success)
+            {
+                $scope.saveProfileSucess = true;
+                
+                $scope.loggedUser = response.data.user;
+                
+                $scope.saveProfileSuccessMessage = "Les informations de votre profil ont été modifiées.";
+            }
+            else
+            {
+                $scope.saveProfileError = true;
+                $scope.saveProfileSuccessError = "Une erreur de serveur est survenue. Veuillez réessayer plus tard.";
+            }
+            
+        });
+    };
+    
+    $scope.changePassword = function()
+    {
+        if(!$scope.userSecurityForm.$valid)
+        {
+            return;
+        }
+        
+        $scope.changePasswordError = false;
+        $scope.changePasswordSuccess = false;
+        var formData = new FormData();
+        formData.append("old_password", $scope.old_password);
+        formData.append("password", $scope.password);
+        
+        $http.post( $scope.site_url.concat("/account/change_password"), 
+        formData, { transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(
+        function(response)
+        {
+            if(response.data.success)
+            {
+                $scope.changePasswordSuccess = true;
+                $scope.changePasswordSuccessMessage = response.data.message;
+            }
+            else
+            {
+                $scope.changePasswordError = true;
+                $scope.changePasswordErrorMessage = response.data.message;
+            }
+        });
+    };
+    
+    $scope.changeSecurityQuestion = function()
+    {
+        if(!$scope.securityQuestionForm.$valid)
+        {
+            return;
+        }
+        
+        $scope.changeSecurityQuestionError = false;
+        $scope.changeSecurityQuestionSuccess = false;
+        var formData = new FormData();
+        formData.append("security_question_answer", $scope.loggedUser.security_question_answer);
+        formData.append("security_question_id", $scope.loggedUser.security_question_id);
+        
+        $http.post( $scope.site_url.concat("/account/change_security_qa"), 
+        formData, { transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(
+        function(response)
+        {
+            if(response.data.success)
+            {
+                $scope.changeSecurityQuestionSuccess = true;
+                $scope.changeSecurityQuestionSuccessMessage = response.data.message;
+            }
+            else
+            {
+                $scope.changeSecurityQuestionError = true;
+                $scope.changeSecurityQuestionErrorMessage = response.data.message;
+            }
         });
     };
    
