@@ -3,7 +3,7 @@
 <script>
     $(document).ready(function()
     {
-        var scope = angular.element($("#admin-container")).scope();
+        var scope = angular.element($("#cart-container")).scope();
         
         scope.$apply(function()
         {
@@ -24,7 +24,7 @@
     </div>
 </div> <!-- End Page title area -->
 
-<md-content id="admin-container" class="admin-container" ng-controller="CartController">
+<md-content id="cart-container" class="admin-container" ng-controller="CartController">
     
     <div>
         <md-content class="eapp-container">
@@ -221,7 +221,7 @@
 				
 				<section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
 					
-					<md-button class="md-fab" aria-label="Impression">
+					<md-button class="md-fab md-primary" aria-label="Impression" ng-click="printCart()">
 						<md-icon style="color: #1abc9c;"><i class="material-icons">print</i></md-icon>
 					</md-button>
 
@@ -229,11 +229,11 @@
 					  <md-icon style="color: #1abc9c;"><i class="material-icons">send</i></md-icon>
 					</md-button>
 
-					<md-button class="md-fab" ng-disabled="true" aria-label="Partager">
+					<md-button class="md-fab md-primary" aria-label="Partager">
 						<md-icon style="color: #1abc9c;"><i class="material-icons">share</i></md-icon>
 					</md-button>
 
-					<md-button class="md-fab md-primary md-hue-2" aria-label="Envoyer à votre courrier électronique">
+					<md-button class="md-fab md-primary" aria-label="Envoyer à votre courrier électronique">
 						<md-icon style="color: #1abc9c;"><i class="material-icons">email</i></md-icon>
 					</md-button>
 
