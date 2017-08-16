@@ -202,6 +202,7 @@ class Account extends CI_Controller {
     public function registration()
     {
         $data = array();
+		
         if($_SERVER['REQUEST_METHOD'] === 'POST')
         {
 
@@ -209,15 +210,16 @@ class Account extends CI_Controller {
 
             $user_account = $this->input->post('account');
             $user_profile = $this->input->post('profile');
-	    $user_account['password'] = md5($user_account['password']);	
+	    	$user_account['password'] = md5($user_account['password']);	
             $user_account['subscription'] = 0;
             $user_account['username'] = $user_account['email'];
+			
             if($this->form_validation->run() == true)
-	    {
+	    	{
                 $insert = $this->account_model->create(USER_ACCOUNT_TABLE, $user_account);
 		    
                 if($insert)
-		{
+				{
                     // create user profile
                     $user_profile['user_account_id'] = $insert;
                     // get longitude and latitude
@@ -232,11 +234,11 @@ class Account extends CI_Controller {
                     $this->session->set_userdata('success_msg', 'Your registration was successfully. Please login to your account.');
                     $data["success"] = true;
                 }
-	        else
-		{
+	        	else
+				{
                     $data["success"] = false;
                     $data["message"] = "Des problèmes sont survenus, veuillez réessayer plus tard.";
-                }
+				}
             }
             else
             {
