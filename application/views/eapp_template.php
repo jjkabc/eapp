@@ -101,6 +101,9 @@
     
     <!-- File Styles Script -->
     <script src="<?php echo base_url("assets/js/bootstrap-filestyle.js")?>"></script>
+	
+	<!-- Html2Canvas -->
+    <script src="<?php echo base_url("assets/js/html2canvas.js")?>"></script>
     
     <!-- Bootstrap Select Script -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
