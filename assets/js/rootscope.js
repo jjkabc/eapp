@@ -355,6 +355,23 @@ $(document).ready(function()
             return false;
         };
 		
+		rootScope.printCart = function() 
+		{
+			var content = document.getElementById("cart-container").innerHTML;
+			var mywindow = window.open('', 'Print', 'height=600,width=800');
+
+			mywindow.document.write('<html><head><title>Print</title>');
+			mywindow.document.write('</head><body >');
+			mywindow.document.write(content);
+			mywindow.document.write('</body></html>');
+
+			mywindow.document.close();
+			mywindow.focus()
+			mywindow.print();
+			mywindow.close();
+			return true;
+		}
+		
 	/*ACCOUNT END*/
         
         // THis is called for a non logged user to prompt for his zip code
