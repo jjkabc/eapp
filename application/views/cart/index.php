@@ -218,8 +218,28 @@
 
                     </tbody>
                 </table>
-            </div>
+				
+				<section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+					
+					<md-button class="md-fab" aria-label="Impression">
+						<md-icon style="color: #1abc9c;"><i class="material-icons">print</i></md-icon>
+					</md-button>
 
+					<md-button class="md-fab md-primary" aria-label="Envoyer à votre téléphone">
+					  <md-icon style="color: #1abc9c;"><i class="material-icons">send</i></md-icon>
+					</md-button>
+
+					<md-button class="md-fab" ng-disabled="true" aria-label="Partager">
+						<md-icon style="color: #1abc9c;"><i class="material-icons">share</i></md-icon>
+					</md-button>
+
+					<md-button class="md-fab md-primary md-hue-2" aria-label="Envoyer à votre courrier électronique">
+						<md-icon style="color: #1abc9c;"><i class="material-icons">email</i></md-icon>
+					</md-button>
+
+				</section>
+				
+            </div>
         </div>
     </div>
 </md-content>
