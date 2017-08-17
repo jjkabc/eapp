@@ -84,17 +84,27 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
             {
                 $rootScope.cart = response.data;
 
-                $rootScope.cart.sort(function(a, b)
-                {
-                    var a_retailer_name = a.store_product.retailer.name;
-                    var b_retailer_name = b.store_product.retailer.name;
-                    return a_retailer_name.toString().localeCompare(b_retailer_name.toString());
-                });
-
                 $scope.update_travel_distance();
+				
+				$scope.update_distance_price_optimization();
             });
         
     };
+	
+	$scope.update_distance_price_optimization()
+	{
+		$scope.distance_optimization = 0;
+		$scope.price_optimization = 0;
+		
+		for(var key in $scope.cart)
+		{
+			var cart_item = $scope.cart[key];
+			
+			$scope.price_optimization += parseFloat(cart_item.store_product.worst_product.price) - parseFloat(cart_item.worst_product.price);
+			$scope.distance_optimization += parseFloat(cart_item.store_product.worst_product.department_store.distance) - parseFloat(cart_item.worst_product.department_store.distance);
+			
+		}
+	}
     
     /**
      * Optimize product list by finding items in stores
