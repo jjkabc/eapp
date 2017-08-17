@@ -155,15 +155,22 @@ class Cart_model extends CI_Model
 			
             $query = $this->db->get_compiled_select(STORE_PRODUCT_TABLE);
             $store_product = $this->db->query($query)->row();
-            $product_found = $store_product != null;
+			if($store_product != null)
+			{
+				$product_found = true;
+				// get the worst deal for the product based on range or price
+				$product_found->worst_product = $this->db->query($query)->last_row();
+			}
+             
             $distance += DEFAULT_DISTANCE;
         }
         
         $best_Store_product = null;
 	
         if($store_product != null)
-        {
+        {			
             $best_Store_product = $this->getStoreProduct($store_product->id, false, false);
+			$best_Store_product->worst_product = $product_found->worst_product;
             $best_Store_product->department_store = $this->get(CHAIN_STORE_TABLE, $store_product->department_store_id);
             $best_Store_product->department_store->distance = $this->compute_driving_distance($best_Store_product->department_store, $user, $coords);
         }
@@ -172,6 +179,7 @@ class Cart_model extends CI_Model
         if($store_product == null)
         {
             $best_Store_product = $this->get_cheapest_store_product($product_id);
+			$best_Store_product->worst_product = $best_Store_product;
         }
         
         return $best_Store_product;
@@ -186,10 +194,10 @@ class Cart_model extends CI_Model
             $this->db->where($array);
         }
         
-        $this->db->order_by("price", "DESC");
-        $this->db->limit(1);
-        $store_product = $this->db->get(STORE_PRODUCT_TABLE)->row();
-        
+        $this->db->order_by("price", "ASC");
+		$query = $this->db->get_compiled_select(STORE_PRODUCT_TABLE);
+		$store_product = $this->db->query($query)->row();
+		        
         $cheapest_store_product = $this->getStoreProduct($store_product->id, false, $latest);
         
         if($cheapest_store_product == null)
