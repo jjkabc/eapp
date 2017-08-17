@@ -67,7 +67,7 @@
                         <th md-column>Product</th>
                         <th md-column>Description du produit</th>
                         <th md-column md-numeric>Quantité</th>
-                        <th md-column md-numeric>Total (CAD)</th>
+                        <th md-column md-numeric>Total ($ CAD)</th>
                         <th md-column  ng-show="isUserLogged"><i class="fa fa-heart"></i></th>
                         <th md-column>Coupon</th>
                     </tr>
@@ -101,7 +101,7 @@
                         <td md-cell>
                             <p><b><a href="single-product.html">{{item.store_product.product.name}}</a></b></p>
                             <p>Format : {{item.store_product.format}}</p>
-                            <p><span class="amount">CAD {{item.store_product.price | number: 2}}</span> </p>
+                            <p><span class="amount">$ CAD {{item.store_product.price | number: 2}}</span> </p>
                         </td>
 
                         <td md-cell>
@@ -176,7 +176,7 @@
                     </tr>
                     <tr>
                         <td class="store-total-caption"><b>Total</b></td>
-                        <td class="store-total-value" ng-repeat="store in close_stores">CAD {{get_store_total($index) | number : 2}} </td>
+                        <td class="store-total-value" ng-repeat="store in close_stores">$ CAD {{get_store_total($index) | number : 2}} </td>
                     </tr>
                     <tr>
                         <td class="store-total-caption"><b>Total d'items</b></td>
@@ -214,6 +214,16 @@
                         <tr class="optimized-distance">
                             <th>Distance de voyage</th>
                             <td><span class="amount"> < {{travel_distance}} Km</span></td>
+                        </tr>
+						
+						<tr class="optimized-distance" ng-show="distance_optimization > 0">
+                            <th>Distance de voyage optimisé</th>
+                            <td><span class="amount"> < {{distance_optimization }} Km</span></td>
+                        </tr>
+						
+						<tr class="optimized-distance" ng-show="price_optimization > 0">
+                            <th>Montant épargné</th>
+                            <td><span class="amount"> < $ CAD {{price_optimization}} </span></td>
                         </tr>
 
                     </tbody>
