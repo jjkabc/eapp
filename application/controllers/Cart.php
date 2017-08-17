@@ -1,6 +1,17 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+function sort_by_stores($productA, $productB)
+{
+	$al = strtolower($productA->retailer->name);
+	$bl = strtolower($productA->retailer->name);
+	if ($al == $bl) 
+	{
+		return 0;
+	}
+	return ($al > $bl) ? +1 : -1;
+}
+
 class Cart extends CI_Controller {
 
     
@@ -145,7 +156,8 @@ class Cart extends CI_Controller {
      */
     public function update_cart_list()
     {
-        $optimizedList = array();    
+        $optimizedList = array();   
+		$products_not_found_list = array();
         $distance = $this->input->post("distance");
         $products = json_decode($this->input->post("products"));
         $search_all = $this->input->post("searchAll") == "true" ? true : false;
@@ -159,10 +171,27 @@ class Cart extends CI_Controller {
             $cart_item->product = $this->cart_model->get_product($product->id);
             $cart_item->rowid = $product->rowid;
             $cart_item->quantity = $product->quantity;
-            array_push($optimizedList, $cart_item);
+			
+			if($store_product->department_store->distance == 0)
+			{
+				array_push($products_not_found_list, $cart_item);
+			}
+			else
+			{
+				array_push($optimizedList, $cart_item);
+			}
+            
         }
-
-        echo json_encode($optimizedList);
+		
+		// Order by store
+		usort($optimizedList, "sort_by_stores");
+		usort($products_not_found_list, "sort_by_stores");
+		
+		// Merge Lists
+		$final_array = array_merge($optimizedList, $products_not_found_list);
+		
+		// returns an array where the items not found are on the bottom of the list
+        echo json_encode($final_array);
     }
 	
     public function optimize_product_list_by_store()
