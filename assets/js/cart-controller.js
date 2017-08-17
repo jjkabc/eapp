@@ -91,7 +91,7 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
         
     };
 	
-	$scope.update_distance_price_optimization()
+	$scope.update_distance_price_optimization = function()
 	{
 		$scope.distance_optimization = 0;
 		$scope.price_optimization = 0;
