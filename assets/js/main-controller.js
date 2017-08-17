@@ -764,6 +764,108 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
             }
         });
     };
+    
+    $scope.sendVerificationCode = function()
+    {
+        $scope.phoneNumberError = null;
+
+        var isValid = $("#phone").intlTelInput("isValidNumber");
+
+        if(isValid)
+        {
+            var intlNumber = $("#phone").intlTelInput("getNumber");
+
+            $.ajax({
+                type: 'POST',
+                url:   $scope.site_url.concat("/account/send_verification"),
+                data: { number : intlNumber},
+                success: function(response)
+                {
+                    if(Boolean(response.toString()))
+                    {
+                        var accountScope = angular.element($("#admin-container")).scope();
+
+                        accountScope.$apply(function()
+                        {
+                            accountScope.enterVerificationNumber = false;
+                        });
+
+                    }
+
+                },
+                async:true
+            });
+        }
+        else
+        {
+            var error = $("#phone").intlTelInput("getValidationError");
+
+            switch(error)
+            {
+                case intlTelInputUtils.validationError.IS_POSSIBLE:
+                    $scope.phoneNumberError = "";
+                    break;
+                case intlTelInputUtils.validationError.INVALID_COUNTRY_CODE:
+                    $scope.phoneNumberError = "Le pays n'est pas valide";
+                    break;
+                case intlTelInputUtils.validationError.TOO_SHORT:
+                    $scope.phoneNumberError = "Le numéro de téléphone entré est trop court";
+                    break;
+                case intlTelInputUtils.validationError.TOO_LONG:
+                    $scope.phoneNumberError = "Le numéro de téléphone entré est trop long";
+                    break;
+                case intlTelInputUtils.validationError.NOT_A_NUMBER:
+                    $scope.phoneNumberError = "Le numéro de téléphone entré n'est pas valide.";
+                    break;
+                default:
+                    $scope.phoneNumberError = "Le numéro de téléphone entré n'est pas valide.";
+                        break;
+            }
+        }
+
+
+    };
+    
+    $scope.validateCode = function()
+    {
+        $scope.validateCodeMessage = null;
+
+        $.ajax({
+            type: 'POST',
+            url:   $scope.site_url.concat("/account/validate_code"),
+            data: { code : $scope.verificationCode},
+            success: function(response)
+            {
+                var result = JSON.parse(response);
+                
+                if(result.success)
+                {
+                    
+                    var accountScope = angular.element($("#admin-container")).scope();
+                    accountScope.$apply(function()
+                    {
+                        $scope.loggedUser.phone_verified = 1;
+                        accountScope.enterVerificationNumber = true;
+                        accountScope.validateCodeMessage = result.message;
+                    });
+
+                }
+                else
+                {
+                    var accountScope = angular.element($("#admin-container")).scope();
+                    
+                    accountScope.$apply(function()
+                    {
+                        accountScope.validateCodeMessage = result.message;
+                    });
+                    
+                }
+
+            },
+            async:true
+        });
+        
+    };
    
 }]);
 

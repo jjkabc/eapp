@@ -37,6 +37,11 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+require __DIR__ . '\..\..\vendor\twilio\sdk\Twilio\autoload.php';
+
+// Use the REST API Client to make requests to the Twilio REST API
+use Twilio\Rest\Client;
+
 /**
  * Application Controller Class
  *
@@ -61,6 +66,10 @@ class CI_Controller {
         public $data;
 	
 	public $user;
+        
+        // Your Account SID and Auth Token from twilio.com/console
+        private $sid = 'AC3afe436140cc93641a56ed107ae5d0f7';
+        private $token = 'c6f3904ebf1cc5f4028c69956c6ad1f7';
 
         /**
 	 * Class constructor
@@ -191,6 +200,43 @@ class CI_Controller {
                  $this->user = $this->account_model->get_user($this->session->userdata('userId'));
              }
 	    
+        }
+        
+        public function send_verification_code($phone_number)
+        {
+            $client = new Client($this->sid, $this->token);
+            
+            $code = $this->generatePIN(4);
+            
+            // insert code in user account
+            $data = array("phone" => $phone_number, "code" => $code, "id" => $this->user->id);
+            
+            $this->account_model->create(USER_ACCOUNT_TABLE, $data);
+
+            // Use the client to do fun stuff like send text messages!
+            $client->messages->create(
+                // the number you'd like to send the message to
+                $phone_number,
+                array(
+                    // A Twilio phone number you purchased at twilio.com/console
+                    'from' => '+14388008069',
+                    // the body of the text message you'd like to send
+                    'body' => "Votre code de vérification est : ".$code
+                )
+            );
+            
+            echo json_encode(true);
+        }
+        
+        private function generatePIN($digits = 4){
+            $i = 0; //counter
+            $pin = ""; //our default pin is blank.
+            while($i < $digits){
+                //generate a random number between 0 and 9.
+                $pin .= mt_rand(0, 9);
+                $i++;
+            }
+            return $pin;
         }
        
 

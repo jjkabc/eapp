@@ -355,33 +355,34 @@ $(document).ready(function()
             return false;
         };
 		
-		rootScope.printCart = function() 
-		{
-			html2canvas($("#cart-container"), {
-				onrendered: function(canvas) 
-				{
-					// Convert and download as image 
-					Canvas2Image.saveAsPNG(canvas); 
-					document.body.appendChild();
-					
-					var content = canvas.innerHTML;
-					var mywindow = window.open('', 'Print');
+        rootScope.printCart = function() 
+        {
+            html2canvas($("#cart-container"), 
+            {
+                onrendered: function(canvas) 
+                {
+                        // Convert and download as image 
+                        Canvas2Image.saveAsPNG(canvas); 
+                        document.body.appendChild();
 
-					mywindow.document.write('<html><head><title>Print</title>');
-					mywindow.document.write('</head><body >');
-					mywindow.document.write(content);
-					mywindow.document.write('</body></html>');
+                        var content = canvas.innerHTML;
+                        var mywindow = window.open('', 'Print');
 
-					mywindow.document.close();
-					mywindow.focus()
-					mywindow.print();
-					mywindow.close();
-					return true;
-				}
-			});
-			
-		}
-		
+                        mywindow.document.write('<html><head><title>Print</title>');
+                        mywindow.document.write('</head><body >');
+                        mywindow.document.write(content);
+                        mywindow.document.write('</body></html>');
+
+                        mywindow.document.close();
+                        mywindow.focus();
+                        mywindow.print();
+                        mywindow.close();
+                        return true;
+                }
+            });
+
+        };
+        
 	/*ACCOUNT END*/
         
         // THis is called for a non logged user to prompt for his zip code

@@ -1,5 +1,15 @@
 <!DOCTYPE html>
 
+<link rel="stylesheet" href="<?php echo base_url("assets/css/intlTelInput.css")?>">
+<script src="<?php echo base_url("assets/js/intlTelInput.js")?>"></script>
+<script src="<?php echo base_url("assets/js/utils.js")?>"></script>
+<script>
+$(document).ready(function()
+{
+    $("#phone").intlTelInput({utilsScript : "<?php echo base_url("assets/js/utils.js")?>"});
+});
+</script>
+
 <script>
     $(document).ready(function()
     {
@@ -12,7 +22,9 @@
            scope.getUserProductList();
            
            scope.retailers = JSON.parse('<?php echo $retailers; ?>');
-        
+           
+           scope.enterVerificationNumber = true;
+           
             if(sessionStorage.getItem("registered_email") || scope.isUserLogged)
             {
                 if(sessionStorage.getItem("registered_email"))
@@ -36,8 +48,6 @@
     
 </script>
 
-
-
 <div id="admin-container" ng-controller="AccountController">
     <md-tabs md-dynamic-height md-border-bottom class="container" layout-padding>
         
@@ -53,7 +63,8 @@
                     <strong>Success!</strong> {{saveProfileSuccessMessage}}
                 </div>
 
-                <md-content class="md-padding">
+                <md-content layout-padding>
+
                     <form name="userInfoForm" novalidate ng-submit="saveProfile()">
                         <md-input-container class="md-block col-md-12 col-sm-12" flex-gt-sm>
                             <label>Email</label>
@@ -140,9 +151,9 @@
                 </div>
                 <div id="select-store-container" ng-include="'<?php echo base_url(); ?>/assets/templates/select-favorite-stores.html'"></div>
                 <div class="form-group">
-                    <!-- Button -->                                        
+                    <!-- Button -->  
                     <div class="col-md-offset-0 col-md-3 pull-right" style="padding-top:25px;">
-                        <button id="btn-signup"  ng-click="submit_favorite_stores()" type="submit" class="btn btn-info col-md-12"><i class="icon-hand-right"></i> &nbsp Changer</button>
+                        <md-button id="btn-signup"  ng-click="submit_favorite_stores()" class="md-primary md-raised col-md-12">Terminer l'inscription</md-button>
                     </div>
                 </div>
             </md-tab>
@@ -150,6 +161,8 @@
             <md-tab label="Sécurité du compte">
                 
                 <md-content class="md-padding">
+                    
+                    <md-subheader class="md-warn">Changer votre mot de passe</md-subheader>
                     
                     <div class="alert alert-danger" ng-show="changePasswordError">
                         <strong>Erreur!</strong> {{changePasswordErrorMessage}}
@@ -204,6 +217,8 @@
                 </md-content>    
                 
                 <md-content class="md-padding">
+                    <md-subheader class="md-warn">Changer la réponse et la question de sécurité</md-subheader>
+                    
                     <form name="securityQuestionForm" ng-submit="changeSecurityQuestion()" novalidate>
 
                         <div class="alert alert-danger" ng-show="changeSecurityQuestionError">
@@ -237,6 +252,48 @@
 
                     </form>
                 </md-content>  
+                
+                <md-content layout-padding>
+                    <md-subheader class="md-warn">Vérifier votre numéro de téléphone</md-subheader>
+                    
+                        
+                        <div class="col-sm-12" ng-show="enterVerificationNumber">
+                            <div class="alert alert-danger" ng-show="phoneNumberError">
+                                <strong>Erreur!</strong> {{phoneNumberError}}.
+                            </div>
+                            <div class="alert alert-success" ng-show="validateCodeMessage">
+                                <strong>Success!</strong> {{validateCodeMessage}}
+                            </div>
+                            <p style="text-align: center; color: green;" ng-show="loggedUser.phone_verified == 1">Verified : {{loggedUser.phone}}</p>
+                            <p style="text-align: center;">Veuillez entrer ci-dessous un numéro de téléphone où nous vous enverrons le code de vérification.</p>
+                            <md-input-container class="col-sm-12 col-md-6 col-md-offset-3">
+                                <md-icon style="color: #1abc9c;"><i class="material-icons">phone</i></md-icon>
+                                <input class="form-control" style="border-radius: 2px;" type="tel" id="phone">
+                            </md-input-container>
+                            <div class="col-sm-12">
+                                <md-button class="md-primary md-raised col-md-4 col-md-offset-4" ng-click="sendVerificationCode()">
+                                    Valider
+                                </md-button>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-12" ng-hide="enterVerificationNumber">
+                            <div class="alert alert-danger" ng-show="validateCodeMessage">
+                                <strong>Erreur!</strong> {{validateCodeMessage}}
+                            </div>
+                            <p style="text-align: center;">Veuillez entrer ci-dessous le code que vous avez reçu ou cliquez sur <a href ng-click="enterVerificationNumber = true">réessayez</a> pour renvoyer un autre code de vérification.</p>
+                            <md-input-container class="col-sm-12 col-md-6 col-md-offset-3">
+                                <label>Code</label>
+                                <input ng-model="verificationCode">
+                            </md-input-container>
+                            <div class="col-sm-12">
+                                <md-button class="md-primary md-raised col-md-4 col-md-offset-4" ng-click="validateCode()">
+                                    Valider
+                                </md-button>
+                            </div>
+                        </div>
+                    
+                </md-content>
             </md-tab>
         </md-content>
     </md-tabs>

@@ -126,8 +126,6 @@ class Account extends CI_Controller {
             }
         }
         
-        $this->account_model->update_user_store_table($this->account_model->get_user($user_account->id));
-        
         echo json_encode($result);
     }
     
@@ -196,6 +194,39 @@ class Account extends CI_Controller {
         exit;
     }
     
+    public function send_verification()
+    {
+        $phone_number = $this->input->post("number");
+        
+        $this->send_verification_code($phone_number);
+    }
+    
+    public function validate_code() 
+    {
+        $result = array("success" => false);
+        
+        $code = trim($this->input->post("code"));
+        
+        $user = $this->account_model->get_specific(USER_ACCOUNT_TABLE, array("code" => $code, "id" => $this->user->id));
+        
+        if($user != null && strlen($code) == 4)
+        {
+            $this->account_model->create(USER_ACCOUNT_TABLE, array("code" => "", "id" => $this->user->id, "phone_verified" => 1));
+            
+            $result["success"] = true;
+            
+            $result["message"] = "Votre numéro de téléphone a été vérifié";
+        }
+        else
+        {
+            $result["message"] = "Le code saisi est incorrect";
+            $result["code"] = $code;
+        }
+        
+        echo json_encode($result);
+    }
+
+
     /*
      * User registration
      */
@@ -257,6 +288,13 @@ class Account extends CI_Controller {
         {
             $user_profile = $this->input->post('profile');
             $user_profile['id'] = $this->user->profile->id;
+            
+            $coordinates = $this->geo->get_coordinates($user_profile["city"], $user_profile["address"], $user_profile["state"], $user_profile["country"]);
+            if($coordinates)
+            {
+                $user_profile["longitude"] = $coordinates["long"];
+                $user_profile["latitude"] = $coordinates["lat"];
+            }
             
             $insert = $this->account_model->create(USER_PROFILE_TABLE, $user_profile);
             

@@ -19,7 +19,7 @@ class Geo {
     {
         $street = rtrim($street, ',');
         $address = urlencode($city.','.rtrim($street, ',').','.$state);
-        $url = "http://maps.google.com/maps/api/geocode/json?key=AIzaSyBdUBJq3Y93iEd29Q6GAK5SHQJniqZiHu0&address=$address&sensor=false&region=".trim($country);
+        $url = "https://maps.google.com/maps/api/geocode/json?key=AIzaSyBdUBJq3Y93iEd29Q6GAK5SHQJniqZiHu0&address=$address&sensor=false&region=".trim($country);
         $curl_handle = curl_init();
         curl_setopt($curl_handle, CURLOPT_URL, $url);
         curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
