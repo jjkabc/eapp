@@ -100,8 +100,8 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 		{
 			var cart_item = $scope.cart[key];
 			
-			$scope.price_optimization += parseFloat(cart_item.store_product.worst_product.price) - parseFloat(cart_item.worst_product.price);
-			$scope.distance_optimization += parseFloat(cart_item.store_product.worst_product.department_store.distance) - parseFloat(cart_item.worst_product.department_store.distance);
+			$scope.price_optimization += parseFloat(cart_item.store_product.worst_product.price) - parseFloat(cart_item.store_product.price);
+			$scope.distance_optimization += parseFloat(cart_item.store_product.worst_product.department_store.distance) - parseFloat(cart_item.store_product.department_store.distance);
 			
 		}
 	}
