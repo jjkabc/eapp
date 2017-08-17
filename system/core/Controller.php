@@ -37,7 +37,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-require __DIR__ . '\..\..\vendor\twilio\sdk\Twilio\autoload.php';
+require __DIR__ . '/../../vendor/twilio/sdk/Twilio/autoload.php';
 
 // Use the REST API Client to make requests to the Twilio REST API
 use Twilio\Rest\Client;
@@ -68,8 +68,8 @@ class CI_Controller {
 	public $user;
         
         // Your Account SID and Auth Token from twilio.com/console
-        private $sid = 'AC3afe436140cc93641a56ed107ae5d0f7';
-        private $token = 'c6f3904ebf1cc5f4028c69956c6ad1f7';
+        private $sid = '';
+        private $token = '';
 
         /**
 	 * Class constructor
