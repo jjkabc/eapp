@@ -182,7 +182,7 @@ class Cart_model extends CI_Model
         {			
             $best_Store_product = $this->getStoreProduct($store_product->id, false, false);
 			$best_Store_product->worst_product = $store_product->worst_product;
-			$best_Store_product->related_products= $store_product->related_products;
+			//$best_Store_product->related_products= $store_product->related_products;
             $best_Store_product->department_store = $this->get(CHAIN_STORE_TABLE, $store_product->department_store_id);
             $best_Store_product->department_store->distance = $this->compute_driving_distance($best_Store_product->department_store, $user, $coords);
         }
