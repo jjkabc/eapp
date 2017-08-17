@@ -165,7 +165,7 @@ class Cart_model extends CI_Model
 			foreach($all_store_products as $val)
 			{
 				$related_store_product = $this->getStoreProduct($val->id, false, false);
-				$related_store_product->worst_product->department_store = $this->get(CHAIN_STORE_TABLE, $val->department_store_id);
+				$related_store_product->department_store = $this->get(CHAIN_STORE_TABLE, $val->department_store_id);
 				// Get this when it is selected. 
 				// $related_store_product->worst_product->department_store->distance = $this->compute_driving_distance($related_store_product->worst_product->department_store, $user, $coords);
 				array_push($store_product->related_products, $related_store_product);
