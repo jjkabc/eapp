@@ -75,7 +75,7 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
         formData.append("distance", $scope.distance);
         formData.append("longitude", $scope.longitude);
         formData.append("latitude", $scope.latitude);
-	formData.append("searchAll", !$rootScope.searchInMyList.value);
+		formData.append("searchAll", !$rootScope.searchInMyList.value);
         // Send request to server to get optimized list 	
         $scope.promise = 
             $http.post( $scope.site_url.concat("/cart/update_cart_list"), 
