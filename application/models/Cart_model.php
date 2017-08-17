@@ -155,14 +155,14 @@ class Cart_model extends CI_Model
 			
             $query = $this->db->get_compiled_select(STORE_PRODUCT_TABLE);
             $store_product = $this->db->query($query)->row();
-			if($store_product != null)
-			{
-				$product_found = true;
-				// get the worst deal for the product based on range or price
-				$store_product->worst_product = $this->db->query($query)->last_row();
-				$store_product->worst_product->department_store = $this->get(CHAIN_STORE_TABLE, $product_found->worst_product->department_store_id);
-            	$store_product->worst_product->department_store->distance = $this->compute_driving_distance($product_found->worst_product->department_store, $user, $coords);
-			}
+		if($store_product != null)
+		{
+			$product_found = true;
+			// get the worst deal for the product based on range or price
+			$store_product->worst_product = $this->db->query($query)->last_row();
+			$store_product->worst_product->department_store = $this->get(CHAIN_STORE_TABLE, $store_product->worst_product->department_store_id);
+			$store_product->worst_product->department_store->distance = $this->compute_driving_distance($store_product->worst_product->department_store, $user, $coords);
+		}
              
             $distance += DEFAULT_DISTANCE;
         }
