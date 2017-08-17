@@ -1,10 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-function sort_by_stores($productA, $productB)
+function sort_by_stores($itemA, $itemB)
 {
-	$al = strtolower($productA->retailer->name);
-	$bl = strtolower($productA->retailer->name);
+	$al = strtolower($itemA->store_product->retailer->name);
+	$bl = strtolower($itemB->store_product->retailer->name);
 	if ($al == $bl) 
 	{
 		return 0;
