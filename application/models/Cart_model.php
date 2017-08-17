@@ -160,8 +160,8 @@ class Cart_model extends CI_Model
 			$product_found = true;
 			// get the worst deal for the product based on range or price
 			$worst_product = $this->db->query($query)->last_row();
-			$store_product->worst_product = $this->getStoreProduct($worst_product->id, false, false)
-			$store_product->worst_product->department_store = $this->get(CHAIN_STORE_TABLE, $store_product->worst_product->department_store_id);
+			$store_product->worst_product = $this->getStoreProduct($worst_product->id, false, false);
+			$store_product->worst_product->department_store = $this->get(CHAIN_STORE_TABLE, $worst_product->department_store_id);
 			$store_product->worst_product->department_store->distance = $this->compute_driving_distance($store_product->worst_product->department_store, $user, $coords);
 		}
              
