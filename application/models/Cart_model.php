@@ -144,17 +144,12 @@ class Cart_model extends CI_Model
             
             $this->db->where(array("product_id" => $product_id));
             
-            if(!empty($range_select))
-            {
-                $this->db->order_by("range", "ASC");
-            }
-            else
-            {
-                $this->db->order_by("price", "ASC");
-            }
+           
+            $this->db->order_by("price", "ASC");
+            
 			
             $query = $this->db->get_compiled_select(STORE_PRODUCT_TABLE);
-            $store_product = $this->db->query($query)->row();
+            $store_product = $this->db->query($query)->first_row();
 		if($store_product != null)
 		{
 			$product_found = true;
