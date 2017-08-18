@@ -86,8 +86,8 @@
                             <div class="center center">
                                 <md-input-container class="col-sm-12 md-primary">
                                     <label>Changer Marchand</label>
-                                    <md-select ng-model="currentStoreProduct" placeholder="Marchands"  ng-init="currentStoreProduct = item.store_product.related_products[item.store_product.id]" ng-change="storeChanged(currentStoreProduct)">
-                                        <md-option ng-value="store_product" ng-repeat="store_product in item.store_product.related_products">{{ store_product.retailer.name }}</md-option>
+                                    <md-select ng-model="currentStoreProduct" placeholder="Marchands"  ng-init="currentStoreProduct = item.store_product.related_products[0]" ng-change="storeChanged(currentStoreProduct)">
+                                        <md-option ng-value="store_product" ng-repeat="store_product in item.store_product.related_products">{{ store_product.retailer.name }} - Format : {{store_product.format}}</md-option>
                                     </md-select>
                                 </md-input-container>
                             </div>
@@ -111,7 +111,9 @@
                         <td md-cell>
                             <p><b><a href="single-product.html">{{item.store_product.product.name}}</a></b></p>
                             <p>Format : {{item.store_product.format}}</p>
-                            <p><span class="amount">$ CAD {{item.store_product.price | number: 2}}</span> </p>
+                            <p ng-show="item.store_product.brand">Marque: {{item.store_product.brand.name}}</p>
+                            <p ng-show="item.store_product.country">Origine : {{item.store_product.country}} <span ng-show="item.store_product.state">, {{item.store_product.state}}</span></p>
+                            <p><b><span class="amount">$ CAD {{item.store_product.price | number: 2}}</span> </b></p>
                         </td>
 
                         <td md-cell>
