@@ -191,14 +191,14 @@ class Cart_model extends CI_Model
                     $close_store_products[$val->id] = $sp;
                 }
 				
-				// order by unit price
-				usort($close_store_products, "cmp_unit_price");
-				// The best store product (cheapest) will be at the top of the list
-				$store_product = reset($close_store_products);
-				// The worst store product (most expensive) will be at the end of the list
-				$store_product->worst_product = end($close_store_products);
-				$store_product->worst_product->department_store = $this->get(CHAIN_STORE_TABLE, $worst_product->department_store_id);
-				//$store_product->worst_product->department_store->distance = $this->compute_driving_distance($store_product->worst_product->department_store, $user, $coords);
+		// order by unit price
+		usort($close_store_products, "cmp_unit_price");
+		// The best store product (cheapest) will be at the top of the list
+		$store_product = reset($close_store_products);
+		$store_product->related_products = $close_store_products;
+		// The worst store product (most expensive) will be at the end of the list
+		$store_product->worst_product = end($close_store_products);
+		//$store_product->worst_product->department_store->distance = $this->compute_driving_distance($store_product->worst_product->department_store, $user, $coords);
             }
              
             $distance += DEFAULT_DISTANCE;
@@ -211,7 +211,7 @@ class Cart_model extends CI_Model
             $best_Store_product = $this->getStoreProduct($store_product->id, false, false, true);
             $best_Store_product->worst_product = $store_product->worst_product;
             $best_Store_product->related_products= $store_product->related_products;
-            $best_Store_product->department_store = $this->get(CHAIN_STORE_TABLE, $store_product->department_store_id);
+            $best_Store_product->department_store = $store_product->department_store;
             //$best_Store_product->department_store->distance = $this->compute_driving_distance($best_Store_product->department_store, $user, $coords);
         }
         
