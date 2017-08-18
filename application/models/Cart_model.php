@@ -210,8 +210,13 @@ class Cart_model extends CI_Model
         if($product_found)
         {			
             $best_Store_product = $this->getStoreProduct($store_product->id, false, false, true);
-            $best_Store_product->worst_product = $store_product->worst_product;
-            $best_Store_product->related_products = $related_products;
+            
+            if(sizeof($related_products) > 1)
+            {
+            	$best_Store_product->worst_product = $store_product->worst_product;
+            	$best_Store_product->related_products = $related_products;
+            }
+            
             $best_Store_product->department_store = $store_product->department_store;
             //$best_Store_product->department_store->distance = $this->compute_driving_distance($best_Store_product->department_store, $user, $coords);
         }
