@@ -178,7 +178,7 @@ class Cart extends CI_Controller {
             $cart_item->quantity = $product->quantity;
             
             // distance of 0 means it wasn't found within the distance specified
-            if($store_product->department_store->distance == 0)
+            if($store_product->price == 0)
             {
                 array_push($products_not_found_list, $cart_item);
             }
