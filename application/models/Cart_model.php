@@ -163,6 +163,7 @@ class Cart_model extends CI_Model
 			
             $query = $this->db->get_compiled_select(STORE_PRODUCT_TABLE);
             $store_product = $this->db->query($query)->first_row();
+            $related_products = array();
             if($store_product != null)
             {
                 $product_found = true;
@@ -195,7 +196,7 @@ class Cart_model extends CI_Model
 		usort($close_store_products, "cmp_unit_price");
 		// The best store product (cheapest) will be at the top of the list
 		$store_product = reset($close_store_products);
-		$store_product->related_products = $close_store_products;
+		$related_products = $close_store_products;
 		// The worst store product (most expensive) will be at the end of the list
 		$store_product->worst_product = end($close_store_products);
 		//$store_product->worst_product->department_store->distance = $this->compute_driving_distance($store_product->worst_product->department_store, $user, $coords);
@@ -206,11 +207,11 @@ class Cart_model extends CI_Model
         
         $best_Store_product = null;
 	
-        if($store_product != null)
+        if($product_found)
         {			
             $best_Store_product = $this->getStoreProduct($store_product->id, false, false, true);
             $best_Store_product->worst_product = $store_product->worst_product;
-            $best_Store_product->related_products= $store_product->related_products;
+            $best_Store_product->related_products = $related_products;
             $best_Store_product->department_store = $store_product->department_store;
             //$best_Store_product->department_store->distance = $this->compute_driving_distance($best_Store_product->department_store, $user, $coords);
         }
