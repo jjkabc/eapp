@@ -168,6 +168,8 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
                     });
                     
                 });
+		    
+	      break;
             }
         }
     };
