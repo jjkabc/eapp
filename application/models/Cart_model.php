@@ -25,6 +25,21 @@ function cmp_stores_by_num_items($a, $b)
     return 0;
 }
 
+function cmp_unit_price($a, $b)
+{
+    if($a->unit_price < $b->unit_price)
+    {
+        return -1;
+    }
+    
+    if($a->unit_price > $b->unit_price)
+    {
+        return 1;
+    }
+    
+    return 0;
+}
+
 class Cart_model extends CI_Model 
 {
     public function __construct()
@@ -127,7 +142,7 @@ class Cart_model extends CI_Model
             
             $range_select = empty($range) ? "" : ", (".$range.") AS 'range'";
             
-            $this->db->select(STORE_PRODUCT_TABLE.".id, product_id, ".CHAIN_TABLE.".id as merchant_id, ".CHAIN_STORE_TABLE.".id AS department_store_id".$range_select);
+            $this->db->select(STORE_PRODUCT_TABLE.".id, unit_price, product_id, ".CHAIN_TABLE.".id as merchant_id, ".CHAIN_STORE_TABLE.".id AS department_store_id".$range_select);
             $this->db->join(CHAIN_TABLE, CHAIN_TABLE.'.id = '.STORE_PRODUCT_TABLE.'.retailer_id');
             $this->db->join(CHAIN_STORE_TABLE, CHAIN_TABLE.'.id = '.CHAIN_STORE_TABLE.'.chain_id');
             
@@ -144,41 +159,46 @@ class Cart_model extends CI_Model
             
             $this->db->where(array("product_id" => $product_id));
             
-            $this->db->order_by("price", "ASC");
+            $this->db->order_by("unit_price", "ASC");
 			
             $query = $this->db->get_compiled_select(STORE_PRODUCT_TABLE);
             $store_product = $this->db->query($query)->first_row();
             if($store_product != null)
             {
                 $product_found = true;
-                // get the worst deal for the product based on range or price
-                $worst_product = $this->db->query($query)->last_row();
-                $store_product->worst_product = $this->getStoreProduct($worst_product->id, false, false, true);
-                $store_product->worst_product->department_store = $this->get(CHAIN_STORE_TABLE, $worst_product->department_store_id);
-                $store_product->worst_product->department_store->distance = $this->compute_driving_distance($store_product->worst_product->department_store, $user, $coords);
-
+                
                 // get all the other choices
                 $all_store_products = $this->db->query($query)->result();
-                $store_product->related_products = array();
+                $close_store_products = array();
                 foreach($all_store_products as $val)
                 {
-                    if(isset($store_product->related_products[$val->id]) 
-                            && $store_product->related_products[$val->id]->merchant_id == $val->merchant_id)
+                    if(isset($close_store_products[$val->id]) 
+                            && $close_store_products[$val->id]->merchant_id == $val->merchant_id)
                     {
-                        $prev_range = floatval($store_product->related_products[$related_store_product->id]->department_store->range);
+                        $prev_range = floatval($close_store_products[$val->id]->department_store->range);
                         
                         if($prev_range < floatval($val->range))
                         {
                             continue;
                         }
                     }
-                    $related_store_product = $this->getStoreProduct($val->id, false, false, true);
-                    $related_store_product->department_store = $this->get(CHAIN_STORE_TABLE, $val->department_store_id);
-                    $related_store_product->department_store->range = $val->range;
-                    $related_store_product->merchant_id = $val->merchant_id;
+					
+                    $sp = $this->getStoreProduct($val->id, false, false, true);
+                    $sp->department_store = $this->get(CHAIN_STORE_TABLE, $val->department_store_id);
+                    $sp->department_store->range = $val->range;
+                    $sp->merchant_id = $val->merchant_id;
                     // Get this when it is selected. 
-                    $store_product->related_products[$val->id] = $related_store_product;
+                    $close_store_products[$val->id] = $sp;
                 }
+				
+				// order by unit price
+				usort($close_store_products, "cmp_unit_price");
+				// The best store product (cheapest) will be at the top of the list
+				$store_product = reset($close_store_products);
+				// The worst store product (most expensive) will be at the end of the list
+				$store_product->worst_product = end($close_store_products);
+				$store_product->worst_product->department_store = $this->get(CHAIN_STORE_TABLE, $worst_product->department_store_id);
+				//$store_product->worst_product->department_store->distance = $this->compute_driving_distance($store_product->worst_product->department_store, $user, $coords);
             }
              
             $distance += DEFAULT_DISTANCE;
@@ -192,7 +212,7 @@ class Cart_model extends CI_Model
             $best_Store_product->worst_product = $store_product->worst_product;
             $best_Store_product->related_products= $store_product->related_products;
             $best_Store_product->department_store = $this->get(CHAIN_STORE_TABLE, $store_product->department_store_id);
-            $best_Store_product->department_store->distance = $this->compute_driving_distance($best_Store_product->department_store, $user, $coords);
+            //$best_Store_product->department_store->distance = $this->compute_driving_distance($best_Store_product->department_store, $user, $coords);
         }
         
         // There was no best product wrt the user. Get the cheapest product    
