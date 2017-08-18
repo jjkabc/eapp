@@ -69,7 +69,9 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
             };
             store_products.push(data);
         }
-
+		
+		$rootScope.cart = [];
+		
         var formData = new FormData();
         formData.append("products", JSON.stringify(store_products));
         formData.append("distance", $scope.distance);
@@ -82,20 +84,63 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
             formData, { transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(
             function(response)
             {
-                $rootScope.cart = response.data;
-
-                $scope.update_travel_distance();
-				
-                $scope.update_distance_price_optimization();
+				// Create ordered array list
+				for(var x in response.data)
+				{
+					$rootScope.cart.push(response.data[x]);
+				}
+				$scope.getDrivingDistances();
+                $scope.update_price_optimization();
             });
         
     };
+	
+	// This method computes the distance to each product stores
+    $scope.getDrivingDistances = function()
+    {
+    	// construct ordered list of origins and destinations
+		var origins = [];
+		var destinations = [];
+		var mode = "DRIVING";
+
+		for(var i in $rootScope.cart)
+		{
+			var currentStoreProduct = $rootScope.cart[i].store_product;
+			
+			origins.push(new google.maps.LatLng(parseFloat($scope.loggedUser.profile.latitude), parseFloat($scope.loggedUser.profile.longitude)));
+			destinations.push(new google.maps.LatLng(parseFloat(currentStoreProduct.department_store.latitude), parseFloat(currentStoreProduct.department_store.longitude)));
+			
+			var service = new google.maps.DistanceMatrixService();
+			service.getDistanceMatrix(
+			{
+				origins: origins,
+				destinations: destinations,
+				travelMode: mode,
+				avoidHighways: false,
+				avoidTolls: false
+			}, function(response, status)
+			{
+				$rootScope.$apply(function()
+			  	{
+					for(var x in response.rows)
+					{
+						var distance = parseFloat(response.rows[x].elements[0].distance.value) / 1000;
+						$rootScope.cart[x].store_product.department_store.distance = distance;
+					}
+					$scope.update_travel_distance();
+				});
+				
+			});
+		}
+	  
+    }
     
     $scope.storeChanged = function(currentStoreProduct)
     {
         for(var i in $rootScope.cart)
         {
             var item = $rootScope.cart[i];
+			var mode = "DRIVING";
             
             if(parseInt(item.product.id) === parseInt(currentStoreProduct.product.id))
             {
@@ -109,33 +154,25 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
                 {
                     origins: [origin],
                     destinations: [destination],
-                    travelMode: 'DRIVING',
+                    travelMode: mode,
                     avoidHighways: false,
                     avoidTolls: false
                 }, function(response, status)
                 {
                     var distance = parseFloat(response.rows[0].elements[0].distance.value) / 1000;
                     currentStoreProduct.department_store.distance = distance;
-                    $scope.$apply(function()
+                    $rootScope.$apply(function()
                     {
-                        $scope.cart[i].store_product = currentStoreProduct;
+                        $rootScope.cart[i].store_product = currentStoreProduct;
                         $scope.update_distance_price_optimization();
                     });
                     
                 });
-                
-                $scope.cart[i].store_product = currentStoreProduct;
             }
         }
     };
-    
-    function distanceMatrixCallback(response, status) 
-    {
-        // See Parsing the Results for
-        // the basics of a callback function.
-    }
 	
-    $scope.update_distance_price_optimization = function()
+    $scope.update_price_optimization = function()
     {
             $scope.distance_optimization = 0;
             $scope.price_optimization = 0;
@@ -149,8 +186,6 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
                     continue;
                 }
                 $scope.price_optimization += parseFloat(cart_item.store_product.worst_product.price) - parseFloat(cart_item.store_product.price);
-                $scope.distance_optimization += parseFloat(cart_item.store_product.worst_product.department_store.distance) - parseFloat(cart_item.store_product.department_store.distance);
-
             }
     };
     
