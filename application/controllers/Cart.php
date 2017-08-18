@@ -196,7 +196,16 @@ class Cart extends CI_Controller {
         $final_list = array_merge($optimizedList, $products_not_found_list);
 		
         // returns an array where the items not found are on the bottom of the list
-        echo json_encode($final_list);
+        $res = json_encode($final_list);
+        
+        if(!$res)
+        {
+        	echo json_last_error();
+        }
+        else
+        {
+        	echo $res;
+        }
     }
 	
     public function optimize_product_list_by_store()
