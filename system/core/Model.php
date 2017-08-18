@@ -193,7 +193,7 @@ class CI_Model {
         $brand_columns = "*";
         if($minified)
         {
-            $store_product_columns = "id, product_id, retailer_id, brand_id, unit_id, country, state, organic, format, size, quantity, price";
+            $store_product_columns = "id, product_id, retailer_id, brand_id, unit_id, country, state, organic, format, size, quantity, price, unit_price";
             $chain_columns = "id, name, image";
             $units_columns = "id, name";
             $brand_columns = "id, name, image";
