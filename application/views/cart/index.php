@@ -80,7 +80,17 @@
                         </td>
 
                         <td md-cell>
-                            <a href><img alt="item.store_product.product.name" class="admin-image" ng-src="{{base_url}}/assets/img/stores/{{item.store_product.retailer.image}}" ></a>
+                            <div>
+                                <a href><img alt="item.store_product.product.name" class="admin-image" ng-src="{{base_url}}/assets/img/stores/{{item.store_product.retailer.image}}" ></a>
+                            </div>
+                            <div class="center center">
+                                <md-input-container class="col-sm-12 md-primary">
+                                    <label>Changer Marchand</label>
+                                    <md-select ng-model="currentStoreProduct" placeholder="Marchands"  ng-init="currentStoreProduct = item.store_product.related_products[item.store_product.id]" ng-change="storeChanged(currentStoreProduct)">
+                                        <md-option ng-value="store_product" ng-repeat="store_product in item.store_product.related_products">{{ store_product.retailer.name }}</md-option>
+                                    </md-select>
+                                </md-input-container>
+                            </div>
                         </td>
 
                         <td md-cell>

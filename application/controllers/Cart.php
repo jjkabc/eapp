@@ -156,42 +156,47 @@ class Cart extends CI_Controller {
      */
     public function update_cart_list()
     {
+        // list of products found within the distance
         $optimizedList = array();   
-		$products_not_found_list = array();
+        // list of products that were not found within the distance
+        $products_not_found_list = array();
+        // get the distance
         $distance = $this->input->post("distance");
+        // get the cart products
         $products = json_decode($this->input->post("products"));
         $search_all = $this->input->post("searchAll") == "true" ? true : false;
         $coords = array("longitude" => $this->input->post("longitude"), "latitude" => $this->input->post("latitude"));
 
         foreach($products as $product)
         {
+            // get the best store product based on price
             $store_product = $this->cart_model->get_best_store_product($product->id, $distance, $distance, $this->user, $search_all, $coords);
             $cart_item = new stdClass();
             $cart_item->store_product = $store_product;
             $cart_item->product = $this->cart_model->get_product($product->id);
             $cart_item->rowid = $product->rowid;
             $cart_item->quantity = $product->quantity;
-			
-			if($store_product->department_store->distance == 0)
-			{
-				array_push($products_not_found_list, $cart_item);
-			}
-			else
-			{
-				array_push($optimizedList, $cart_item);
-			}
             
+            // distance of 0 means it wasn't found within the distance specified
+            if($store_product->department_store->distance == 0)
+            {
+                array_push($products_not_found_list, $cart_item);
+            }
+            else
+            {
+                array_push($optimizedList, $cart_item);
+            }
         }
 		
-		// Order by store
-		usort($optimizedList, "sort_by_stores");
-		usort($products_not_found_list, "sort_by_stores");
+        // Order by store
+        usort($optimizedList, "sort_by_stores");
+        usort($products_not_found_list, "sort_by_stores");
+        
+        // Merge Lists putting the found items at the top
+        $final_list = array_merge($optimizedList, $products_not_found_list);
 		
-		// Merge Lists
-		$final_array = array_merge($optimizedList, $products_not_found_list);
-		
-		// returns an array where the items not found are on the bottom of the list
-        echo json_encode($final_array);
+        // returns an array where the items not found are on the bottom of the list
+        echo json_encode($final_list);
     }
 	
     public function optimize_product_list_by_store()

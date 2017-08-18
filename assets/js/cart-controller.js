@@ -86,25 +86,73 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 
                 $scope.update_travel_distance();
 				
-				$scope.update_distance_price_optimization();
+                $scope.update_distance_price_optimization();
             });
         
     };
+    
+    $scope.storeChanged = function(currentStoreProduct)
+    {
+        for(var i in $rootScope.cart)
+        {
+            var item = $rootScope.cart[i];
+            
+            if(parseInt(item.product.id) === parseInt(currentStoreProduct.product.id))
+            {
+                currentStoreProduct.related_products = $rootScope.cart[i].store_product.related_products;
+                
+                var origin = new google.maps.LatLng(parseFloat(currentStoreProduct.department_store.latitude), parseFloat(currentStoreProduct.department_store.longitude));
+                var destination = new google.maps.LatLng(parseFloat($scope.loggedUser.profile.latitude), parseFloat($scope.loggedUser.profile.longitude));
+                
+                var service = new google.maps.DistanceMatrixService();
+                service.getDistanceMatrix(
+                {
+                    origins: [origin],
+                    destinations: [destination],
+                    travelMode: 'DRIVING',
+                    avoidHighways: false,
+                    avoidTolls: false
+                }, function(response, status)
+                {
+                    var distance = parseFloat(response.rows[0].elements[0].distance.value) / 1000;
+                    currentStoreProduct.department_store.distance = distance;
+                    $scope.$apply(function()
+                    {
+                        $scope.cart[i].store_product = currentStoreProduct;
+                        $scope.update_distance_price_optimization();
+                    });
+                    
+                });
+                
+                $scope.cart[i].store_product = currentStoreProduct;
+            }
+        }
+    };
+    
+    function distanceMatrixCallback(response, status) 
+    {
+        // See Parsing the Results for
+        // the basics of a callback function.
+    }
 	
-	$scope.update_distance_price_optimization = function()
-	{
-		$scope.distance_optimization = 0;
-		$scope.price_optimization = 0;
-		
-		for(var key in $scope.cart)
-		{
-			var cart_item = $scope.cart[key];
-			
-			$scope.price_optimization += parseFloat(cart_item.store_product.worst_product.price) - parseFloat(cart_item.store_product.price);
-			$scope.distance_optimization += parseFloat(cart_item.store_product.worst_product.department_store.distance) - parseFloat(cart_item.store_product.department_store.distance);
-			
-		}
-	}
+    $scope.update_distance_price_optimization = function()
+    {
+            $scope.distance_optimization = 0;
+            $scope.price_optimization = 0;
+
+            for(var key in $scope.cart)
+            {
+                var cart_item = $scope.cart[key];
+
+                if(typeof cart_item.store_product.worst_product === "undefined")
+                {
+                    continue;
+                }
+                $scope.price_optimization += parseFloat(cart_item.store_product.worst_product.price) - parseFloat(cart_item.store_product.price);
+                $scope.distance_optimization += parseFloat(cart_item.store_product.worst_product.department_store.distance) - parseFloat(cart_item.store_product.department_store.distance);
+
+            }
+    };
     
     /**
      * Optimize product list by finding items in stores

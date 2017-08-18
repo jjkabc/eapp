@@ -96,6 +96,7 @@ class CI_Model {
     public $latest_products_condition;
     public $store_product_product_join;
     public $store_product_subcategory_join;
+    
     /**
      * Class constructor
      *
@@ -145,9 +146,9 @@ class CI_Model {
         }
     }
         
-    public function get($table_name, $id)
+    public function get($table_name, $id, $columns = "*")
     {
-        $this->db->select("*");
+        $this->db->select($columns);
         $this->db->from($table_name);
         $this->db->where('id', $id);
         $query = $this->db->get();
@@ -177,7 +178,7 @@ class CI_Model {
         }
     }
     
-    public function getStoreProduct($id, $includeRelatedProducts = true, $latestProduct = true) 
+    public function getStoreProduct($id, $includeRelatedProducts = true, $latestProduct = true, $minified = false) 
     {
         // Get the store product object
 	if($latestProduct)
@@ -186,29 +187,41 @@ class CI_Model {
             $this->db->where($array);
 	}
 	
-        $store_product = $this->get(STORE_PRODUCT_TABLE, $id);
+        $store_product_columns = "*";
+        $chain_columns = "*";
+        $units_columns = "*";
+        $brand_columns = "*";
+        if($minified)
+        {
+            $store_product_columns = "id, product_id, retailer_id, brand_id, unit_id, country, state, organic, format, size, quantity, price";
+            $chain_columns = "id, name, image";
+            $units_columns = "id, name";
+            $brand_columns = "id, name, image";
+        }
+        
+        $store_product = $this->get(STORE_PRODUCT_TABLE, $id, $store_product_columns);
 
         if($store_product != null)
         {
             // Get associated product
-            $store_product->product = $this->get_product($store_product->product_id);
+            $store_product->product = $this->get_product($store_product->product_id, $minified);
             
             // Get product store
-            $store_product->retailer = $this->get(CHAIN_TABLE, $store_product->retailer_id);
+            $store_product->retailer = $this->get(CHAIN_TABLE, $store_product->retailer_id, $chain_columns);
             $store_image_path = ASSETS_DIR_PATH."img/stores/".$store_product->retailer->image;
             if(!file_exists($store_image_path) || empty($store_product->retailer->image))
             {
                 $store_product->retailer->image = "no_image_available.png";
             }
             // Get product unit
-            $store_product->unit = $this->get(UNITS_TABLE, $store_product->unit_id);
+            $store_product->unit = $this->get(UNITS_TABLE, $store_product->unit_id, $units_columns);
             // Get subcategory
             if($store_product->product != null && $includeRelatedProducts)
             {
                 $store_product->related_products = $this->get_related_products($store_product);
             }
             
-            $store_product->brand = $this->get(PRODUCT_BRAND_TABLE, $store_product->brand_id);
+            $store_product->brand = $this->get(PRODUCT_BRAND_TABLE, $store_product->brand_id, $brand_columns);
             
             if($store_product->brand != null)
             {
@@ -291,9 +304,20 @@ class CI_Model {
         return $result;
     }
     
-     public function get_product($product_id, $get_store_products = true) 
+    public function get_product($product_id, $get_store_products = true, $minified = false) 
     {
-        $value = $this->get(PRODUCT_TABLE, $product_id);
+        $product_columns = "*";
+        $subcategory_columns = "*";
+        $category_columns = "*";
+        
+        if($minified)
+        {
+            $product_columns = "id, name, subcategory_id, image";
+            $subcategory_columns = "id, name, product_category_id";
+            $category_columns = "id, name";
+        }
+        
+        $value = $this->get(PRODUCT_TABLE, $product_id, $product_columns);
         
         $store_image_path = ASSETS_DIR_PATH."img/products/".$value->image;
         
@@ -302,31 +326,37 @@ class CI_Model {
             $value->image = "no_image_available.png";
         }
 
-        $value->subcategory = $this->get(SUB_CATEGORY_TABLE, $value->subcategory_id);
+        $value->subcategory = $this->get(SUB_CATEGORY_TABLE, $value->subcategory_id, $subcategory_columns);
         
         // Get category
         if($value->subcategory != null)
         {
-            $value->category = $this->get(CATEGORY_TABLE, $value->subcategory->product_category_id);
+            $value->category = $this->get(CATEGORY_TABLE, $value->subcategory->product_category_id, $category_columns);
         }
         
         if($get_store_products)
         {
-            $value->store_products = $this->get_flyer_products($product_id);
+            $value->store_products = $this->get_flyer_products($product_id, $minified);
         }	 
-        
 
         return $value;
     }
 	
-    private function get_flyer_products($product_id)
+    private function get_flyer_products($product_id, $minified)
     {
-		$this->db->select(STORE_PRODUCT_TABLE.".*, ".PRODUCT_BRAND_TABLE.".name as brandName, ".PRODUCT_BRAND_TABLE.".id as brand_id");
-		$this->db->where(array(STORE_PRODUCT_TABLE.".product_id" => $product_id, "in_flyer" => 1));
-		$this->db->join(PRODUCT_BRAND_TABLE, PRODUCT_BRAND_TABLE.".id = ".STORE_PRODUCT_TABLE.".brand_id", "left outer");
-		$result = $this->db->get(STORE_PRODUCT_TABLE);
-		
-		return $result->result();
+        $store_product_columns = "*";
+        
+        if($minified)
+        {
+            $store_product_columns = "id, product_id, retailer_id, brand_id, unit_id, country, state, organic, format, size, quantity, price";
+        }
+        
+        $this->db->select($store_product_columns.", ".PRODUCT_BRAND_TABLE.".name as brandName, ".PRODUCT_BRAND_TABLE.".id as brand_id");
+        $this->db->where(array(STORE_PRODUCT_TABLE.".product_id" => $product_id, "in_flyer" => 1));
+        $this->db->join(PRODUCT_BRAND_TABLE, PRODUCT_BRAND_TABLE.".id = ".STORE_PRODUCT_TABLE.".brand_id", "left outer");
+        $result = $this->db->get(STORE_PRODUCT_TABLE);
+
+        return $result->result();
     }
     
     /**

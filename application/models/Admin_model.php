@@ -101,9 +101,9 @@ class Admin_model extends CI_Model
     
    
     
-    public function get($table_name, $id)
+    public function get($table_name, $id, $columns = "*")
     {
-        $this->db->select("*");
+        $this->db->select($columns);
         $this->db->from($table_name);
         $this->db->where('id', $id);
         $query = $this->db->get();
