@@ -638,6 +638,7 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 		var mywindow = window.open('', 'PRINT', 'height=400,width=600');
 
 		mywindow.document.write('<html><head><title>' + document.title  + '</title>');
+		mywindow.document.write('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">');
 		mywindow.document.write('</head><body >');
 		mywindow.document.write("<h1 style='text-align : center;'>OtiPrix - Liste d'épicerie</h1>");
 		
@@ -659,7 +660,7 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 					// Close previously opened tag
 					mywindow.document.write("<br>");
 					mywindow.document.write("</div>");
-					mywindow.document.write("</ol>");
+					mywindow.document.write("</ul>");
 				}
 				
 				if(typeof storeProduct.department_store !== "undefined" && parseInt(storeProduct.department_store.distance) !== 0)
@@ -676,7 +677,7 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 				
 				// Open new table
 				mywindow.document.write("<div>");
-				mywindow.document.write("<ol>");
+				mywindow.document.write("<ul  class='list-group'>");
 			}
 			
 			var description = "";
@@ -708,14 +709,14 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 			
 			var product_text = "<p><b>" + storeProduct.product.name +  "</b> - " + description + "</p>";
 			
-			mywindow.document.write("<li>" + product_text + "</li>");
+			mywindow.document.write("<li class='list-group-item'>" + product_text + "</li>");
 		}
 		
 		if(currentDepartmentStoreID !== -1)
 		{
 			// Close last opened tag
 			mywindow.document.write("</div>");
-			mywindow.document.write("</ol>");
+			mywindow.document.write("</ul>");
 		}
 		
 		mywindow.document.write("<br>");
