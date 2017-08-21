@@ -606,7 +606,7 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 	{
 		$rootScope.cart.sort(function(a, b){
 			var keyA = a.store_product.retailer.name.toString(),
-				keyB = b..store_product.retailer.name.toString();
+                        keyB = b.store_product.retailer.name.toString();
 			return keyA.localeCompare(keyB);
 		});
 	};
