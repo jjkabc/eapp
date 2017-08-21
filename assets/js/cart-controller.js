@@ -580,13 +580,13 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 		var formData = new FormData();
         formData.append("sms", $rootScope.getListAsText());
         // Send request to server to get optimized list 	
-        $scope.promise = $http.post($scope.site_url.concat("/cart/sendSMS"), 
+        $scope.promise = $http.post($scope.site_url.concat("/cart/send_sms"), 
         formData, { transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(
         function(response)
         {
             if(response.data)
             {
-                $rootScope.cart = response.data;
+                
             }
         });
 	}
