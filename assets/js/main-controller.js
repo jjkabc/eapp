@@ -275,7 +275,7 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
         return count;
     };
     
-    $scope.clearMyList = function()
+    $scope.clearMyList = function($event)
     {
 		var confirmDialog = $rootScope.createConfirmDIalog($event, "Cela effacera tous les contenus de votre liste d'épicerie.");
 		
