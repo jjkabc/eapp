@@ -253,6 +253,21 @@ class CI_Controller {
             }
             return $pin;
         }
+	
+	public function send_sms($sms)
+	{
+		$client = new Client($this->sid, $this->token);
+		$client->messages->create(
+                // the number you'd like to send the message to
+                $this->user->phone,
+                array(
+                    // A Twilio phone number you purchased at twilio.com/console
+                    'from' => '+14388008069',
+                    // the body of the text message you'd like to send
+                    'body' => $sms
+                )
+            );
+	}
        
 
 }

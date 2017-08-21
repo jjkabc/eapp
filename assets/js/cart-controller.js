@@ -537,4 +537,72 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
         });
     };
 	
+	$rootScope.getListAsText = function()
+	{
+		var currentDepartmentStoreID = -1;
+		var smsText = "Votre liste d'épicerie fourni par OtiPrix \n";
+		for(var x in $rootScope.cart)
+		{
+			var storeProduct = $rootScope.cart[x].store_product;
+			
+			if(currentDepartmentStoreID !== parseInt(storeProduct.department_store.id))
+			{
+				currentDepartmentStoreID = parseInt(storeProduct.department_store.id);
+				
+				smsText += storeProduct.retailer.name + " - " +  storeProduct.department_store.address + ", " + storeProduct.department_store.state + ", " + storeProduct.department_store.city + "," + storeProduct.department_store.postcode;
+				smsText += "\n";
+			}
+			
+			smsText += storeProduct.product.name + ": " + storeProduct.price + "/" + storeProduct.unit.name + "\n";
+		}
+	}
+	
+	$scope.showAlert = function(ev, title, message) 
+	{
+		// Appending dialog to document.body to cover sidenav in docs app
+		// Modal dialogs should fully cover application
+		// to prevent interaction outside of dialog
+		$mdDialog.show(
+		  $mdDialog.alert()
+			.parent(angular.element(document.querySelector('#popupContainer')))
+			.clickOutsideToClose(true)
+			.title(title)
+			.textContent(message)
+			.ariaLabel('Alert Dialog Demo')
+			.ok('Got it!')
+			.targetEvent(ev)
+		);
+  	};
+	
+	$rootScope.sendListAsSMS = function($event)
+	{
+		if(!$rootScope.isUserLogged)
+		{
+			return;
+		}
+		
+		if(!$rootScope.loggedUser.phone_verified)
+		{
+			$scope.showAlert($event, "Votre numéro de téléphone n'est pas vérifié", "Votre numéro de téléphone n'est pas vérifié. Veuillez consulter l'onglet de sécurité de votre compte pour vérifier votre numéro de téléphone.");
+		}
+		
+		if($rootScope.cart.length === 0)
+		{
+			$scope.showAlert($event, "Panier vide", "Votre panier est actuellement vide. Ajoutez des éléments au panier avant d'utiliser cette fonctionnalité.");
+		}
+		
+		var formData = new FormData();
+        formData.append("sms", $rootScope.getListAsText());
+        // Send request to server to get optimized list 	
+        $scope.promise = $http.post($scope.site_url.concat("/cart/send_sms"), 
+        formData, { transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(
+        function(response)
+        {
+            if(response.data)
+            {
+                
+            }
+        });
+	}
+	
 }]);
