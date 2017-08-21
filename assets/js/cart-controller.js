@@ -96,9 +96,10 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
                 // Create ordered array list
                 for(var x in response.data)
                 {
-                        $rootScope.cart.push(response.data[x]);
+					$rootScope.cart.push(response.data[x]);
+					$scope.storeChanged(response.data[x].store_product);
                 }
-                $scope.getDrivingDistances();
+                //$scope.getDrivingDistances();
                 $scope.update_price_optimization();
             });
         
