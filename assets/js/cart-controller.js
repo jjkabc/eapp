@@ -634,7 +634,101 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 	
 	$rootScope.printCart = function() 
 	{
-            
+		
+		var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+
+		mywindow.document.write('<html><head><title>' + document.title  + '</title>');
+		mywindow.document.write('</head><body >');
+		mywindow.document.write('<h1>' + document.title  + '</h1>');
+		
+		
+		var currentDepartmentStoreID = -1;
+		for(var x in $rootScope.cart)
+		{
+			var storeProduct = $rootScope.cart[x].store_product;
+
+			if(parseFloat(storeProduct.price) === 0)
+			{
+				continue;
+			}
+
+			if(currentDepartmentStoreID !== parseInt(storeProduct.department_store.id))
+			{
+				if(currentDepartmentStoreID !== -1)
+				{
+					// Close previously opened tag
+					mywindow.document.write("</table>");
+				}
+				
+				if(typeof storeProduct.department_store !== "undefined" && parseInt(storeProduct.department_store.distance) !== 0)
+				{
+					var text = storeProduct.department_store.address + ", " + storeProduct.department_store.state + ", " + storeProduct.department_store.city + "," + storeProduct.department_store.postcode;
+					mywindow.document.write("<h3>" + text + "</h3>");
+				}
+				else
+				{
+					mywindow.document.write("<h3>Le magasin n'est pas proche de chez vous.</h3>");
+				}
+				
+				currentDepartmentStoreID = parseInt(storeProduct.department_store.id);
+				
+				// Open new table
+				mywindow.document.write("<table>");
+				mywindow.document.write("<tr>");
+				
+				mywindow.document.write("<th>Magasin</th>");
+				mywindow.document.write("<th>Description</th>");
+				mywindow.document.write("<th>Total</th>");
+				
+				mywindow.document.write("</tr>");
+				
+			}
+			
+			mywindow.document.write("<tr>");
+				
+			mywindow.document.write("<td>" + storeProduct.retailer.name + "</td>");
+			mywindow.document.write("<td>");
+			mywindow.document.write("<p><b>" + storeProduct.product.name + "</b></p>");
+			if(storeProduct.size)
+			{
+				mywindow.document.write("<p>" + storeProduct.size + "</p>");
+			}
+			if(storeProduct.brand)
+			{
+				mywindow.document.write("<p>" + storeProduct.brand.name + "</p>");
+			}
+			if(storeProduct.format)
+			{
+				mywindow.document.write("<p>" + storeProduct.format + "</p>");
+			}
+			if(storeProduct.state)
+			{
+				mywindow.document.write("<p> Origine : " + storeProduct.state + "</p>");
+			}
+			
+			mywindow.document.write("</td>");
+			mywindow.document.write("<td>" + (storeProduct.price * storeProduct.quantity) + "</td>");
+				
+			mywindow.document.write("</tr>");
+
+		}
+		
+		if(currentDepartmentStoreID !== -1)
+		{
+			// Close last opened tag
+			mywindow.document.write("</table>");
+		}
+		
+		mywindow.document.write('</body></html>');
+
+		mywindow.document.close(); // necessary for IE >= 10
+		mywindow.focus(); // necessary for IE >= 10*/
+
+		mywindow.print();
+		mywindow.close();
+
+		return true;
+
 	};
 	
 }]);
