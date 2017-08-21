@@ -659,6 +659,7 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 					// Close previously opened tag
 					mywindow.document.write("<br>");
 					mywindow.document.write("</div>");
+					mywindow.document.write("</ol>");
 				}
 				
 				if(typeof storeProduct.department_store !== "undefined" && parseInt(storeProduct.department_store.distance) !== 0)
@@ -675,6 +676,7 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 				
 				// Open new table
 				mywindow.document.write("<div>");
+				mywindow.document.write("<ol>");
 			}
 			
 			var description = "";
@@ -706,13 +708,14 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 			
 			var product_text = "<p><b>" + storeProduct.product.name +  "</b> - " + description + "</p>";
 			
-			mywindow.document.write(product_text);
+			mywindow.document.write("<li>" + product_text + "</li>");
 		}
 		
 		if(currentDepartmentStoreID !== -1)
 		{
 			// Close last opened tag
 			mywindow.document.write("</div>");
+			mywindow.document.write("</ol>");
 		}
 		
 		mywindow.document.write('</body></html>');
