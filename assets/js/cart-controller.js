@@ -660,9 +660,9 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 		$rootScope.sortCart();
 		var mywindow = window.open('', 'PRINT', 'height=400,width=600');
 
-		mywindow.document.write('<html><head><title>' + document.title  + '</title>');
+		mywindow.document.write('<html><head><title>OtiPrix</title>');
 		mywindow.document.write('</head><body >');
-		mywindow.document.write("<h1 style='text-align : center;'>OtiPrix - Liste d'épicerie</h1>");
+		mywindow.document.write("<h1 style='text-align : center;'>OtiPrix - Liste d'épicerie optimisé</h1>");
 		
 		
 		var currentDepartmentStoreID = -1;
@@ -743,7 +743,7 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 		
 		mywindow.document.write("<br>");
 		mywindow.document.write("<br>");
-		mywindow.document.write("<p style='float : right;'><b>Totale : $ CAD " + $rootScope.get_cart_total_price() + "</b></p>");
+		mywindow.document.write("<p style='float : right;'><b>Totale : $ CAD " + $rootScope.get_cart_total_price() + " + taxes. </b></p>");
 		
 		if($rootScope.price_optimization > 0)
 		{
