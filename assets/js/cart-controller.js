@@ -635,11 +635,11 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 	$rootScope.printCart = function() 
 	{
 		
-		var mywindow = window.open('', 'PRINT');
+		var mywindow = window.open('', 'PRINT', 'height=400,width=600');
 
-		mywindow.document.write("<html><head><title>OtiPrix - Liste d'épicerie</title>");
+		mywindow.document.write('<html><head><title>' + document.title  + '</title>');
 		mywindow.document.write('</head><body >');
-		mywindow.document.write('<h1>' + document.title  + '</h1>');
+		mywindow.document.write("<h1>OtiPrix - Liste d'épicerie</h1>");
 		
 		
 		var currentDepartmentStoreID = -1;
