@@ -638,7 +638,6 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 		var mywindow = window.open('', 'PRINT', 'height=400,width=600');
 
 		mywindow.document.write('<html><head><title>' + document.title  + '</title>');
-		mywindow.document.write("<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css' integrity='sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp' crossorigin='anonymous'>");
 		mywindow.document.write('</head><body >');
 		mywindow.document.write("<h1 style='text-align : center;'>OtiPrix - Liste d'épicerie</h1>");
 		
