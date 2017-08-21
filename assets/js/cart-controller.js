@@ -632,4 +632,9 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
             });
 	};
 	
+	$rootScope.printCart = function() 
+	{
+		$("#cart-container").printElement();
+	};
+	
 }]);
