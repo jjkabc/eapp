@@ -562,7 +562,16 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
                         smsText += "\n";
                 }
 
-                smsText += storeProduct.product.name + ": " + storeProduct.price + " $ CAD /" + storeProduct.unit.name + "\n";
+                smsText += storeProduct.product.name + ": " + storeProduct.price + " $ CAD";
+                
+                if(storeProduct.unit != null && typeof storeProduct.unit !== "undefined")
+                {
+                    smsText += "/" + storeProduct.unit.name + "\n";
+                }
+                else
+                {
+                    smsText += "\n";
+                }
             }
 
             return smsText;
