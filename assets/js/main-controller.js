@@ -284,6 +284,7 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
             $http.post($rootScope.site_url.concat("/cart/destroy"), null).then(function(response)
             {
                 $rootScope.myCategories = [];
+				$scope.loggedUser.grocery_list = [];
 				$rootScope.saveMyList();
 				
             });
