@@ -209,7 +209,7 @@
                             <md-icon style="color: #1abc9c;"><i class="material-icons">print</i></md-icon>
                     </md-button>
 
-                    <md-button class="md-fab md-primary" aria-label="Envoyer à votre téléphone">
+                    <md-button class="md-fab md-primary" ng-click="sendListAsSMS($event)" aria-label="Envoyer à votre téléphone">
                       <md-icon style="color: #1abc9c;"><i class="material-icons">send</i></md-icon>
                     </md-button>
 
