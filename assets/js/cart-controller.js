@@ -635,9 +635,9 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 	$rootScope.printCart = function() 
 	{
 		
-		var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+		var mywindow = window.open('', 'PRINT');
 
-		mywindow.document.write('<html><head><title>' + document.title  + '</title>');
+		mywindow.document.write("<html><head><title>OtiPrix - Liste d'épicerie</title>");
 		mywindow.document.write('</head><body >');
 		mywindow.document.write('<h1>' + document.title  + '</h1>');
 		
@@ -657,7 +657,6 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 				if(currentDepartmentStoreID !== -1)
 				{
 					// Close previously opened tag
-					mywindow.document.write("<br>");
 					mywindow.document.write("<br>");
 					mywindow.document.write("</div>");
 				}
