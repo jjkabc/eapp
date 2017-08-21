@@ -573,6 +573,13 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
                     smsText += "\n";
                 }
             }
+		
+			smsText += "TOTAL : $ CAD " + $scope.get_cart_total_price();
+		
+			if(parseFloat($scope.price_optimization) > 0)
+			{
+				smsText += "Vous économiserez environs : $ CAD " +  $scope.price_optimization;
+			}
 
             return smsText;
 	};
