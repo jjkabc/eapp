@@ -114,10 +114,11 @@
 
                         <td md-cell>
                             <p><b><a href="single-product.html">{{item.store_product.product.name}}</a></b></p>
-                            <p ng-show="item.store_product.format">Format : {{item.store_product.format}}</p>
-                            <p ng-show="item.store_product.brand">Marque: {{item.store_product.brand.name}}</p>
-                            <p ng-show="item.store_product.country">Origine : {{item.store_product.country}} <span ng-show="item.store_product.state">, {{item.store_product.state}}</span></p>
-                            <p  ng-show="item.store_product.price > 0"><b><span class="amount">$ CAD {{item.store_product.price | number: 2}}</span> </b></p>
+							<p ng-show="item.store_product.size">{{item.store_product.size}}</p>
+            				<p ng-show="item.store_product.brand">{{item.store_product.brand.name}}</p>
+            				<p>{{item.store_product.format}} {{item.store_product.unit.name}}</p>
+            				<p ng-show="item.store_product.state">Origine : {{item.store_product.state}}</p>
+							<p  ng-show="item.store_product.price > 0"><b><span class="amount">$ CAD {{item.store_product.price | number: 2}}</span> </b><span ng-show="item.store_product.brand"> / {{item.store_product.brand.name}}</span></p>
                         </td>
 
                         <td md-cell>
