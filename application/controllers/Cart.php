@@ -59,6 +59,31 @@ class Cart extends CI_Controller {
         $this->parser->parse('eapp_template', $this->data);
     }
     
+    public function insert_batch() 
+    {
+        $items = json_decode($this->input->post("items"));
+        
+        foreach ($items as $item) 
+        {
+            $store_product = $this->cart_model->get_cheapest_store_product($item->product_id);
+            
+            if($store_product == null)
+            {
+                continue;
+            }
+
+            $data = array
+            (
+                'id'      => $item->product_id,
+                'qty'     => 1,
+                'price'   => $store_product->price,
+                'name'    => 'name_'.$item->product_id
+            );	    
+
+            $this->cart->insert($data);
+        }
+    }
+    
     /**
      * Inserts a well formated item to the cart
      * and returns the rowid of the item inserted
@@ -173,7 +198,9 @@ class Cart extends CI_Controller {
             $store_product = $this->cart_model->get_best_store_product($product->id, $distance, $distance, $this->user, $search_all, $coords);
             $cart_item = new stdClass();
             $cart_item->store_product = $store_product;
+            $cart_item->store_product->product->in_user_grocery_list = $this->inUserList($product->id);
             $cart_item->product = $this->cart_model->get_product($product->id);
+            $cart_item->product->in_user_grocery_list = $this->inUserList($product->id);
             $cart_item->rowid = $product->rowid;
             $cart_item->quantity = $product->quantity;
             

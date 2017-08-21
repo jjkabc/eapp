@@ -105,7 +105,7 @@ $(document).ready(function()
 
             for(var key in rootScope.cart)
             {
-                if(parseFloat(rootScope.cart[key].store_product.price) !== 0)
+                //if(parseFloat(rootScope.cart[key].store_product.price) !== 0)
                 {
                     total++;
                 }
@@ -309,27 +309,74 @@ $(document).ready(function()
 	/* CART END*/
 		
 	/* ACCOUNT */
+        
+        rootScope.selectedProduct = null;
+        rootScope.searchProductText = "";
+        rootScope.myCategories = [];
+        rootScope.maxNumItems = 50;
+        
+        rootScope.addNewProductToList = function()
+        {
+            rootScope.addToMyList(rootScope.selectedProduct);
+        }
 		
         rootScope.addToMyList = function(product)
         {
             product.quantity = 1;
 
-            rootScope.currentProduct = product;
-
-            rootScope.AddProductToList();
+            rootScope.AddProductToList(product);
 
             rootScope.saveMyList();
         };
+        
+        rootScope.AddProductToList = function(product)
+        {
+            if(typeof product !== "undefined" && product !== null &&  rootScope.my_list_count() < rootScope.maxNumItems)
+            {
+                product.quantity = (typeof product.quantity !== "undefined" && product.quantity) ? product.quantity : 1;
+                // get product category id
+                var category = product.category;
+                // Check if category exists
+                var index = rootScope.myCategories.map(function(e) { return e.id; }).indexOf(category.id);
+
+                if(index !== -1)
+                {
+                    // Check if product exists in categories
+                    var product_index = rootScope.myCategories[index].products.map(function(e) { return e.id; }).indexOf(product.id);
+                    if(product_index !== -1)
+                    {
+                        rootScope.myCategories[index].products[product_index].quantity += product.quantity;
+                    }
+                    else
+                    {
+                        if(rootScope.myCategories[index].products === null || typeof rootScope.myCategories[index].products === 'undefined')
+                        {
+                            rootScope.myCategories[index].products = [];
+                        }
+
+                        rootScope.myCategories[index].products.push(product);
+                    }
+                }
+                else
+                {
+                    // create category
+                    category.products = [];
+                    category.products.push(product);
+                    rootScope.myCategories.push(category);
+                }
+            }
+        };
+        
+        
 
         rootScope.removeFromMyList = function(product)
         {
-            rootScope.removeProductFromList(product.id, null);
-            rootScope.saveMyList();
+            rootScope.removeProductFromList(product.id, null, false);
         };
 
         rootScope.favoriteChanged = function(product)
         {
-            if(product.favorite)
+            if(product.in_user_grocery_list)
             {
                 rootScope.addToMyList(product);
             }
@@ -337,6 +384,20 @@ $(document).ready(function()
             {
                 rootScope.removeFromMyList(product);
             }
+        };
+        
+        rootScope.getUserProductList = function()
+        {
+            if(rootScope.loggedUser !== null)
+            {
+                for(var i in rootScope.loggedUser.grocery_list)
+                {
+                    rootScope.AddProductToList(rootScope.loggedUser.grocery_list[i]);
+                }
+            }
+
+            rootScope.currentProduct = null;
+
         };
 		
         rootScope.inMyList = function(product_id)
@@ -354,6 +415,8 @@ $(document).ready(function()
 
             return false;
         };
+        
+        
 		
         rootScope.printCart = function() 
         {
@@ -382,6 +445,38 @@ $(document).ready(function()
             });
 
         };
+        
+        rootScope.my_list_count = function()
+        {
+            var count = 0;
+
+            for(var index in rootScope.myCategories)
+            {
+                count += rootScope.myCategories[index].products.length;
+            }
+
+            return count;
+        };
+	
+    rootScope.flyer_products_count = function()
+    {
+        var count = 0;
+
+        for(var index in rootScope.myCategories)
+        {
+            for(var i in rootScope.myCategories[index].products)
+            {
+                var product = rootScope.myCategories[index].products[i];
+                
+                if(typeof product.store_products !== "undefined" && product.store_products !== null)
+                {
+                    count += product.store_products.length;
+                }
+                
+            }
+        }
+        return count;
+    };
         
 	/*ACCOUNT END*/
         

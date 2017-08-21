@@ -34,7 +34,16 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
         }
         else
         {
-            $scope.update_product_list_by_store();
+            $rootScope.stores = $scope.getListByStore();
+            
+            // Select the first store
+            if($rootScope.stores.length > 0)
+            {
+                $scope.storeTabSelected($rootScope.stores[0]);
+            }
+            
+            $scope.getStoreDrivingDistances();
+            //$scope.update_product_list_by_store();
         }
     };
     
@@ -77,63 +86,232 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
         formData.append("distance", $scope.distance);
         formData.append("longitude", $scope.longitude);
         formData.append("latitude", $scope.latitude);
-		formData.append("searchAll", !$rootScope.searchInMyList.value);
+        formData.append("searchAll", !$rootScope.searchInMyList.value);
         // Send request to server to get optimized list 	
         $scope.promise = 
             $http.post( $scope.site_url.concat("/cart/update_cart_list"), 
             formData, { transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(
             function(response)
             {
-				// Create ordered array list
-				for(var x in response.data)
-				{
-					$rootScope.cart.push(response.data[x]);
-				}
-				$scope.getDrivingDistances();
+                // Create ordered array list
+                for(var x in response.data)
+                {
+                        $rootScope.cart.push(response.data[x]);
+                }
+                $scope.getDrivingDistances();
                 $scope.update_price_optimization();
             });
         
+    };
+    
+    $scope.getListByStore = function()
+    {
+        var stores = [];
+        
+        for(var i in $rootScope.cart)
+        {
+            var item = $rootScope.cart[i].store_product;
+            
+            // each related product represents a store
+            for(var x in item.related_products)
+            {
+                // get a product store product
+                var store_product = item.related_products[x];
+                store_product.related_products = item.related_products;
+                // check if the store for this related product has already been added to the array
+                var index = stores.map(function(e) { return e.id; }).indexOf(store_product.retailer.id); 
+                
+                if(index >= 0)
+                {
+                    var product_index = stores[index].store_products.map(function(e){ return e.product.id; }).indexOf(store_product.product.id);
+                    if(product_index === -1)
+                    {
+                        stores[index].store_products.push(store_product);
+                    }
+                }
+                else
+                {
+                    var retailer = store_product.retailer;
+                    retailer.department_store = store_product.department_store;
+   
+                    stores.push(retailer);
+                    stores[stores.length - 1].store_products = [];
+                    stores[stores.length - 1].store_products.push(store_product);
+                }
+            }
+        }
+        
+        for(var i in $rootScope.cart)
+        {
+            var item = $rootScope.cart[i];
+            
+            for(var x in stores)
+            {
+                
+                                
+                index = stores[x].store_products.map(function(e) { return e.product.id; }).indexOf(item.store_product.product.id); 
+                
+                // The product does not exist in that store
+                if(index === -1)
+                {
+                    if(typeof stores[x].missing_products === 'undefined')
+                    {
+                        stores[x].missing_products = [];
+                    }
+                    
+                    stores[x].missing_products.push(item);
+                }
+            }
+            
+        }
+        
+        
+        return stores;
+    };
+    
+    $scope.storeTabSelected = function(store)
+    {
+        for(var i in $rootScope.cart)
+        {
+            var related_products = $rootScope.cart[i].store_product.related_products;
+            if(typeof related_products !== 'undefined')
+            {
+                $rootScope.cart[i].store_product = related_products[related_products.length - 1];
+                $rootScope.cart[i].store_product.related_products = related_products;
+            }
+            
+            // reset the product price
+            for(var x in store.store_products)
+            {
+                if(parseInt($rootScope.cart[i].store_product.product.id) === parseInt(store.store_products[x].product.id))
+                {
+                    $rootScope.cart[i].store_product = store.store_products[x];
+                }
+            }
+        }
+        
+        $scope.update_price_optimization();
     };
 	
 	// This method computes the distance to each product stores
     $scope.getDrivingDistances = function()
     {
     	// construct ordered list of origins and destinations
-		var origins = [];
-		var destinations = [];
-		var mode = "DRIVING";
+        var origins = [];
+        var destinations = [];
+        var mode = "DRIVING";
 
-		for(var i in $rootScope.cart)
-		{
-			var currentStoreProduct = $rootScope.cart[i].store_product;
-			
-			origins.push(new google.maps.LatLng(parseFloat($scope.loggedUser.profile.latitude), parseFloat($scope.loggedUser.profile.longitude)));
-			destinations.push(new google.maps.LatLng(parseFloat(currentStoreProduct.department_store.latitude), parseFloat(currentStoreProduct.department_store.longitude)));
-			
-			var service = new google.maps.DistanceMatrixService();
-			service.getDistanceMatrix(
-			{
-				origins: origins,
-				destinations: destinations,
-				travelMode: mode,
-				avoidHighways: false,
-				avoidTolls: false
-			}, function(response, status)
-			{
-				$rootScope.$apply(function()
-			  	{
-					for(var x in response.rows)
-					{
-						var distance = parseFloat(response.rows[x].elements[0].distance.value) / 1000;
-						$rootScope.cart[x].store_product.department_store.distance = distance;
-					}
-					$scope.update_travel_distance();
-				});
-				
-			});
-		}
+        for(var i in $rootScope.cart)
+        {
+            var currentStoreProduct = $rootScope.cart[i].store_product;
+            origins.push(new google.maps.LatLng(parseFloat($scope.loggedUser.profile.latitude), parseFloat($scope.loggedUser.profile.longitude)));
+            destinations.push(new google.maps.LatLng(parseFloat(currentStoreProduct.department_store.latitude), parseFloat(currentStoreProduct.department_store.longitude)));
+        }
+
+        var service = new google.maps.DistanceMatrixService();
+        service.getDistanceMatrix(
+        {
+            origins: origins,
+            destinations: destinations,
+            travelMode: mode,
+            avoidHighways: false,
+            avoidTolls: false
+        }, function(response, status)
+        {
+            if(response === null || typeof response === "undefined")
+            {
+                return;
+            }
+
+            $rootScope.$apply(function()
+            {
+                for(var x in response.rows)
+                {
+                    var distance = 0;
+                    var time = 0;
+                    if(typeof response.rows[x].elements[0].status !== 'undefined' && response.rows[x].elements[0].status === "ZERO_RESULTS")
+                    {
+                        $rootScope.cart[x].store_product.department_store.time = time;
+                        $rootScope.cart[x].store_product.department_store.distance = distance;
+                        continue;
+                    }
+                    else
+                    {
+                        distance = parseFloat(response.rows[x].elements[0].distance.value) / 1000;
+                        time = parseFloat(response.rows[x].elements[0].duration.value) / 60;
+                    }
+
+                    $rootScope.cart[x].store_product.department_store.time = time;
+                    $rootScope.cart[x].store_product.department_store.distance = distance;
+                }
+
+                $scope.update_travel_distance();
+            });
+
+        });
 	  
-    }
+    };
+    
+    $scope.getStoreDrivingDistances = function()
+    {
+    	// construct ordered list of origins and destinations
+        var origins = [];
+        var destinations = [];
+        var mode = "DRIVING";
+
+        for(var i in $rootScope.stores)
+        {
+            var department_store = $rootScope.stores[i].department_store;
+            origins.push(new google.maps.LatLng(parseFloat($scope.loggedUser.profile.latitude), parseFloat($scope.loggedUser.profile.longitude)));
+            destinations.push(new google.maps.LatLng(parseFloat(department_store.latitude), parseFloat(department_store.longitude)));
+
+                
+        }
+        
+        var service = new google.maps.DistanceMatrixService();
+        service.getDistanceMatrix(
+        {
+                origins: origins,
+                destinations: destinations,
+                travelMode: mode,
+                avoidHighways: false,
+                avoidTolls: false
+        }, function(response, status)
+        {
+            if(response === null || typeof response === "undefined")
+            {
+                return;
+            }
+
+            $rootScope.$apply(function()
+            {
+                for(var x in response.rows)
+                {
+                    var distance = 0;
+                    var time = 0;
+                    if(typeof response.rows[x].elements[0].status !== 'undefined' && response.rows[x].elements[0].status === "ZERO_RESULTS")
+                    {
+                        $rootScope.stores[x].department_store.distance = distance;
+                        $rootScope.stores[x].department_store.time = time;
+                        continue;
+                    }
+                    else
+                    {
+                        distance = parseFloat(response.rows[x].elements[0].distance.value) / 1000;
+                        time = parseFloat(response.rows[x].elements[0].duration.value) / 60;
+                    }
+                    
+                    $rootScope.stores[x].department_store.distance = distance;
+                    $rootScope.stores[x].department_store.time = time;
+
+                    
+                }
+                $scope.update_travel_distance();
+            });
+
+        });
+	  
+    };
     
     $scope.storeChanged = function(currentStoreProduct)
     {
@@ -183,7 +361,7 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
             {
                 var cart_item = $scope.cart[key];
 
-                if(typeof cart_item.store_product.worst_product === "undefined")
+                if(typeof cart_item.store_product.worst_product === "undefined" || cart_item.store_product.worst_product === null)
                 {
                     continue;
                 }
@@ -287,7 +465,7 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
         {
             var product = $rootScope.cart[key];
             
-            if(typeof product.store_product.department_store !== 'undefined' && $.inArray(product.store_product.department_store.id, stores) == -1)
+            if(typeof product.store_product.department_store !== 'undefined' && $.inArray(product.store_product.department_store.id, stores) === -1)
             {
                 stores.push(product.store_product.department_store.id);
                 traval_distance += parseInt(product.store_product.department_store.distance);
@@ -295,6 +473,23 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
         }
         
         $rootScope.travel_distance = traval_distance;
+    };
+    
+    $rootScope.clearCart = function($event)
+    {
+        var confirmDialog = $rootScope.createConfirmDIalog($event, "Cela effacera tous les contenus de votre panier.");
+        
+        $mdDialog.show(confirmDialog).then(function() 
+        {
+            $http.post($rootScope.site_url.concat("/cart/destroy"), null).then(function(response)
+            {
+                $rootScope.cart = [];
+                $rootScope.stores = [];
+            });
+
+        });
+        
+        
     };
      
     $rootScope.relatedProductsAvailable = function()

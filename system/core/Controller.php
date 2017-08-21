@@ -79,7 +79,7 @@ class CI_Controller {
 	public function __construct()
 	{
             self::$instance =& $this;
-
+            
             // Assign all the class objects that were instantiated by the
             // bootstrap file (CodeIgniter.php) to local class variables
             // so that CI can run as one big super object.
@@ -123,6 +123,9 @@ class CI_Controller {
             {
                 header('Location: '.  site_url('/account/page_under_construction'));
             }
+            $this->sid = $this->config->item("sid");
+            
+            $this->token = $this->config->item("token");
 	}
         
         
@@ -159,7 +162,7 @@ class CI_Controller {
                 }
 
                 $cart_item['store_product'] = $store_product;
-                $cart_item['product'] = $store_product->product;
+                $cart_item['product'] = isset($store_product->product) ? $store_product->product : $this->cart_model->get_product($product_id);
                 $cart_item['rowid'] = $rowid;
                 $cart_item['quantity'] = 1;
 
@@ -200,6 +203,18 @@ class CI_Controller {
                  $this->user = $this->account_model->get_user($this->session->userdata('userId'));
              }
 	    
+        }
+        
+        public function inUserList($product_id) 
+        {
+            foreach ($this->user->grocery_list as $product) 
+            {
+                if($product_id == $product->id)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
         
         public function send_verification_code($phone_number)

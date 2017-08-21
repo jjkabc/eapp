@@ -182,13 +182,9 @@ eappApp.controller('HomeController', ["$scope", function($scope)
   
 }]);
 
-eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$rootScope", function($scope, $http, $mdToast, $q, $rootScope) 
+eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$rootScope", "$mdDialog", function($scope, $http, $mdToast, $q, $rootScope, $mdDialog) 
 {
-    $rootScope.currentProduct = null;
-    $scope.searchProductText = "";
-    $scope.myCategories = [];
-    $scope.maxNumItems = 50;
-	
+    
     $scope.querySearch = function(searchProductText)
     {
     	var q = $q.defer();
@@ -210,29 +206,14 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
         return q.promise;
     };
 	
-    $scope.product_selected = function(item)
+    $rootScope.product_selected = function(item)
     {
         if(typeof item === 'undefined')
         	return;
             
-        $scope.currentProduct = item;
+        $rootScope.selectedProduct = item;
     };
     
-    $scope.getUserProductList = function()
-    {
-        if($scope.loggedUser !== null)
-        {
-            for(var i in $scope.loggedUser.grocery_list)
-            {
-                $scope.currentProduct = $scope.loggedUser.grocery_list[i];
-                $scope.AddProductToList();
-            }
-        }
-        
-        $scope.currentProduct = null;
-        
-    };
-	
     $scope.getUserListStorePrices = function()
     {
         var stores = [];
@@ -280,92 +261,6 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
         return stores;
     };
 	
-    $rootScope.AddProductToList = function()
-    {
-        if($scope.currentProduct != null &&  $scope.my_list_count() < $scope.maxNumItems)
-        {
-            var product = $scope.currentProduct;
-            product.quantity = ($scope.currentProduct.quantity && typeof $scope.currentProduct.quantity !== "undefined") ? $scope.currentProduct.quantity : 1;
-            // get product category id
-            var category = $scope.currentProduct.category;
-            // Check if category exists
-            var index = $scope.myCategories.map(function(e) { return e.id; }).indexOf(category.id);
-
-            if(index !== -1)
-            {
-                // Check if product exists in categories
-                var product_index = $scope.myCategories[index].products.map(function(e) { return e.id; }).indexOf($scope.currentProduct.id);
-                if(product_index !== -1)
-                {
-                    $scope.myCategories[index].products[product_index].quantity += $scope.currentProduct.quantity;
-                }
-                else
-                {
-                    if($scope.myCategories[index].products === null || typeof $scope.myCategories[index].products === 'undefined')
-                    {
-                        $scope.myCategories[index].products = [];
-                    }
-
-                    $scope.myCategories[index].products.push(product);
-                }
-            }
-            else
-            {
-                // create category
-                category.products = [];
-                category.products.push(product);
-                $scope.myCategories.push(category);
-            }
-        }
-    };
-    
-    $rootScope.removeProductFromList = function(product_id, $event)
-    {
-        for(var index in $scope.myCategories)
-        {
-            var pos = $scope.myCategories[index].products.map(function(e) { return e.id; }).indexOf(product_id);
-            if(pos > -1)
-            {
-                $scope.myCategories[index].products.splice(pos, 1);
-                
-                if($scope.myCategories[index].products.length === 0)
-                {
-                    $scope.myCategories.splice(index, 1);
-                }
-                
-                break;
-            }
-        }
-    };
-    
-    $scope.my_list_count = function()
-    {
-        var count = 0;
-        
-        for(var index in $scope.myCategories)
-        {
-            count += $scope.myCategories[index].products.length;
-        }
-        
-        return count;
-    };
-	
-    $scope.flyer_products_count = function()
-    {
-        var count = 0;
-
-        for(var index in $scope.myCategories)
-        {
-            for(var i in $scope.myCategories[index].products)
-            {
-                    count += $scope.myCategories[index].products[i].store_products.length;
-            }
-        }
-        return count;
-    };
-	
-    
-    
     $scope.flyers_count = function()
     {
         var count = 0;
@@ -405,6 +300,106 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
         return result;
     };
     
+    $rootScope.createConfirmDIalog = function(ev, contentText) 
+    {
+        // Appending dialog to document.body to cover sidenav in docs app
+        var confirm = $mdDialog.confirm()
+              .title('Êtes-vous sûr?')
+              .textContent(contentText)
+              .ariaLabel('Êtes-vous sûr?')
+              .targetEvent(ev)
+              .ok('Oui')
+              .cancel('Non');
+      
+        return confirm;
+
+        
+    };
+    
+    $rootScope.optimizeMyList = function($event)
+    {
+        var confirmDialog = $rootScope.createConfirmDIalog($event, "Cela effacera tous les contenus de votre panier.");
+        
+        $mdDialog.show(confirmDialog).then(function() 
+        {
+            $http.post($rootScope.site_url.concat("/cart/destroy"), null).then(function(response)
+            {
+                $rootScope.cart = [];
+                var items = [];
+                
+                // add cart contents from my list
+                for(var index in $rootScope.myCategories)
+                {
+                    for(var i in $rootScope.myCategories[index].products)
+                    {
+                        var product = $rootScope.myCategories[index].products[i];
+                        
+                        var item = 
+                        {
+                            product_id : product.id
+                        };
+                        
+                        items.push(item);
+                    }
+                }
+                
+                var formData = new FormData();
+                formData.append("items", JSON.stringify(items));
+
+                $http.post($rootScope.site_url.concat("/cart/insert_batch"), 
+                formData, { transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(function(response)
+                {
+                    window.location = $rootScope.site_url.concat("/cart");
+                });
+            });
+
+        });
+        
+        
+    };
+    
+    $rootScope.removeProductFromList = function(product_id, $event, showDialog)
+    {
+        var confirmDialog = $rootScope.createConfirmDIalog ($event, "Ce produit sera supprimé de votre liste.");
+        
+        if(showDialog)
+        {
+            $mdDialog.show(confirmDialog).then(function() 
+            {
+                $rootScope.removeFromList(product_id);
+                $rootScope.saveMyList();
+                
+            }, function() 
+            {
+                
+            });
+        }
+        else
+        {
+            $rootScope.removeFromList(product_id);
+            $rootScope.saveMyList();
+        }
+    };
+    
+    $rootScope.removeFromList = function(product_id)
+    {
+        for(var index in $rootScope.myCategories)
+        {
+            var pos = $rootScope.myCategories[index].products.map(function(e) { return e.id; }).indexOf(product_id);
+            if(pos > -1)
+            {
+                $rootScope.myCategories[index].products.splice(pos, 1);
+
+                if($rootScope.myCategories[index].products.length === 0)
+                {
+                    $rootScope.myCategories.splice(index, 1);
+                }
+
+                break;
+            }
+        }
+    };
+  
     $rootScope.saveMyList = function()
     {
         var formData = new FormData();
@@ -414,11 +409,7 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
         formData, { transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(
         function(response)
         {
-            if(response.data.success)
-            {
-                $scope.showSimpleToast("Votre liste a été enregistrée.", "mainmenu-area");  
-            }
-            else
+            if(!response.data.success)
             {
                 $scope.showSimpleToast("une erreur inattendue est apparue. Veuillez réessayer plus tard.", "mainmenu-area");
             }

@@ -7,6 +7,7 @@
         
         scope.$apply(function()
         {
+            scope.getUserProductList();
             scope.optimization_preference_changed();
         });
     })
@@ -27,21 +28,21 @@
 <md-content id="cart-container" class="admin-container" ng-controller="CartController">
     
     <div>
-        <md-content class="eapp-container">
+        <md-content class="eapp-container md-whiteframe-3dp">
             <fieldset>
-                <legend>Optimizations</legend>
-                <md-radio-group ng-model="viewing_cart_optimization.value" ng-change="optimization_preference_changed()">
-                    <md-radio-button ng-value="true_value">Optimisation du panier</md-radio-button>
-                    <md-radio-button ng-value="false_value">Optimisation par magasin</md-radio-button>
+                <md-subheader class="md-primary">Configurez votre optimization du panier</md-subheader>
+                <md-radio-group class="col-md-6 col-sm-12" ng-model="viewing_cart_optimization.value" ng-change="optimization_preference_changed()">
+                    <md-radio-button ng-value="true_value">Vue du panier</md-radio-button>
+                    <md-radio-button ng-value="false_value">Vue par magasin</md-radio-button>
                 </md-radio-group>
-
-                <h4 class="search-preference">Rechercher dans ...</h4>
-                <md-radio-group ng-model="searchInMyList.value" ng-change="optimization_preference_changed()">
-                    <md-radio-button ng-value="true_value" ng-disabled="!isUserLogged">Votre liste prefere</md-radio-button>
-                    <md-radio-button ng-value="false_value">Tout les magasins</md-radio-button>
-                </md-radio-group>
+                <div  class="col-md-6 col-sm-12">
+                    <md-radio-group ng-model="searchInMyList.value" ng-change="optimization_preference_changed()">
+                        <md-radio-button ng-value="true_value" ng-disabled="!isUserLogged">Rechercher dans votre liste de magasins</md-radio-button>
+                        <md-radio-button ng-value="false_value">Rechercher dans tout les magasins</md-radio-button>
+                    </md-radio-group>
+                </div>
                 
-                <div layout>
+                <div layout class="col-sm-12">
                     <div flex="15" layout layout-align="center center">
                       <span class="md-body-1">Distance : {{distance}} Km</span>
                     </div>
@@ -69,7 +70,7 @@
                         <th md-column md-numeric>Quantité</th>
                         <th md-column md-numeric>Total ($ CAD)</th>
                         <th md-column  ng-show="isUserLogged"><i class="fa fa-heart"></i></th>
-                        <th md-column>Coupon</th>
+                        <th md-column ng-hide="true">Coupon</th>
                     </tr>
                 </thead>
                     <tbody>
@@ -83,7 +84,7 @@
                             <div>
                                 <a href><img alt="item.store_product.product.name" class="admin-image" ng-src="{{base_url}}/assets/img/stores/{{item.store_product.retailer.image}}" ></a>
                             </div>
-                            <div class="center center" ng-show="item.store_product.related_products">
+                            <div class="center center" ng-show="item.store_product.related_products && item.store_product.related_products.length > 0">
                                 <md-input-container class="col-sm-12 md-primary">
                                     <label>Changer Marchand</label>
                                     <md-select ng-model="currentStoreProduct" placeholder="Marchands"  ng-init="currentStoreProduct = item.store_product.related_products[0]" ng-change="storeChanged(currentStoreProduct)">
@@ -99,8 +100,11 @@
                                 <p>{{item.store_product.department_store.city}}, {{item.store_product.department_store.state}} , {{item.store_product.department_store.postcode }}</p>
                                 <p> < {{item.store_product.department_store.distance}} Km en voiture</p>
                             </div>
-                            <div ng-show="item.store_product.department_store.distance == 0">
+                            <div ng-show="item.store_product.department_store.distance == 0 && item.store_product.price > 0">
                                 <p style="color : #F64747;">Le produit n'est pas disponible près de chez vous.</p>
+                            </div>
+                            <div ng-show="item.store_product.price == 0">
+                                <p style="color : #F64747;">Ce produit n'est pas encore disponible..</p>
                             </div>
                         </td>
 
@@ -110,10 +114,10 @@
 
                         <td md-cell>
                             <p><b><a href="single-product.html">{{item.store_product.product.name}}</a></b></p>
-                            <p>Format : {{item.store_product.format}}</p>
+                            <p ng-show="item.store_product.format">Format : {{item.store_product.format}}</p>
                             <p ng-show="item.store_product.brand">Marque: {{item.store_product.brand.name}}</p>
                             <p ng-show="item.store_product.country">Origine : {{item.store_product.country}} <span ng-show="item.store_product.state">, {{item.store_product.state}}</span></p>
-                            <p><b><span class="amount">$ CAD {{item.store_product.price | number: 2}}</span> </b></p>
+                            <p  ng-show="item.store_product.price > 0"><b><span class="amount">$ CAD {{item.store_product.price | number: 2}}</span> </b></p>
                         </td>
 
                         <td md-cell>
@@ -123,15 +127,15 @@
                         </td>
 
                         <td md-cell>
-                            <span class="amount">CAD {{item.store_product.price * item.quantity | number : 2}} </span> 
+                            <span class="amount">$ CAD {{item.store_product.price * item.quantity | number : 2}} </span> 
                         </td>
 
                         <td md-cell ng-show="isUserLogged">
-                            <md-checkbox ng-model="item.store_product.product.favorite" aria-label="Add to my list" ng-checked="inMyList(item.store_product.product.id)" ng-change="favoriteChanged(item.store_product.product)">
+                        <md-checkbox ng-model="item.store_product.product.in_user_grocery_list" aria-label="Add to my list" ng-init="item.store_product.product.in_user_grocery_list" ng-checked="item.store_product.product.in_user_grocery_list" ng-change="favoriteChanged(item.store_product.product)">
                             </md-checkbox>
                         </td>
 
-                        <td md-cell>
+                        <td md-cell ng-hide="true">
                             <md-checkbox ng-model="item.apply_coupon" aria-label="Apply coupon">
                             </md-checkbox> 
                         </td>
@@ -142,72 +146,37 @@
         </md-content>
     </div>
 
-    <div id="store-optimization-container" class="eapp-container" ng-hide="viewing_cart_optimization.value">
-        <!-- Store Optimizations -->
-        <md-content layout-padding ng-hide="close_stores.length == 0 && !loading_store_products">
-            <table class="table table-condensed" style="table-layout: fixed;">
-                <md-progress-linear md-mode="indeterminate" ng-disabled="!loading_store_products"></md-progress-linear>
-                <thead>
-                    <tr>
-                        <th><p>Commerçant</p></th>
-                        <th ng-repeat="store in close_stores">
-                            <p>{{store.store.chain.name}}</p>
-                        </th>
-                    </tr>
-                    <tr id="header-stores">
-                        <th></th>
-                        <th ng-repeat="store in close_stores">
-                            <img class="admin-image" ng-src="{{base_url}}/assets/img/stores/{{store.store.chain.image}}" />
-                        </th>
-                    </tr>
-                    <tr>
-                        <th><p>Addresse</p></th>
-                        <th ng-repeat="store in close_stores">
-                            <p>{{store.store.address}}</p>
-                        </th>
-                    </tr>
-                    <tr>
-                        <th><p>Distance</p></th>
-                        <th ng-repeat="store in close_stores">
-                            <p> > {{store.distance}} Km en voiture</p>
-                        </th>
-                    </tr>
-
-                </thead>
-                <tbody id="store-cart-tbody">
-                    <tr ng-repeat="product in cart">
-                        <td>
-                            <img class="admin-image" ng-src="{{base_url}}/assets/img/products/{{product.store_product.product.image}}" />
-                            <p style="width : auto;">{{product.product.name}}</p>
-                            <md-input-container class='col-sm-6'>
-                                <label>Quantity</label>
-                                <input aria-label="Qty" type="number" ng-model="product.quantity">
-                            </md-input-container>
-                        </td>
-                        <td ng-repeat="store_product in product.store_products">{{get_price_label(store_product, product)}}</td>
-                    </tr>
-                    <tr>
-                        <td class="store-total-caption"><b>Total</b></td>
-                        <td class="store-total-value" ng-repeat="store in close_stores">$ CAD {{get_store_total($index) | number : 2}} </td>
-                    </tr>
-                    <tr>
-                        <td class="store-total-caption"><b>Total d'items</b></td>
-                        <td class="store-total-value" ng-repeat="store in close_stores"><b>{{store.num_items}}</b></td>
-                    </tr>
-                    <tr>
-                        <td class="store-total-caption"><b>Sélectionner</b></td>
-                        <td class="store-total-checkbox" ng-repeat="store in close_stores">
-                            <md-checkbox ng-model="store.selected" ng-change="store_selected($index)"  aria-label="Select Store">
-                            </md-checkbox>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+    <div class="container" ng-cloak ng-hide="viewing_cart_optimization.value">
+        <md-content>
+          
+            <md-tabs md-dynamic-height md-border-bottom>
+              
+                <md-tab label="{{store.name}} ({{store.store_products.length}} / {{cart.length}})" ng-repeat="store in stores" md-on-select="storeTabSelected(store)">
+                  <md-content class="md-padding">
+                      <md-subheader class="md-primary">{{store.department_store.address}}, {{store.department_store.city}}, {{store.department_store.state}}, {{store.department_store.postcode}}, {{store.department_store.distance}} Km en voiture</md-subheader>
+                      <md-list-item ng-repeat="product in store.store_products" class="noright">
+                          <img alt="{{ product.name }}" ng-src="{{base_url}}/assets/img/products/{{ product.product.image }}" class="md-avatar" />
+                          <p>{{ product.product.name }}, <span ng-show="product.brand">, Marque : {{product.brand.name}}</span> <span ng-show="product.format">, Format : {{product.format}}</span> </p>
+                          <md-input-container class="md-secondary">
+                              <p><b>$ CAD {{product.price}} <span ng-show="product.unit"> / {{product.unit.name}}</span></b></p>
+                          </md-input-container>
+                      </md-list-item>
+                      
+                      <md-subheader class="md-warn">Produits indisponibles</md-subheader>
+                      <md-list-item ng-repeat="item in store.missing_products" class="noright">
+                          <img alt="{{ item.store_product.product.name }}" ng-src="{{base_url}}/assets/img/products/{{ item.store_product.product.image }}" class="md-avatar" />
+                          
+                          <p>{{ item.store_product.product.name }}, <span ng-show="item.store_product.brand">, Marque : {{item.store_product.brand.name}}</span> <span ng-show="item.store_product.format">, Format : {{item.store_product.format}}</span> </p>
+                          <img  alt="{{ product.name }}" ng-src="{{base_url}}/assets/img/stores/{{item.store_product.retailer.image }}" class="md-secondary md-avatar" />
+                          <md-input-container class="md-secondary">
+                              <p><b>$ CAD {{item.store_product.price}} <span ng-show="item.store_product.unit"> / {{item.store_product.unit.name}}</span></b></p>
+                          </md-input-container>
+                          
+                      </md-list-item>
+                  </md-content>
+              </md-tab>
+            </md-tabs>
         </md-content>
-		
-		<md-content layout-padding ng-show="close_stores.length == 0 && !loading_store_products">
-			<p>Aucun résultat trouvé pour la liste des produits.</p>
-		</md-content>
     </div>
 
     <div>
@@ -220,46 +189,39 @@
                     <tbody>
                         <tr class="cart-subtotal">
                             <th>Total du panier</th>
-                            <td><span class="amount">CAD {{get_cart_total_price() | number : 2}}</span></td>
+                            <td><span class="amount md-warn"><b>$ CAD {{get_cart_total_price() | number : 2}}</b></span></td>
                         </tr>
-
-                        <tr class="optimized-distance">
-                            <th>Distance de voyage</th>
-                            <td><span class="amount"> < {{travel_distance}} Km</span></td>
-                        </tr>
-						
-						<tr class="optimized-distance" ng-show="distance_optimization > 0">
-                            <th>Distance de voyage optimisé</th>
-                            <td><span class="amount"> < {{distance_optimization }} Km</span></td>
-                        </tr>
-						
-						<tr class="optimized-distance" ng-show="price_optimization > 0">
+			
+                        <tr class="optimized-distance" ng-show="price_optimization > 0">
                             <th>Montant épargné</th>
-                            <td><span class="amount"> < $ CAD {{price_optimization}} </span></td>
+                            <td><span class="amount"><b style="color : red"><b> $ CAD {{price_optimization | number : 2}} </b></span></td>
                         </tr>
 
                     </tbody>
                 </table>
 				
-				<section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
-					
-					<md-button class="md-fab md-primary" aria-label="Impression" ng-click="printCart()">
-						<md-icon style="color: #1abc9c;"><i class="material-icons">print</i></md-icon>
-					</md-button>
+                <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
 
-					<md-button class="md-fab md-primary" aria-label="Envoyer à votre téléphone">
-					  <md-icon style="color: #1abc9c;"><i class="material-icons">send</i></md-icon>
-					</md-button>
+                    <md-button class="md-fab md-warn"  ng-click="clearCart()" aria-label="Effacer votre panier">
+                        <md-icon><i class="material-icons">clear_all</i></md-icon>
+                    </md-button>
+                    <md-button class="md-fab md-primary" aria-label="Impression" ng-click="printCart()">
+                            <md-icon style="color: #1abc9c;"><i class="material-icons">print</i></md-icon>
+                    </md-button>
 
-					<md-button class="md-fab md-primary" aria-label="Partager">
-						<md-icon style="color: #1abc9c;"><i class="material-icons">share</i></md-icon>
-					</md-button>
+                    <md-button class="md-fab md-primary" aria-label="Envoyer à votre téléphone">
+                      <md-icon style="color: #1abc9c;"><i class="material-icons">send</i></md-icon>
+                    </md-button>
 
-					<md-button class="md-fab md-primary" aria-label="Envoyer à votre courrier électronique">
-						<md-icon style="color: #1abc9c;"><i class="material-icons">email</i></md-icon>
-					</md-button>
+                    <md-button class="md-fab md-primary" aria-label="Partager">
+                            <md-icon style="color: #1abc9c;"><i class="material-icons">share</i></md-icon>
+                    </md-button>
 
-				</section>
+                    <md-button class="md-fab md-primary" aria-label="Envoyer à votre courrier électronique">
+                            <md-icon style="color: #1abc9c;"><i class="material-icons">email</i></md-icon>
+                    </md-button>
+
+                </section>
 				
             </div>
         </div>

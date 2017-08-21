@@ -27,7 +27,7 @@
                 </md-autocomplete>
             
             
-            <md-button ng-click="AddProductToList()" class="md-fab md-mini md-primary" style="background-color : #1abc9c;" aria-label="" ng-click="removeProduct(product.id, $event)">
+            <md-button ng-click="addNewProductToList()" class="md-fab md-mini md-primary" style="background-color : #1abc9c;" aria-label="Ajouter">
                 <md-icon md-svg-src="{{icons.add | trustUrl}}"></md-icon>
             </md-button>
         </div>
@@ -46,7 +46,7 @@
                         <md-input-container class="md-secondary">
                             <input style="width: 40px;" aria-label="Qty" type="number" ng-model="product.quantity">
                         </md-input-container>
-                        <md-button class="md-fab md-mini md-secondary" aria-label="" ng-click="removeProductFromList(product.id, $event)">
+                        <md-button class="md-fab md-mini md-secondary" aria-label="Supprimer" ng-click="removeProductFromList(product.id, $event, true)">
                             <md-icon md-svg-src="{{icons.delete | trustUrl}}"></md-icon>
                         </md-button>
                     </md-list-item>
@@ -72,10 +72,9 @@
         
         <div class="row actions-section">
             <div class="col-sm-6">
-                <md-button ng-click="OptimizeMyList()" class="md-raised md-primary" style="background-color : #1abc9c;">Optimiser ma liste</md-button>
+                <md-button ng-click="optimizeMyList()" class="md-raised md-primary" style="background-color : #1abc9c;">Optimiser ma liste</md-button>
             </div>
             <div class="col-sm-6">
-                <md-button ng-click="saveMyList()" class="md-raised md-primary pull-right">Sauver ma liste</md-button>
                 <md-button ng-click="clearMyList()" class="md-raised md-warn pull-right">Effacer ma liste</md-button>
             </div>
         </div>

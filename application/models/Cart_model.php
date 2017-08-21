@@ -244,13 +244,16 @@ class Cart_model extends CI_Model
         $this->db->order_by("price", "ASC");
         $query = $this->db->get_compiled_select(STORE_PRODUCT_TABLE);
         $store_product = $this->db->query($query)->row();
+        $cheapest_store_product = null;
+        if($store_product != null)
+        {
+            $cheapest_store_product = $this->getStoreProduct($store_product->id, false, $latest, true);
+        }
 		        
-        $cheapest_store_product = $this->getStoreProduct($store_product->id, false, $latest, true);
-        
         if($cheapest_store_product == null)
         {
             $cheapest_store_product = $this->create_empty_store_product();
-            //$cheapest_store_product->product = $this->get_product($product_id);
+            $cheapest_store_product->product = $this->get_product($product_id);
         }
         $cheapest_store_product->department_store = new stdClass();
         $cheapest_store_product->department_store->name = "Le magasin n'est pas disponible près de chez vous.";
