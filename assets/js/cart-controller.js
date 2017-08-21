@@ -526,7 +526,7 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 	$rootScope.getListAsText = function()
 	{
 		var currentDepartmentStoreID = -1;
-		var smsText = "";
+		var smsText = "Votre liste d'épicerie fourni par OtiPrix \n";
 		for(var x in $rootScope.cart)
 		{
 			var storeProduct = $rootScope.cart[x].store_product;
