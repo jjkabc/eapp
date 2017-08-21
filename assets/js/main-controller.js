@@ -277,7 +277,19 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
     
     $scope.clearMyList = function()
     {
-        $scope.myCategories = [];
+		var confirmDialog = $rootScope.createConfirmDIalog($event, "Cela effacera tous les contenus de votre liste d'épicerie.");
+		
+		$mdDialog.show(confirmDialog).then(function() 
+        {
+            $http.post($rootScope.site_url.concat("/cart/destroy"), null).then(function(response)
+            {
+                $rootScope.myCategories = [];
+				$rootScope.saveMyList();
+				
+            });
+
+        });
+        
     };
     
     $scope.getProductList = function()
