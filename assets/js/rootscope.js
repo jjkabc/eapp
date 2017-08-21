@@ -416,36 +416,6 @@ $(document).ready(function()
             return false;
         };
         
-        
-		
-        rootScope.printCart = function() 
-        {
-            html2canvas($("#cart-container"), 
-            {
-                onrendered: function(canvas) 
-                {
-                        // Convert and download as image 
-                        Canvas2Image.saveAsPNG(canvas); 
-                        document.body.appendChild();
-
-                        var content = canvas.innerHTML;
-                        var mywindow = window.open('', 'Print');
-
-                        mywindow.document.write('<html><head><title>Print</title>');
-                        mywindow.document.write('</head><body >');
-                        mywindow.document.write(content);
-                        mywindow.document.write('</body></html>');
-
-                        mywindow.document.close();
-                        mywindow.focus();
-                        mywindow.print();
-                        mywindow.close();
-                        return true;
-                }
-            });
-
-        };
-        
         rootScope.my_list_count = function()
         {
             var count = 0;
