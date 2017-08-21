@@ -357,6 +357,7 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
                     $rootScope.$apply(function()
                     {
                         $rootScope.cart[i].store_product = currentStoreProduct;
+						$rootScope.sortCart();
                         $scope.update_price_optimization();
                     });
                     
@@ -601,6 +602,15 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 		);
   	};
 	
+	$rootScope.sortCart = function()
+	{
+		$rootScope.cart.sort(function(a, b){
+			var keyA = a.store_product.retailer.name.toString(),
+				keyB = b..store_product.retailer.name.toString();
+			return keyA.localeCompare(keyB);
+		});
+	};
+	
 	$rootScope.sendListAsSMS = function($event)
 	{
             if(!$rootScope.isUserLogged)
@@ -617,6 +627,8 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
             {
                     $scope.showAlert($event, "Panier vide", "Votre panier est actuellement vide. Ajoutez des éléments au panier avant d'utiliser cette fonctionnalité.");
             }
+		
+			$rootScope.sortCart();
 
             var formData = new FormData();
             formData.append("sms", $rootScope.getListAsText());
@@ -635,6 +647,17 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 	$rootScope.printCart = function() 
 	{
 		
+		if(!$rootScope.isUserLogged)
+		{
+				return;
+		}
+
+		if($rootScope.cart.length === 0)
+		{
+				$scope.showAlert($event, "Panier vide", "Votre panier est actuellement vide. Ajoutez des éléments au panier avant d'utiliser cette fonctionnalité.");
+		}
+		
+		$rootScope.sortCart();
 		var mywindow = window.open('', 'PRINT', 'height=400,width=600');
 
 		mywindow.document.write('<html><head><title>' + document.title  + '</title>');
