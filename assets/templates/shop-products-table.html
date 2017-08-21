@@ -52,7 +52,7 @@
         <td md-cell><div class="admin-image"><a href=""><img alt="" ng-src="{{base_url}}assets/img/products/{{product.product.image}}"></a></div></td>
         <td md-cell>
             <p><b>{{product.product.name}}</b></p>
-            <p ng-show="product.size">{{product.size}}</p>
+            <p ng-show="product.size"><a  href="single-product.html">{{product.size}}</a></p>
             <p ng-show="product.brand">{{product.brand.name}}</p>
             <p>{{product.format}} {{product.unit.name}}</p>
             <p ng-show="product.state">Origine : {{product.state}}</p>
