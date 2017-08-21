@@ -338,12 +338,26 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
                     avoidTolls: false
                 }, function(response, status)
                 {
-                    var distance = parseFloat(response.rows[0].elements[0].distance.value) / 1000;
+                    
+                    var distance = 0;
+                    var time = 0;
+                    if(typeof response.rows[0].elements[0].status !== 'undefined' && response.rows[0].elements[0].status === "ZERO_RESULTS")
+                    {
+                        distance = 0;
+                        time = 0;
+                    }
+                    else
+                    {
+                        distance = parseFloat(response.rows[0].elements[0].distance.value) / 1000;
+                        time = parseFloat(response.rows[0].elements[0].duration.value) / 60;
+                    }
+                    
                     currentStoreProduct.department_store.distance = distance;
+                    currentStoreProduct.department_store.time = time;
                     $rootScope.$apply(function()
                     {
                         $rootScope.cart[i].store_product = currentStoreProduct;
-                        $scope.update_distance_price_optimization();
+                        $scope.update_price_optimization();
                     });
                     
                 });
