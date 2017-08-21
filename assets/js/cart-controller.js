@@ -718,6 +718,15 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 			mywindow.document.write("</ol>");
 		}
 		
+		mywindow.document.write("<br>");
+		mywindow.document.write("<br>");
+		mywindow.document.write("<p><b>Totale : $ CAD" + $rootScope.get_cart_total_price() + "</b></p>");
+		
+		if($rootScope.price_optimization > 0)
+		{
+			mywindow.document.write("<p><b>Vous économiserez environs : $ CAD  : " + $rootScope.price_optimization + "</b></p>");
+		}
+		
 		mywindow.document.write('</body></html>');
 
 		mywindow.document.close(); // necessary for IE >= 10
