@@ -235,10 +235,10 @@ class Cart extends CI_Controller {
         }
     }
 	
-	public function send_sms()
-	{
-		$this->send_sms($this->input->post("sms"));
-	}
+    public function send_sms()
+    {
+            $this->send_twilio_sms($this->input->post("sms"));
+    }
 	
     public function optimize_product_list_by_store()
     {

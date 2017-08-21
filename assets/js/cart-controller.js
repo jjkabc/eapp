@@ -539,23 +539,34 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 	
 	$rootScope.getListAsText = function()
 	{
-		var currentDepartmentStoreID = -1;
-		var smsText = "Votre liste d'épicerie fourni par OtiPrix \n";
-		for(var x in $rootScope.cart)
-		{
-			var storeProduct = $rootScope.cart[x].store_product;
-			
-			if(currentDepartmentStoreID !== parseInt(storeProduct.department_store.id))
-			{
-				currentDepartmentStoreID = parseInt(storeProduct.department_store.id);
-				
-				smsText += storeProduct.retailer.name + " - " +  storeProduct.department_store.address + ", " + storeProduct.department_store.state + ", " + storeProduct.department_store.city + "," + storeProduct.department_store.postcode;
-				smsText += "\n";
-			}
-			
-			smsText += storeProduct.product.name + ": " + storeProduct.price + "/" + storeProduct.unit.name + "\n";
-		}
-	}
+            var currentDepartmentStoreID = -1;
+            var smsText = "Votre liste d'épicerie fourni par OtiPrix \n";
+            for(var x in $rootScope.cart)
+            {
+                var storeProduct = $rootScope.cart[x].store_product;
+                
+                if(parseFloat(storeProduct.price) === 0)
+                {
+                    continue;
+                }
+                
+                if(currentDepartmentStoreID !== parseInt(storeProduct.department_store.id))
+                {
+                        currentDepartmentStoreID = parseInt(storeProduct.department_store.id);
+
+                        smsText += storeProduct.retailer.name;
+                        if(typeof storeProduct.department_store !== "undefined" && parseInt(storeProduct.department_store.distance) !== 0)
+                        {
+                             smsText += " - " +  storeProduct.department_store.address + ", " + storeProduct.department_store.state + ", " + storeProduct.department_store.city + "," + storeProduct.department_store.postcode;
+                        }
+                        smsText += "\n";
+                }
+
+                smsText += storeProduct.product.name + ": " + storeProduct.price + " $ CAD /" + storeProduct.unit.name + "\n";
+            }
+
+            return smsText;
+	};
 	
 	$scope.showAlert = function(ev, title, message) 
 	{
@@ -576,33 +587,33 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 	
 	$rootScope.sendListAsSMS = function($event)
 	{
-		if(!$rootScope.isUserLogged)
-		{
-			return;
-		}
-		
-		if(!$rootScope.loggedUser.phone_verified)
-		{
-			$scope.showAlert($event, "Votre numéro de téléphone n'est pas vérifié", "Votre numéro de téléphone n'est pas vérifié. Veuillez consulter l'onglet de sécurité de votre compte pour vérifier votre numéro de téléphone.");
-		}
-		
-		if($rootScope.cart.length === 0)
-		{
-			$scope.showAlert($event, "Panier vide", "Votre panier est actuellement vide. Ajoutez des éléments au panier avant d'utiliser cette fonctionnalité.");
-		}
-		
-		var formData = new FormData();
-        formData.append("sms", $rootScope.getListAsText());
-        // Send request to server to get optimized list 	
-        $scope.promise = $http.post($scope.site_url.concat("/cart/send_sms"), 
-        formData, { transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(
-        function(response)
-        {
-            if(response.data)
+            if(!$rootScope.isUserLogged)
             {
-                
+                    return;
             }
-        });
-	}
+
+            if(!$rootScope.loggedUser.phone_verified)
+            {
+                    $scope.showAlert($event, "Votre numéro de téléphone n'est pas vérifié", "Votre numéro de téléphone n'est pas vérifié. Veuillez consulter l'onglet de sécurité de votre compte pour vérifier votre numéro de téléphone.");
+            }
+
+            if($rootScope.cart.length === 0)
+            {
+                    $scope.showAlert($event, "Panier vide", "Votre panier est actuellement vide. Ajoutez des éléments au panier avant d'utiliser cette fonctionnalité.");
+            }
+
+            var formData = new FormData();
+            formData.append("sms", $rootScope.getListAsText());
+            // Send request to server to get optimized list 	
+            $scope.promise = $http.post($scope.site_url.concat("/cart/send_sms"), 
+            formData, { transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(
+            function(response)
+            {
+                if(response.data)
+                {
+                    $scope.showAlert($event, "Message envoyé", "Votre liste d'épicerie a été envoyée à votre téléphone.");
+                }
+            });
+	};
 	
 }]);

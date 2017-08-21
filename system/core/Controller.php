@@ -254,7 +254,7 @@ class CI_Controller {
             return $pin;
         }
 	
-	public function send_sms($sms)
+	public function send_twilio_sms($sms)
 	{
 		$client = new Client($this->sid, $this->token);
 		$client->messages->create(
