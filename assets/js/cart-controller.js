@@ -657,66 +657,63 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 				if(currentDepartmentStoreID !== -1)
 				{
 					// Close previously opened tag
-					mywindow.document.write("</table>");
+					mywindow.document.write("<br>");
+					mywindow.document.write("<br>");
+					mywindow.document.write("</div>");
 				}
 				
 				if(typeof storeProduct.department_store !== "undefined" && parseInt(storeProduct.department_store.distance) !== 0)
 				{
-					var text = storeProduct.department_store.address + ", " + storeProduct.department_store.state + ", " + storeProduct.department_store.city + "," + storeProduct.department_store.postcode;
+					var text = storeProduct.retailer.name + " - " + storeProduct.department_store.address + ", " + storeProduct.department_store.state + ", " + storeProduct.department_store.city + "," + storeProduct.department_store.postcode;
 					mywindow.document.write("<h3>" + text + "</h3>");
 				}
 				else
 				{
-					mywindow.document.write("<h3>Le magasin n'est pas proche de chez vous.</h3>");
+					mywindow.document.write("<h3> " + storeProduct.retailer.name + " - Le magasin n'est pas proche de chez vous.</h3>");
 				}
 				
 				currentDepartmentStoreID = parseInt(storeProduct.department_store.id);
 				
 				// Open new table
-				mywindow.document.write("<table>");
-				mywindow.document.write("<tr>");
-				
-				mywindow.document.write("<th>Magasin</th>");
-				mywindow.document.write("<th>Description</th>");
-				mywindow.document.write("<th>Total</th>");
-				
-				mywindow.document.write("</tr>");
-				
+				mywindow.document.write("<div>");
 			}
 			
-			mywindow.document.write("<tr>");
-				
-			mywindow.document.write("<td>" + storeProduct.retailer.name + "</td>");
-			mywindow.document.write("<td>");
-			mywindow.document.write("<p><b>" + storeProduct.product.name + "</b></p>");
+			var description = "";
 			if(storeProduct.size)
 			{
-				mywindow.document.write("<p>" + storeProduct.size + "</p>");
+				description += ", Taile : " + storeProduct.size;
 			}
 			if(storeProduct.brand)
 			{
-				mywindow.document.write("<p>" + storeProduct.brand.name + "</p>");
+				description += ", Marque : " + storeProduct.brand.name;
 			}
 			if(storeProduct.format)
 			{
-				mywindow.document.write("<p>" + storeProduct.format + "</p>");
+				description += ", Format : " + storeProduct.format;
 			}
 			if(storeProduct.state)
 			{
-				mywindow.document.write("<p> Origine : " + storeProduct.state + "</p>");
+				description += ", Origine : " + storeProduct.state;
 			}
 			
-			mywindow.document.write("</td>");
-			mywindow.document.write("<td>" + (storeProduct.price * storeProduct.quantity) + "</td>");
-				
-			mywindow.document.write("</tr>");
-
+			var unit = "";
+			
+			if(storeProduct.unit)
+			{
+				unit += " / " + storeProduct.unit.name;
+			}
+			
+			description += ", Prix : <b> $ CAD " + storeProduct.price + unit + "</b>";
+			
+			var product_text = "<p><b>" + storeProduct.product.name +  "</b> - " + description + "</p>";
+			
+			mywindow.document.write(product_text);
 		}
 		
 		if(currentDepartmentStoreID !== -1)
 		{
 			// Close last opened tag
-			mywindow.document.write("</table>");
+			mywindow.document.write("</div>");
 		}
 		
 		mywindow.document.write('</body></html>');
