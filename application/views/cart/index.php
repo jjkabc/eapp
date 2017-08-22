@@ -93,7 +93,7 @@
                             <div ng-hide="true">
                                 <a href><img alt="item.store_product.product.name" class="admin-image" ng-src="{{base_url}}/assets/img/stores/{{item.store_product.retailer.image}}" ></a>
                             </div>
-                            <md-button class="md-raised" ng-disabled="item.different_store_products.length === 0">Changer Marchand</md-button>
+                            <md-button class="md-raised" ng-disabled="item.different_store_products.length === 0" ng-click="productStoreChanged($event, item.store_product)">Changer Marchand</md-button>
                         </td>
 
                         <td md-cell width = "20%">
