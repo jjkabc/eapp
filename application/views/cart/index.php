@@ -55,16 +55,25 @@
     	</md-content>
     </div>
 
-    <div id="cart-optimization-container" class="" ng-show="viewing_cart_optimization.value">
+    <div id="cart-optimization-container" ng-show="viewing_cart_optimization.value">
         <!-- Cart Optimizations -->
-        <md-content>
+        <md-content class="container" ng-repeat="departmentStore in departmenStores">
+            
+            <md-subheader class="" ng-show="departmentStore.distance > 0">
+                <img alt="{{ product.name }}" ng-src="{{base_url}}/assets/img/stores/{{departmentStore.image}}" style="height : 44px;" />
+                <b> {{departmentStore.address}}, {{departmentStore.city}}, {{departmentStore.state}}, {{departmentStore.postcode}}, {{departmentStore.distance}} Km en voiture</b>
+            </md-subheader>
+            <md-subheader class="md-warn" ng-hide="departmentStore.distance > 0">
+                <img alt="{{ product.name }}" ng-src="{{base_url}}/assets/img/stores/{{departmentStore.image}}" style="height : 44px;" />
+                <b> Le magasin n'est pas disponible près de chez vous.</b>
+            </md-subheader>
+
             <md-table-container>
-                <table  md-table md-row-select multiple cellspacing="0" ng-model="selected"  md-progress="promise">
+                <table  md-table cellspacing="0" ng-model="selected"  md-progress="promise">
                     <thead md-head md-order="query.order" md-on-reorder="update_cart_list">
-                    <tr md-row>
+                        <tr md-row ng-show="$index === 0">
                         <th md-column>&nbsp;</th>
-                        <th md-column>Magasin</th>
-                        <th md-column>Address / Distance en voiture</th>
+                        <th md-column>Changer Magasin / Format</th>
                         <th md-column>Product</th>
                         <th md-column>Description du produit</th>
                         <th md-column md-numeric>Quantité</th>
@@ -74,14 +83,14 @@
                     </tr>
                 </thead>
                     <tbody>
-                    <tr  md-row md-select="item"  md-select-id="name" class="cart_item" ng-repeat="item in cart">
+                    <tr  md-row md-select="item"  md-select-id="name" class="cart_item" ng-repeat="item in departmentStore.products">
 
                         <td md-cell>
                             <a title="Remove this item" class="remove" href ng-click="remove_product_from_cart(item.product.id)">×</a> 
                         </td>
 
-                        <td md-cell>
-                            <div>
+                        <td md-cell width = "30%">
+                            <div ng-hide="true">
                                 <a href><img alt="item.store_product.product.name" class="admin-image" ng-src="{{base_url}}/assets/img/stores/{{item.store_product.retailer.image}}" ></a>
                             </div>
                             <div class="center center" ng-show="item.store_product.related_products && item.store_product.related_products.length > 0">
@@ -92,33 +101,22 @@
                                     </md-select>
                                 </md-input-container>
                             </div>
-                        </td>
-
-                        <td md-cell>
-                            <div ng-show="item.store_product.department_store.distance > 0">
-                                <p>{{item.store_product.department_store.address}}</p>
-                                <p>{{item.store_product.department_store.city}}, {{item.store_product.department_store.state}} , {{item.store_product.department_store.postcode }}</p>
-                                <p> < {{item.store_product.department_store.distance}} Km en voiture</p>
-                            </div>
-                            <div ng-show="item.store_product.department_store.distance == 0 && item.store_product.price > 0">
-                                <p style="color : #F64747;">Le produit n'est pas disponible près de chez vous.</p>
-                            </div>
-                            <div ng-show="item.store_product.price == 0">
-                                <p style="color : #F64747;">Ce produit n'est pas encore disponible..</p>
+                            <div ng-show="!item.store_product.related_products || item.store_product.related_products.length === 0">
+                                <p>{{item.store_product.retailer.name}} - Format : {{store_product.format}}</p>
                             </div>
                         </td>
 
-                        <td md-cell>
+                        <td md-cell width = "20%">
                             <a href><img alt="poster_1_up" class="admin-image" ng-src="{{base_url}}/assets/img/products/{{item.store_product.product.image}}"></a>
                         </td>
 
                         <td md-cell>
                             <p><b><a href="single-product.html">{{item.store_product.product.name}}</a></b></p>
-							<p ng-show="item.store_product.size">{{item.store_product.size}}</p>
-            				<p ng-show="item.store_product.brand">{{item.store_product.brand.name}}</p>
-            				<p>{{item.store_product.format}} {{item.store_product.unit.name}}</p>
-            				<p ng-show="item.store_product.state">Origine : {{item.store_product.state}}</p>
-							<p  ng-show="item.store_product.price > 0"><b><span class="amount">$ CAD {{item.store_product.price | number: 2}}</span> </b><span ng-show="item.store_product.brand"> / {{item.store_product.brand.name}}</span></p>
+                            <p ng-show="item.store_product.size">{{item.store_product.size}}</p>
+                            <p ng-show="item.store_product.brand">{{item.store_product.brand.name}}</p>
+                            <p>{{item.store_product.format}} {{item.store_product.unit.name}}</p>
+                            <p ng-show="item.store_product.state">Origine : {{item.store_product.state}}</p>
+                            <p  ng-show="item.store_product.price > 0"><b><span class="amount">$ CAD {{item.store_product.price | number: 2}}</span> </b><span ng-show="item.store_product.brand"> / {{item.store_product.brand.name}}</span></p>
                         </td>
 
                         <td md-cell>
@@ -181,7 +179,7 @@
     </div>
 
     <div>
-        <div class="eapp-container">
+        <div class="eapp-container container">
 
             <div class="cart_totals ">
                 <h2>Détails d'optimisation</h2>

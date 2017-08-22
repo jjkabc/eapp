@@ -96,13 +96,69 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
                 // Create ordered array list
                 for(var x in response.data)
                 {
-					$rootScope.cart.push(response.data[x]);
-					$scope.storeChanged(response.data[x].store_product);
+                    $rootScope.cart.push(response.data[x]);
+                    $scope.storeChanged(response.data[x].store_product);
                 }
+                
+                $rootScope.sortCart();
+                
+                $scope.orderByStore();
+                
                 //$scope.getDrivingDistances();
                 $scope.update_price_optimization();
             });
         
+    };
+    
+    $scope.orderByStore = function()
+    {
+        var currentDepartmentStoreID = -1;
+        
+        $rootScope.departmenStores = [];
+        
+        for(var x in $rootScope.cart)
+        {
+            var storeProduct = $rootScope.cart[x].store_product;
+
+            if(parseFloat(storeProduct.price) === 0)
+            {
+                continue;
+            }
+
+            if(currentDepartmentStoreID !== parseInt(storeProduct.department_store.id))
+            {
+                $rootScope.departmenStores.push(storeProduct.department_store);
+                $rootScope.departmenStores[$rootScope.departmenStores.length - 1].storeName = storeProduct.retailer.name;
+                $rootScope.departmenStores[$rootScope.departmenStores.length - 1].image = storeProduct.retailer.image;
+                
+                if(parseFloat($rootScope.departmenStores[$rootScope.departmenStores.length - 1].distance) === 0)
+                {
+                    $rootScope.departmenStores[$rootScope.departmenStores.length - 1].range = 0;
+                }
+                
+                $rootScope.departmenStores[$rootScope.departmenStores.length - 1].products = [];
+
+                currentDepartmentStoreID = parseInt(storeProduct.department_store.id);
+            }
+            
+            $rootScope.departmenStores[$rootScope.departmenStores.length - 1].products.push($rootScope.cart[x]);
+        }
+        
+        $rootScope.departmenStores.sort(function(a, b)
+        {
+            if(parseFloat(a.range) > parseFloat(b.range))
+            {
+                return -1;
+            }
+            
+            if(parseFloat(a.range) < parseFloat(b.range))
+            {
+                return 1;
+            }
+            
+            return 0;
+            
+        });
     };
     
     $scope.getListByStore = function()
@@ -357,7 +413,8 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
                     $rootScope.$apply(function()
                     {
                         $rootScope.cart[i].store_product = currentStoreProduct;
-						$rootScope.sortCart();
+                        $rootScope.sortCart();
+                        $scope.orderByStore();
                         $scope.update_price_optimization();
                     });
                     
@@ -604,18 +661,19 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 	
 	$rootScope.sortCart = function()
 	{
-		$rootScope.cart.sort(function(a, b){
-			var keyA = a.store_product.retailer.name.toString(),
-                        keyB = b.store_product.retailer.name.toString();
-			return keyA.localeCompare(keyB);
-		});
+            $rootScope.cart.sort(function(a, b)
+            {
+                var keyA = a.store_product.retailer.name.toString(),
+                keyB = b.store_product.retailer.name.toString();
+                return keyA.localeCompare(keyB);
+            });
 	};
 	
 	$rootScope.sendListAsSMS = function($event)
 	{
             if(!$rootScope.isUserLogged)
             {
-                    return;
+                return;
             }
 
             if(!$rootScope.loggedUser.phone_verified)
@@ -628,7 +686,7 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
                     $scope.showAlert($event, "Panier vide", "Votre panier est actuellement vide. Ajoutez des éléments au panier avant d'utiliser cette fonctionnalité.");
             }
 		
-			$rootScope.sortCart();
+            $rootScope.sortCart();
 
             var formData = new FormData();
             formData.append("sms", $rootScope.getListAsText());
@@ -644,121 +702,121 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
             });
 	};
 	
-	$rootScope.printCart = function() 
+	$rootScope.printCart = function($event) 
 	{
 		
-		if(!$rootScope.isUserLogged)
-		{
-				return;
-		}
+            if(!$rootScope.isUserLogged)
+            {
+                return;
+            }
 
-		if($rootScope.cart.length === 0)
-		{
-				$scope.showAlert($event, "Panier vide", "Votre panier est actuellement vide. Ajoutez des éléments au panier avant d'utiliser cette fonctionnalité.");
-		}
+            if($rootScope.cart.length === 0)
+            {
+                $scope.showAlert($event, "Panier vide", "Votre panier est actuellement vide. Ajoutez des éléments au panier avant d'utiliser cette fonctionnalité.");
+            }
 		
-		$rootScope.sortCart();
-		var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+            $rootScope.sortCart();
+            var mywindow = window.open('', 'PRINT', 'height=400,width=600');
 
-		mywindow.document.write('<html><head><title>OtiPrix</title>');
-		mywindow.document.write('</head><body >');
-		mywindow.document.write("<h1 style='text-align : center;'>OtiPrix - Liste d'épicerie optimisé</h1>");
+            mywindow.document.write('<html><head><title>OtiPrix</title>');
+            mywindow.document.write('</head><body >');
+            mywindow.document.write("<h1 style='text-align : center;'>OtiPrix - Liste d'épicerie optimisé</h1>");
 		
-		
-		var currentDepartmentStoreID = -1;
-		for(var x in $rootScope.cart)
-		{
-			var storeProduct = $rootScope.cart[x].store_product;
+            var currentDepartmentStoreID = -1;
+            
+            for(var x in $rootScope.cart)
+            {
+                var storeProduct = $rootScope.cart[x].store_product;
 
-			if(parseFloat(storeProduct.price) === 0)
-			{
-				continue;
-			}
+                if(parseFloat(storeProduct.price) === 0)
+                {
+                        continue;
+                }
 
-			if(currentDepartmentStoreID !== parseInt(storeProduct.department_store.id))
-			{
-				if(currentDepartmentStoreID !== -1)
-				{
-					// Close previously opened tag
-					mywindow.document.write("<br>");
-					mywindow.document.write("</div>");
-					mywindow.document.write("</ul>");
-				}
-				
-				if(typeof storeProduct.department_store !== "undefined" && parseInt(storeProduct.department_store.distance) !== 0)
-				{
-					var text = storeProduct.retailer.name + " - " + storeProduct.department_store.address + ", " + storeProduct.department_store.state + ", " + storeProduct.department_store.city + "," + storeProduct.department_store.postcode;
-					mywindow.document.write("<h3>" + text + "</h3>");
-				}
-				else
-				{
-					mywindow.document.write("<h3> " + storeProduct.retailer.name + " - Le magasin n'est pas proche de chez vous.</h3>");
-				}
-				
-				currentDepartmentStoreID = parseInt(storeProduct.department_store.id);
-				
-				// Open new table
-				mywindow.document.write("<div>");
-				mywindow.document.write("<ul  class='list-group'>");
-			}
-			
-			var description = "";
-			if(storeProduct.size)
-			{
-				description += ", Taile : " + storeProduct.size;
-			}
-			if(storeProduct.brand)
-			{
-				description += ", Marque : " + storeProduct.brand.name;
-			}
-			if(storeProduct.format)
-			{
-				description += ", Format : " + storeProduct.format;
-			}
-			if(storeProduct.state)
-			{
-				description += ", Origine : " + storeProduct.state;
-			}
-			
-			var unit = "";
-			
-			if(storeProduct.unit)
-			{
-				unit += " / " + storeProduct.unit.name;
-			}
-			
-			description += ", Prix : <b> $ CAD " + storeProduct.price + unit + "</b>";
-			
-			var product_text = "<p><b>" + storeProduct.product.name +  "</b> - " + description + "</p>";
-			
-			mywindow.document.write("<li class='list-group-item'>" + product_text + "</li>");
-		}
-		
-		if(currentDepartmentStoreID !== -1)
-		{
-			// Close last opened tag
-			mywindow.document.write("</div>");
-			mywindow.document.write("</ul>");
-		}
-		
-		mywindow.document.write("<br>");
-		mywindow.document.write("<br>");
-		mywindow.document.write("<p style='float : right;'><b>Totale : $ CAD " + $rootScope.get_cart_total_price() + " + taxes. </b></p>");
-		
-		if($rootScope.price_optimization > 0)
-		{
-                    mywindow.document.write("<p style='float : right;'><b>Vous économiserez environs : $ CAD  " + $rootScope.price_optimization + "</b></p>");
-		}
-		
-		mywindow.document.write('</body></html>');
+                if(currentDepartmentStoreID !== parseInt(storeProduct.department_store.id))
+                {
+                    if(currentDepartmentStoreID !== -1)
+                    {
+                        // Close previously opened tag
+                        mywindow.document.write("<br>");
+                        mywindow.document.write("</div>");
+                        mywindow.document.write("</ul>");
+                    }
 
-		mywindow.document.close(); // necessary for IE >= 10
-		mywindow.focus(); // necessary for IE >= 10*/
+                    if(typeof storeProduct.department_store !== "undefined" && parseInt(storeProduct.department_store.distance) !== 0)
+                    {
+                        var text = storeProduct.retailer.name + " - " + storeProduct.department_store.address + ", " + storeProduct.department_store.state + ", " + storeProduct.department_store.city + "," + storeProduct.department_store.postcode;
+                        mywindow.document.write("<h3>" + text + "</h3>");
+                    }
+                    else
+                    {
+                        mywindow.document.write("<h3> " + storeProduct.retailer.name + " - Le magasin n'est pas proche de chez vous.</h3>");
+                    }
 
-		mywindow.print();
-		mywindow.close();
+                    currentDepartmentStoreID = parseInt(storeProduct.department_store.id);
 
-		return true;
+                    // Open new table
+                    mywindow.document.write("<div>");
+                    mywindow.document.write("<ul style='list-style-type: none;'>");
+                }
+
+                var description = "";
+                if(storeProduct.size)
+                {
+                    description += ", Taile : " + storeProduct.size;
+                }
+                if(storeProduct.brand)
+                {
+                    description += ", Marque : " + storeProduct.brand.name;
+                }
+                if(storeProduct.format)
+                {
+                    description += ", Format : " + storeProduct.format;
+                }
+                if(storeProduct.state)
+                {
+                    description += ", Origine : " + storeProduct.state;
+                }
+
+                var unit = "";
+
+                if(storeProduct.unit)
+                {
+                    unit += " / " + storeProduct.unit.name;
+                }
+
+                description += ", Prix : <b> $ CAD " + storeProduct.price + unit + "</b>";
+
+                var product_text = "<p><b>" + storeProduct.product.name +  "</b> - " + description + "</p>";
+
+                mywindow.document.write("<li class='list-group-item'>" + product_text + "</li>");
+            }
+
+            if(currentDepartmentStoreID !== -1)
+            {
+                    // Close last opened tag
+                    mywindow.document.write("</div>");
+                    mywindow.document.write("</ul>");
+            }
+
+            mywindow.document.write("<br>");
+            mywindow.document.write("<br>");
+            mywindow.document.write("<p style='float : right;'><b>Totale : $ CAD " + $rootScope.get_cart_total_price() + " + taxes. </b></p>");
+
+            if($rootScope.price_optimization > 0)
+            {
+                mywindow.document.write("<p style='float : right;'><b>Vous économiserez environs : $ CAD  " + $rootScope.price_optimization + "</b></p>");
+            }
+
+            mywindow.document.write('</body></html>');
+
+            mywindow.document.close(); // necessary for IE >= 10
+            mywindow.focus(); // necessary for IE >= 10*/
+
+            mywindow.print();
+            mywindow.close();
+
+            return true;
 
 	};
 	
