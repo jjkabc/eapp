@@ -96,7 +96,18 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
                 // Create ordered array list
                 for(var x in response.data)
                 {
-                    $rootScope.cart.push(response.data[x]);
+					var cartItem = response.data[x];
+					
+					if(typeof cartItem.store_product.related_products === "undefined" || cartItem.store_product.related_products === null)
+					{
+						cartItem.store_product.related_products = [];
+					}
+					
+					var relatedProducts = $scope.getRelatedProducts(cartItem);
+					cartItem.different_store_products = relatedProducts[0];
+					cartItem.different_format_products = relatedProducts[1];
+					
+                    $rootScope.cart.push(cartItem);
                     $scope.storeChanged(response.data[x].store_product);
                 }
                 
@@ -109,6 +120,33 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
             });
         
     };
+	
+	$scope.getRelatedProducts = function(cartItem)
+	{
+		var results = [];
+		// split related products to store related and format related
+		var different_format_products = [];
+		var different_store_products = [];
+		
+		for(var i in cartItem.store_product.related_products)
+		{
+			if(parseInt(cartItem.store_product.retailer.id) === parseInt(cartItem.store_product.related_products[i].retailer.id))
+			{
+				// They are from the same store, thy surely differ by format
+				different_format_products.push(cartItem.store_product.related_products[i]);
+			}
+			else
+			{
+				different_store_products.push(cartItem.store_product.related_products[i]);
+			}
+		}
+		
+		results.push(different_store_products);
+		results.push(different_format_products);
+		
+		return results;
+		
+	};
     
     $scope.orderByStore = function()
     {
@@ -413,6 +451,9 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
                     $rootScope.$apply(function()
                     {
                         $rootScope.cart[i].store_product = currentStoreProduct;
+						var relatedProducts = $scope.getRelatedProducts($rootScope.cart[i]);
+						$rootScope.cart[i].different_store_products = relatedProducts[0];
+						$rootScope.cart[i].different_format_products = relatedProducts[1];
                         $rootScope.sortCart();
                         $scope.orderByStore();
                         $scope.update_price_optimization();
