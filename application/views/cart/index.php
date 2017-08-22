@@ -93,17 +93,7 @@
                             <div ng-hide="true">
                                 <a href><img alt="item.store_product.product.name" class="admin-image" ng-src="{{base_url}}/assets/img/stores/{{item.store_product.retailer.image}}" ></a>
                             </div>
-                            <div class="center center" ng-show="item.store_product.related_products && item.store_product.related_products.length > 0">
-                                <md-input-container class="col-sm-12 md-primary">
-                                    <label>Changer Marchand</label>
-                                    <md-select ng-model="currentStoreProduct" placeholder="Marchands"  ng-init="currentStoreProduct = item.store_product.related_products[0]" ng-change="storeChanged(currentStoreProduct)">
-                                        <md-option ng-value="store_product" ng-repeat="store_product in item.store_product.related_products">{{ store_product.retailer.name }} - Format : {{store_product.format}}</md-option>
-                                    </md-select>
-                                </md-input-container>
-                            </div>
-                            <div ng-show="!item.store_product.related_products || item.store_product.related_products.length === 0">
-                                <p>{{item.store_product.retailer.name}} - Format : {{store_product.format}}</p>
-                            </div>
+							<md-button class="md-raised" ng-show="item.different_store_products.length > 0">Changer Marchand</md-button>
                         </td>
 
                         <td md-cell width = "20%">
@@ -114,7 +104,10 @@
                             <p><b><a href="single-product.html">{{item.store_product.product.name}}</a></b></p>
                             <p ng-show="item.store_product.size">{{item.store_product.size}}</p>
                             <p ng-show="item.store_product.brand">{{item.store_product.brand.name}}</p>
-                            <p>{{item.store_product.format}} {{item.store_product.unit.name}}</p>
+                            <div>
+								{{item.store_product.format}} {{item.store_product.unit.name}}
+								<md-button class="md-raised" ng-show="item.different_format_products.length > 0">Changer Format</md-button>
+							</div>
                             <p ng-show="item.store_product.state">Origine : {{item.store_product.state}}</p>
                             <p  ng-show="item.store_product.price > 0"><b><span class="amount">$ CAD {{item.store_product.price | number: 2}}</span> </b><span ng-show="item.store_product.brand"> / {{item.store_product.brand.name}}</span></p>
                         </td>
