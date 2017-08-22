@@ -408,9 +408,9 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 	  
     };
 	
-	$scope.productStoreChanged = function(ev, currentStoreProduct)
+	$scope.productStoreChanged = function(ev, item)
     {
-		$scope.selectedStore = currentStoreProduct;
+		$scope.currentCartItem = item;
 		
         $mdDialog.show({
             controller: ChangeStoreController,
