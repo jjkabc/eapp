@@ -1,0 +1,22 @@
+<md-dialog>
+    
+        <md-dialog-content class="md-dialog-content">
+            
+             <md-subheader class="md-primary">{{$scope.selectedStore.product.name}}</md-subheader>
+             
+             <md-select ng-model="selectedStore" placeholder="Produit" class="md-no-underline">
+                <md-option value="store_product" ng-repeat="store_product in selectedStore.different_store_products">{{store_product.retailer.name}} - Format : {{store_product.format}}. $CAD {{store_product.price}} / {{store_product.brand.name}}</md-option>
+            </md-select>
+            
+        </md-dialog-content>
+
+        <md-dialog-actions>
+            <md-button class="md-raised" ng-click="cancel()>
+                Annuler
+            </md-button>
+            <md-button class="md-raised" ng-click="selectStore()>
+                Sélectionner
+            </md-button>
+        </md-dialog-actions>
+
+</md-dialog>
