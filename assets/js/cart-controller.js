@@ -130,15 +130,15 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 		
 		for(var i in cartItem.store_product.related_products)
 		{
-			if(parseInt(cartItem.store_product.retailer.id) === parseInt(cartItem.store_product.related_products[i].retailer.id))
-			{
-				// They are from the same store, thy surely differ by format
-				different_format_products.push(cartItem.store_product.related_products[i]);
-			}
-			else
-			{
-				different_store_products.push(cartItem.store_product.related_products[i]);
-			}
+                    if(parseInt(cartItem.store_product.retailer.id) === parseInt(cartItem.store_product.related_products[i].retailer.id))
+                    {
+                            // They are from the same store, thy surely differ by format
+                            different_format_products.push(cartItem.store_product.related_products[i]);
+                    }
+                    else
+                    {
+                            different_store_products.push(cartItem.store_product.related_products[i]);
+                    }
 		}
 		
 		results.push(different_store_products);

@@ -61,7 +61,7 @@
             
             <md-subheader class="" ng-show="departmentStore.distance > 0">
                 <img alt="{{ product.name }}" ng-src="{{base_url}}/assets/img/stores/{{departmentStore.image}}" style="height : 44px;" />
-                <b> {{departmentStore.address}}, {{departmentStore.city}}, {{departmentStore.state}}, {{departmentStore.postcode}}, {{departmentStore.distance}} Km en voiture</b>
+                <b> {{departmentStore.address}}, {{departmentStore.city}}, {{departmentStore.state}}, {{departmentStore.postcode}}, {{departmentStore.distance}} Km en voiture (environs {{departmentStore.time | number : 0}} Minutes)</b>
             </md-subheader>
             <md-subheader class="md-warn" ng-hide="departmentStore.distance > 0">
                 <img alt="{{ product.name }}" ng-src="{{base_url}}/assets/img/stores/{{departmentStore.image}}" style="height : 44px;" />
