@@ -407,6 +407,46 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
         });
 	  
     };
+	
+	$scope.productStoreChanged = function(ev, currentStoreProduct)
+    {
+		$scope.selectedStore = currentStoreProduct;
+		
+        $mdDialog.show({
+            controller: ChangeStoreController,
+            templateUrl:  $scope.base_url + 'assets/templates/change-store-product.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose:true,
+            preserveScope:true,
+            scope : $scope,
+            fullscreen: false //
+          })
+          .then(function(answer) {
+                
+          }, function() {
+                
+          });
+    };
+	
+	function ChangeStoreController($scope, $mdDialog) 
+    {
+        $scope.hide = function() 
+        {
+            $mdDialog.hide();
+        };
+
+        $scope.cancel = function() 
+        {
+            $mdDialog.cancel();
+        };
+
+        $scope.selectStore = function() 
+        {
+			var currentStoreProduct = $scope.selectedStore;
+			$scope.storeChanged(currentStoreProduct);
+		}
+    };
     
     $scope.storeChanged = function(currentStoreProduct)
     {
