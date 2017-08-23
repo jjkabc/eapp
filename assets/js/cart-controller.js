@@ -842,9 +842,6 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 	
 	$rootScope.printCart = function($event) 
 	{
-		
-		var content = "";
-		
 		if(!$rootScope.isUserLogged)
 		{
 				return;
@@ -855,8 +852,26 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 				$scope.showAlert($event, "Panier vide", "Votre panier est actuellement vide. Ajoutez des éléments au panier avant d'utiliser cette fonctionnalité.");
 		}
 		
-		$rootScope.sortCart();
 		var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+		
+		mywindow.document.write($scope.getCartHtmlContent());
+
+		mywindow.document.close(); // necessary for IE >= 10
+		mywindow.focus(); // necessary for IE >= 10*/
+
+		mywindow.print();
+		mywindow.close();
+
+		return true;
+
+	};
+	
+	$scope.getCartHtmlContent()
+	{
+		
+		var content = "";
+		
+		$rootScope.sortCart();
 		
 		content += '<html><head><title>OtiPrix</title>';
 		content += '</head><body >';
@@ -946,16 +961,7 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 			}
 			content += '</body></html>';
 		
-			mywindow.document.write(content);
-
-			mywindow.document.close(); // necessary for IE >= 10
-			mywindow.focus(); // necessary for IE >= 10*/
-
-			mywindow.print();
-			mywindow.close();
-
-			return true;
-
-	};
+			return content;
+	}
 	
 }]);
