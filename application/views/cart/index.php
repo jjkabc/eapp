@@ -106,7 +106,7 @@
                             <p ng-show="item.store_product.brand">{{item.store_product.brand.name}}</p>
                             <div>
                                 {{item.store_product.format}} {{item.store_product.unit.name}}
-                                <md-button class="md-raised" ng-disabled="item.different_format_products.length === 0">Changer Format</md-button>
+                                <md-button class="md-raised" ng-disabled="item.different_format_products.length === 0" ng-click="productFormatChanged($event, item)">Changer Format</md-button>
                             </div>
                             <p ng-show="item.store_product.state">Origine : {{item.store_product.state}}</p>
                             <p  ng-show="item.store_product.price > 0"><b><span class="amount">$ CAD {{item.store_product.price | number: 2}}</span> </b><span ng-show="item.store_product.brand"> / {{item.store_product.brand.name}}</span></p>

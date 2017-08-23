@@ -96,16 +96,16 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
                 // Create ordered array list
                 for(var x in response.data)
                 {
-					var cartItem = response.data[x];
-					
-					if(typeof cartItem.store_product.related_products === "undefined" || cartItem.store_product.related_products === null)
-					{
-						cartItem.store_product.related_products = [];
-					}
-					
-					var relatedProducts = $scope.getRelatedProducts(cartItem);
-					cartItem.different_store_products = relatedProducts[0];
-					cartItem.different_format_products = relatedProducts[1];
+                    var cartItem = response.data[x];
+
+                    if(typeof cartItem.store_product.related_products === "undefined" || cartItem.store_product.related_products === null)
+                    {
+                        cartItem.store_product.related_products = [];
+                    }
+
+                    var relatedProducts = $scope.getRelatedProducts(cartItem);
+                    cartItem.different_store_products = relatedProducts[0];
+                    cartItem.different_format_products = relatedProducts[1];
 					
                     $rootScope.cart.push(cartItem);
                     $scope.storeChanged(response.data[x].store_product);
@@ -121,32 +121,33 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
         
     };
 	
-	$scope.getRelatedProducts = function(cartItem)
-	{
-		var results = [];
-		// split related products to store related and format related
-		var different_format_products = [];
-		var different_store_products = [];
-		
-		for(var i in cartItem.store_product.related_products)
-		{
-                    if(parseInt(cartItem.store_product.retailer.id) === parseInt(cartItem.store_product.related_products[i].retailer.id))
-                    {
-                            // They are from the same store, thy surely differ by format
-                            different_format_products.push(cartItem.store_product.related_products[i]);
-                    }
-                    else
-                    {
-                            different_store_products.push(cartItem.store_product.related_products[i]);
-                    }
-		}
-		
-		results.push(different_store_products);
-		results.push(different_format_products);
-		
-		return results;
-		
-	};
+    $scope.getRelatedProducts = function(cartItem)
+    {
+        var results = [];
+        // split related products to store related and format related
+        var different_format_products = [];
+        var different_store_products = [];
+
+        for(var i in cartItem.store_product.related_products)
+        {
+            if(parseInt(cartItem.store_product.retailer.id) !== parseInt(cartItem.store_product.related_products[i].retailer.id))
+            {
+                different_store_products.push(cartItem.store_product.related_products[i]);
+            }
+            
+            if(cartItem.store_product.format.toString().trim() !== cartItem.store_product.related_products[i].format.toString().trim()
+                    && parseInt(cartItem.store_product.retailer.id) === parseInt(cartItem.store_product.related_products[i].retailer.id))
+            {
+                different_format_products.push(cartItem.store_product.related_products[i]);
+            }
+        }
+
+        results.push(different_store_products);
+        results.push(different_format_products);
+
+        return results;
+
+    };
     
     $scope.orderByStore = function()
     {
@@ -408,10 +409,10 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 	  
     };
 	
-	$scope.productStoreChanged = function(ev, currentStoreProduct)
+    $scope.productStoreChanged = function(ev, currentStoreProduct)
     {
-		$scope.selectedStore = currentStoreProduct;
-		
+        $scope.selectedStoreProduct = currentStoreProduct.store_product;
+	$scope.selectedStoreProduct.different_store_products = 	currentStoreProduct.different_store_products;
         $mdDialog.show({
             controller: ChangeStoreController,
             templateUrl:  $scope.base_url + 'assets/templates/change-store-product.html',
@@ -428,8 +429,29 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
                 
           });
     };
+    
+    $scope.productFormatChanged = function(ev, currentStoreProduct)
+    {
+        $scope.selectedStoreProduct = currentStoreProduct.store_product;
+	$scope.selectedStoreProduct.different_format_products = currentStoreProduct.different_format_products;
+        $mdDialog.show({
+            controller: ChangeFormatController,
+            templateUrl:  $scope.base_url + 'assets/templates/change-format-product.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose:true,
+            preserveScope:true,
+            scope : $scope,
+            fullscreen: false //
+          })
+          .then(function(answer) {
+                
+          }, function() {
+                
+          });
+    };
 	
-	function ChangeStoreController($scope, $mdDialog) 
+    function ChangeStoreController($scope, $mdDialog) 
     {
         $scope.hide = function() 
         {
@@ -440,12 +462,47 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
         {
             $mdDialog.cancel();
         };
-
-        $scope.selectStore = function() 
+        
+        $scope.change = function(sp)
         {
-			var currentStoreProduct = $scope.selectedStore;
-			$scope.storeChanged(currentStoreProduct);
-		}
+            var related_store_products = $scope.selectedStoreProduct.different_store_products;
+            $scope.selectedStoreProduct = sp;
+            $scope.selectedStoreProduct.different_store_products = related_store_products;
+        };
+
+        $scope.selectStoreProduct = function() 
+        {
+            var currentStoreProduct = $scope.selectedStoreProduct;
+            $scope.storeChanged(currentStoreProduct);
+            $mdDialog.hide();
+        };
+    };
+    
+    function ChangeFormatController($scope, $mdDialog) 
+    {
+        $scope.hide = function() 
+        {
+            $mdDialog.hide();
+        };
+
+        $scope.cancel = function() 
+        {
+            $mdDialog.cancel();
+        };
+        
+        $scope.change = function(sp)
+        {
+            var related_store_products = $scope.selectedStoreProduct.different_format_products;
+            $scope.selectedStoreProduct = sp;
+            $scope.selectedStoreProduct.different_format_products = related_store_products;
+        };
+
+        $scope.selectStoreProduct = function() 
+        {
+            var currentStoreProduct = $scope.selectedStoreProduct;
+            $scope.storeChanged(currentStoreProduct);
+            $mdDialog.hide();
+        };
     };
     
     $scope.storeChanged = function(currentStoreProduct)
