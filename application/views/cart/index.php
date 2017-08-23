@@ -71,7 +71,7 @@
             <md-table-container>
                 <table  md-table cellspacing="0" ng-model="selected"  md-progress="promise">
                     <thead md-head md-order="query.order" md-on-reorder="update_cart_list">
-                        <tr md-row ng-show="$index === 0">
+                        <tr md-row ng-show="$index === 500">
                         <th md-column>&nbsp;</th>
                         <th md-column>Changer Magasin / Format</th>
                         <th md-column>Product</th>
