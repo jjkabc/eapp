@@ -843,118 +843,118 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 	$rootScope.printCart = function($event) 
 	{
 		
-            if(!$rootScope.isUserLogged)
-            {
-                return;
-            }
-
-            if($rootScope.cart.length === 0)
-            {
-                $scope.showAlert($event, "Panier vide", "Votre panier est actuellement vide. Ajoutez des éléments au panier avant d'utiliser cette fonctionnalité.");
-            }
+		var content = "";
 		
-            $rootScope.sortCart();
-            var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+		if(!$rootScope.isUserLogged)
+		{
+				return;
+		}
 
-            mywindow.document.write('<html><head><title>OtiPrix</title>');
-            mywindow.document.write('</head><body >');
-            mywindow.document.write("<h1 style='text-align : center;'>OtiPrix - Liste d'épicerie optimisé</h1>");
+		if($rootScope.cart.length === 0)
+		{
+				$scope.showAlert($event, "Panier vide", "Votre panier est actuellement vide. Ajoutez des éléments au panier avant d'utiliser cette fonctionnalité.");
+		}
 		
-            var currentDepartmentStoreID = -1;
+		$rootScope.sortCart();
+		var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+		
+		content += '<html><head><title>OtiPrix</title>';
+		content += '</head><body >';
+		content += "<h1 style='text-align : center;'>OtiPrix - Liste d'épicerie optimisé</h1>";
+		
+		var currentDepartmentStoreID = -1;
             
-            for(var x in $rootScope.cart)
-            {
-                var storeProduct = $rootScope.cart[x].store_product;
+		for(var x in $rootScope.cart)
+		{
+				var storeProduct = $rootScope.cart[x].store_product;
 
-                if(parseFloat(storeProduct.price) === 0)
-                {
-                        continue;
-                }
+				if(parseFloat(storeProduct.price) === 0)
+				{
+					continue;
+				}
 
-                if(currentDepartmentStoreID !== parseInt(storeProduct.department_store.id))
-                {
-                    if(currentDepartmentStoreID !== -1)
-                    {
-                        // Close previously opened tag
-                        mywindow.document.write("<br>");
-                        mywindow.document.write("</div>");
-                        mywindow.document.write("</ul>");
-                    }
+				if(currentDepartmentStoreID !== parseInt(storeProduct.department_store.id))
+				{
+						if(currentDepartmentStoreID !== -1)
+						{
+								content += "<br></div></ul>";
+						}
 
-                    if(typeof storeProduct.department_store !== "undefined" && parseInt(storeProduct.department_store.distance) !== 0)
-                    {
-                        var text = storeProduct.retailer.name + " - " + storeProduct.department_store.address + ", " + storeProduct.department_store.state + ", " + storeProduct.department_store.city + "," + storeProduct.department_store.postcode;
-                        mywindow.document.write("<h3>" + text + "</h3>");
-                    }
-                    else
-                    {
-                        mywindow.document.write("<h3> " + storeProduct.retailer.name + " - Le magasin n'est pas proche de chez vous.</h3>");
-                    }
+						if(typeof storeProduct.department_store !== "undefined" && parseInt(storeProduct.department_store.distance) !== 0)
+						{
+								var text = storeProduct.retailer.name + " - " + storeProduct.department_store.address + ", " + storeProduct.department_store.state + ", " + storeProduct.department_store.city + "," + storeProduct.department_store.postcode;
+								content += "<h3>" + text + "</h3>";
+						}
+						else
+						{
+								content += "<h3> " + storeProduct.retailer.name + " - Le magasin n'est pas proche de chez vous.</h3>";
+						}
 
-                    currentDepartmentStoreID = parseInt(storeProduct.department_store.id);
+						currentDepartmentStoreID = parseInt(storeProduct.department_store.id);
 
-                    // Open new table
-                    mywindow.document.write("<div>");
-                    mywindow.document.write("<ul style='list-style-type: none;'>");
-                }
+						// Open new table
+						content += "<div>";
+						content += "<ul style='list-style-type: none;'>";
+				}
 
-                var description = "";
-                if(storeProduct.size)
-                {
-                    description += ", Taile : " + storeProduct.size;
-                }
-                if(storeProduct.brand)
-                {
-                    description += ", Marque : " + storeProduct.brand.name;
-                }
-                if(storeProduct.format)
-                {
-                    description += ", Format : " + storeProduct.format;
-                }
-                if(storeProduct.state)
-                {
-                    description += ", Origine : " + storeProduct.state;
-                }
+				var description = "";
+				if(storeProduct.size)
+				{
+						description += ", Taile : " + storeProduct.size;
+				}
+				if(storeProduct.brand)
+				{
+						description += ", Marque : " + storeProduct.brand.name;
+				}
+				if(storeProduct.format)
+				{
+						description += ", Format : " + storeProduct.format;
+				}
+				if(storeProduct.state)
+				{
+						description += ", Origine : " + storeProduct.state;
+				}
 
-                var unit = "";
+				var unit = "";
 
-                if(storeProduct.unit)
-                {
-                    unit += " / " + storeProduct.unit.name;
-                }
+				if(storeProduct.unit)
+				{
+						unit += " / " + storeProduct.unit.name;
+				}
 
-                description += ", Prix : <b> $ CAD " + storeProduct.price + unit + "</b>";
+				description += ", Prix : <b> $ CAD " + storeProduct.price + unit + "</b>";
 
-                var product_text = "<p><b>" + storeProduct.product.name +  "</b> - " + description + "</p>";
+				var product_text = "<p><b>" + storeProduct.product.name +  "</b> - " + description + "</p>";
 
-                mywindow.document.write("<li class='list-group-item'>" + product_text + "</li>");
-            }
+				content += "<li class='list-group-item'>" + product_text + "</li>";
+			}
 
-            if(currentDepartmentStoreID !== -1)
-            {
-                    // Close last opened tag
-                    mywindow.document.write("</div>");
-                    mywindow.document.write("</ul>");
-            }
+			if(currentDepartmentStoreID !== -1)
+			{
+					// Close last opened tag
+					content += "</div>";
+					content += "</ul>";
+			}
 
-            mywindow.document.write("<br>");
-            mywindow.document.write("<br>");
-            mywindow.document.write("<p style='float : right;'><b>Totale : $ CAD " + $rootScope.get_cart_total_price() + " + taxes. </b></p>");
+			content += "<br>";
+			content += "<br>";
+			content += "<p style='float : right;'><b>Totale : $ CAD " + $rootScope.get_cart_total_price() + " + taxes. </b></p>";
 
-            if($rootScope.price_optimization > 0)
-            {
-                mywindow.document.write("<p style='float : right;'><b>Vous économiserez environs : $ CAD  " + $rootScope.price_optimization + "</b></p>");
-            }
+			if($rootScope.price_optimization > 0)
+			{
+					content += "<p style='float : right;'><b>Vous économiserez environs : $ CAD  " + $rootScope.price_optimization + "</b></p>";
+			}
+			content += '</body></html>';
+		
+			mywindow.document.write(content);
 
-            mywindow.document.write('</body></html>');
+			mywindow.document.close(); // necessary for IE >= 10
+			mywindow.focus(); // necessary for IE >= 10*/
 
-            mywindow.document.close(); // necessary for IE >= 10
-            mywindow.focus(); // necessary for IE >= 10*/
+			mywindow.print();
+			mywindow.close();
 
-            mywindow.print();
-            mywindow.close();
-
-            return true;
+			return true;
 
 	};
 	
