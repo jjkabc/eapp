@@ -61,7 +61,7 @@
             
             <md-subheader class="" ng-show="departmentStore.distance > 0">
                 <img alt="{{ product.name }}" ng-src="{{base_url}}/assets/img/stores/{{departmentStore.image}}" style="height : 44px;" />
-                <b> {{departmentStore.address}}, {{departmentStore.city}}, {{departmentStore.state}}, {{departmentStore.postcode}}, {{departmentStore.distance}} Km en voiture (environs {{departmentStore.time | number : 0}} Minutes)</b>
+                <b> <a href>{{departmentStore.address}}, {{departmentStore.city}}, {{departmentStore.state}}, {{departmentStore.postcode}}, {{departmentStore.distance}} Km en voiture (environs {{departmentStore.time | number : 0}} Minutes)</a></b>
             </md-subheader>
             <md-subheader class="md-warn" ng-hide="departmentStore.distance > 0">
                 <img alt="{{ product.name }}" ng-src="{{base_url}}/assets/img/stores/{{departmentStore.image}}" style="height : 44px;" />
@@ -104,17 +104,18 @@
                             <p><b><a href="single-product.html">{{item.store_product.product.name}}</a></b></p>
                             <p ng-show="item.store_product.size">{{item.store_product.size}}</p>
                             <p ng-show="item.store_product.brand">{{item.store_product.brand.name}}</p>
-                            <div>
-                                {{item.store_product.format}} {{item.store_product.unit.name}}
-                                <md-button class="md-raised" ng-disabled="item.different_format_products.length === 0" ng-click="productFormatChanged($event, item)">Changer Format</md-button>
-                            </div>
+                            <p>
+                                Format : {{item.store_product.format}} {{item.store_product.unit.name}}
+                            </p>
+                            <md-button class="md-raised" ng-hide="item.different_format_products.length === 0" ng-click="productFormatChanged($event, item)">Changer Format</md-button>
                             <p ng-show="item.store_product.state">Origine : {{item.store_product.state}}</p>
                             <p  ng-show="item.store_product.price > 0"><b><span class="amount">$ CAD {{item.store_product.price | number: 2}}</span> </b><span ng-show="item.store_product.brand"> / {{item.store_product.brand.name}}</span></p>
                         </td>
 
                         <td md-cell>
                             <md-input-container>
-                                <input aria-label="Qty" style="width : 50px;" type="number" ng-model="item.quantity">
+                                <label>Quantité</label>
+                                <input aria-label="Qty" type="number" ng-model="item.quantity">
                             </md-input-container>
                         </td>
 
@@ -172,9 +173,9 @@
     </div>
 
     <div>
-        <div class="eapp-container container">
+        <div class="container">
 
-            <div class="cart_totals ">
+            <div class="cart_totals pull-right">
                 <h2>Détails d'optimisation</h2>
 
                 <table>
@@ -205,7 +206,7 @@
                       <md-icon style="color: #1abc9c;"><i class="material-icons">send</i></md-icon>
                     </md-button>
 
-                    <md-button class="md-fab md-primary" aria-label="Partager">
+                    <md-button class="md-fab md-primary" aria-label="Partager" ng-hide="true">
                             <md-icon style="color: #1abc9c;"><i class="material-icons">share</i></md-icon>
                     </md-button>
 
