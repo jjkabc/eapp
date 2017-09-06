@@ -5,42 +5,25 @@ jQuery(document).ready(function($){
     $('.product-carousel').owlCarousel({
         loop:true,
         nav:true,
-        margin:20,
+        autoplay:true,
+        autoplayTimeout: 1000,
+        autoplayHoverPause:true,
+        margin:0,
         responsiveClass:true,
+        
         responsive:{
             0:{
-                items:1,
+                items:1
             },
             600:{
-                items:3,
+                items:3
             },
             1000:{
-                items:5,
+                items:6
             }
         }
     });  
-    
-    $('.related-products-carousel').owlCarousel({
-        loop:true,
-        nav:true,
-        margin:20,
-        responsiveClass:true,
-        responsive:{
-            0:{
-                items:1,
-            },
-            600:{
-                items:2,
-            },
-            1000:{
-                items:2,
-            },
-            1200:{
-                items:3,
-            }
-        }
-    });  
-    
+        
     $('.brand-list').owlCarousel({
         loop:true,
         nav:true,
@@ -48,13 +31,13 @@ jQuery(document).ready(function($){
         responsiveClass:true,
         responsive:{
             0:{
-                items:1,
+                items:1
             },
             600:{
-                items:3,
+                items:4
             },
             1000:{
-                items:4,
+                items:6
             }
         }
     });    
@@ -209,7 +192,7 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
     $rootScope.product_selected = function(item)
     {
         if(typeof item === 'undefined')
-        	return;
+            return;
             
         $rootScope.selectedProduct = item;
     };
@@ -590,9 +573,6 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
             formData.append("profile[city]", $scope.user.city);
             formData.append("profile[address]", $scope.user.address);
             formData.append("profile[postcode]", $scope.user.postcode);
-            formData.append("profile[phone1]", $scope.user.phone1);
-            formData.append("profile[phone2]", $scope.user.phone2);
-	    
 
             $http.post(
                  $scope.site_url.concat("/account/registration"),formData,

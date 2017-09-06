@@ -171,15 +171,14 @@
     <notifications-bar class="notifications"></notifications-bar>
 
     <div class="container search-box" id="search-box" ng-controller="ShopController" ng-hide="hideSearchArea" style="margin-top: 60px;">
-        <form ng-submit="searchProducts(searchText)" class="col-md-12 col-sm-12">
-            <div class="row">
-                <md-input-container class="col-md-12 col-sm-12">
-                    <label>Rechercher produits</label>
-                    <input name="searchText" ng-model="searchText" aria-label="Search" />
-                    <md-icon><i class="material-icons">search</i></icon>
-                </md-input-container>
-            </div>
+        <form ng-submit="searchProducts(searchText)">
+            <md-input-container class="md-icon-float md-icon-right md-block">
+                <label>Rechercher produits</label>
+                <input name="searchText" ng-model="searchText" aria-label="Rechercher" />
+                <md-icon ng-hide="true"><i class="material-icons">search</i></md-icon>
+            </md-input-container>
         </form>
+        <p style="text-align: center;" ng-hide="isUserLogged">Résultats optimisés pour {{currentAddress}} | <a href="<?php echo site_url("/home/change_location"); ?>">Changer</a></p>
     </div>
     
     <div id="mainmenu-area" class="mainmenu-area" class="navbar-wrapper">
@@ -273,7 +272,9 @@
                 <div class="col-md-3 col-sm-6">
                     <div class="footer-about-us">
                         <h2>oti<span>Prix</span></h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis sunt id doloribus vero quam laborum quas alias dolores blanditiis iusto consequatur, modi aliquid eveniet eligendi iure eaque ipsam iste, pariatur omnis sint! Suscipit, debitis, quisquam. Laborum commodi veritatis magni at?</p>
+                        <p>  
+                            En un seul clic, otiPrix réduit le coût de votre panier d’épicerie en identifiant les meilleurs et les vrais rabais dans les magasins proches de vous. Avec OTIPRIX, consulter en un seul et même endroit l’ensemble des produits alimentaires en rabais dans les grandes surfaces, mais aussi dans tous les petits magasins situés à proximité de votre lieu de résidence.
+                        </p>
                         <div class="footer-social">
                             <a href="#" target="_blank"><i class="fa fa-facebook"></i></a>
                             <a href="#" target="_blank"><i class="fa fa-twitter"></i></a>
@@ -288,11 +289,11 @@
                     <div class="footer-menu">
                         <h2 class="footer-wid-title">User Navigation </h2>
                         <ul>
-                            <li><a href="#">Mon compte</a></li>
-                            <li><a href="#">Ma liste d'epicerie</a></li>
-                            <li><a href="#">Presse</a></li>
+                            <li><a href="<?php echo site_url("account"); ?>">Mon compte</a></li>
+                            <li><a href="<?php echo site_url("account/my_grocery_list"); ?>">Ma liste d'epicerie</a></li>
+                            <li><a href="<?php echo site_url("blog/press_release"); ?>">Presse</a></li>
                             <li><a href="#">Contacter nous</a></li>
-                            <li><a href="#">Terme et conditions</a></li>
+                            <li><a href  onclick="window.open('<?php echo base_url("/assets/files/terms_and_conditions.pdf")?>', '_blank', 'fullscreen=yes'); return false;">Terme et conditions</a></li>
                         </ul>                        
                     </div>
                 </div>
@@ -309,11 +310,11 @@
                 <div class="col-md-3 col-sm-6">
                     <div class="footer-newsletter">
                         <h2 class="footer-wid-title">Newsletter</h2>
-                        <p>Sign up to our newsletter and get exclusive deals you wont find anywhere else straight to your inbox!</p>
+                        <p>Inscrivez-vous à notre newsletter et obtenez des offres exclusives que vous ne trouverez nulle part ailleurs dans votre boîte de réception!</p>
                         <div class="newsletter-form">
                             <form action="#">
-                                <input type="email" placeholder="Type your email">
-                                <input type="submit" value="Subscribe">
+                                <input type="email" placeholder="Entrez votre email">
+                                <input type="submit" value="Souscrire">
                             </form>
                         </div>
                     </div>

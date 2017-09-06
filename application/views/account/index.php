@@ -44,7 +44,90 @@ $(document).ready(function()
             }
         });
         
+        scope.optimizations = [];
+        if(scope.isUserLogged)
+        {
+            var data = 
+            {
+                label : "Économies général",
+                value : optimization_avg(scope.loggedUser.optimizations.overall),
+                count : items_count(scope.loggedUser.optimizations.overall)
+            };
+            
+            scope.optimizations.push(data);
+            
+            var data = 
+            {
+                label : "Économies cette semaine",
+                value : optimization_avg(scope.loggedUser.optimizations.currentWeek),
+                count : items_count(scope.loggedUser.optimizations.currentWeek)
+            };
+            
+            scope.optimizations.push(data);
+            
+            
+            var data = 
+            {
+                label : "Économies ce mois",
+                value : optimization_avg(scope.loggedUser.optimizations.currentMonth),
+                count : items_count(scope.loggedUser.optimizations.currentMonth)
+            };
+            
+            scope.optimizations.push(data);
+            
+            var data = 
+            {
+                label : "Économies cette année",
+                value : optimization_avg(scope.loggedUser.optimizations.currentYear),
+                count : items_count(scope.loggedUser.optimizations.currentYear)
+            };
+            
+            scope.optimizations.push(data);
+            
+        }
+        
     });
+    
+    function optimization_avg(list)
+    {
+        var average = 0;
+        var count = 0;
+        var display = "-";
+        
+        for(var i in list)
+        {
+            average += parseFloat(list[i].price_optimization);
+            count++;
+        }
+        
+        if(parseFloat(average) !== 0)
+        {
+            display = parseInt(average / count);
+        }
+        
+        return display;
+    }
+    
+    function items_count(list)
+    {
+        var average = 0;
+        var display = "-";
+        var count = 0;
+        
+        for(var i in list)
+        {
+            var items = JSON.parse(list[i].items);
+            average += items.length;
+            count++;
+        }
+        
+        if(parseFloat(average) !== 0)
+        {
+            display = parseInt(average / count);
+        }
+        
+        return display;
+    }
     
 </script>
 
@@ -52,7 +135,27 @@ $(document).ready(function()
     <md-tabs md-dynamic-height md-border-bottom class="container" layout-padding>
         
         <md-content>
-		
+            
+            <md-tab label="Historique de mes économies">
+                <div class="md-padding">
+                <md-list>
+                    <md-list-item class="md-3-line" ng-repeat="item in optimizations">
+                      <div class="md-list-item-text"  style="margin-bottom: 10px;">
+                        <h3 style="color : #1abc9c;">{{item.label}}</h3>
+                        <h4>Économies moyen : <b style="color : red;"><span ng-show="item.value != '-'">$ CAD</span> {{item.value}}</b></h4>
+                        <p>Nombre moyen de produits par panier : <b>{{item.count}}</b></p>
+                      </div>
+                      <md-button class="md-secondary md-otiprix">Voir détails</md-button>
+                      <md-divider ng-if="!$last"></md-divider>
+                    </md-list-item>
+                </md-list>
+                </div>
+            </md-tab>
+            
+            <md-tab label="Modifier ma liste d’épicerie">
+                <div id="groceryListContainer" ng-include="'<?php echo base_url(); ?>/assets/templates/user_grocery_list.html'"></div>
+            </md-tab>
+            
             <md-tab label="Modifier mes renseignements personnels">
 
                 <div class="alert alert-danger" ng-show="saveProfileError">
@@ -63,7 +166,7 @@ $(document).ready(function()
                     <strong>Success!</strong> {{saveProfileSuccessMessage}}
                 </div>
 
-                <md-content layout-padding>
+                <div layout-padding>
 
                     <form name="userInfoForm" novalidate ng-submit="saveProfile()">
                         <md-input-container class="md-block col-md-12 col-sm-12" flex-gt-sm>
@@ -116,33 +219,53 @@ $(document).ready(function()
                             </div>
                         </md-input-container>
 
-                        <md-input-container class="md-block col-md-6 col-sm-12" flex-gt-sm>
-                            <label>Numbero de telephone principale</label>
-                            <md-icon style="color: #1abc9c;"><i class="material-icons">local_phone</i></md-icon>
-                            <input name="profile[phone1]" ng-model="loggedUser.profile.phone1" />
-                        </md-input-container>
-
-                        <md-input-container class="md-block col-md-6 col-sm-12" flex-gt-sm>
-                            <label>Numbero de telephone secondaire</label>
-                            <md-icon style="color: #1abc9c;"><i class="material-icons">local_phone</i></md-icon>
-                            <input name="profile[phone2]" ng-model="loggedUser.profile.phone2" />
-                        </md-input-container>
+                        <div layout-padding>
+                            <md-subheader class="md-warn" ng-hide="loggedUser.phone_verified == 1">Vérifier votre numéro de téléphone</md-subheader>
+                    
+                            <div class="col-sm-12" ng-show="enterVerificationNumber">
+                                <div class="alert alert-danger" ng-show="phoneNumberError">
+                                    <strong>Erreur!</strong> {{phoneNumberError}}.
+                                </div>
+                                <div class="alert alert-success" ng-show="validateCodeMessage">
+                                    <strong>Success!</strong> {{validateCodeMessage}}
+                                </div>
+                                <p style="text-align: center; color: green;" ng-show="loggedUser.phone_verified == 1">Verified : {{loggedUser.phone}}</p>
+                                <p style="text-align: center;">Veuillez entrer ci-dessous un numéro de téléphone où nous vous enverrons le code de vérification.</p>
+                                <md-input-container class="col-sm-12 col-md-6 col-md-offset-3">
+                                    <md-icon style="color: #1abc9c;"><i class="material-icons">phone</i></md-icon>
+                                    <input class="form-control" style="border-radius: 2px;" type="tel" id="phone">
+                                </md-input-container>
+                                <div class="col-sm-12">
+                                    <md-button class="md-primary md-raised col-md-4 col-md-offset-4" ng-click="sendVerificationCode()">
+                                        Valider
+                                    </md-button>
+                                </div>
+                            </div>
+                        
+                            <div class="col-sm-12" ng-hide="enterVerificationNumber">
+                                <div class="alert alert-danger" ng-show="validateCodeMessage">
+                                    <strong>Erreur!</strong> {{validateCodeMessage}}
+                                </div>
+                                <p style="text-align: center;">Veuillez entrer ci-dessous le code que vous avez reçu ou cliquez sur <a href ng-click="enterVerificationNumber = true">réessayez</a> pour renvoyer un autre code de vérification.</p>
+                                <md-input-container class="col-sm-12 col-md-6 col-md-offset-3">
+                                    <label>Code</label>
+                                    <input ng-model="verificationCode">
+                                </md-input-container>
+                                <div class="col-sm-12">
+                                    <md-button class="md-primary md-raised col-md-4 col-md-offset-4" ng-click="validateCode()">
+                                        Valider
+                                    </md-button>
+                                </div>
+                            </div>
+                    
+                        </div>
 
                         <div class="pull-right">
                             <input type="submit" class="btn btn-primary" value="Changer" />
                         </div>
                         
                     </form>
-                </md-content>
-            </md-tab>
-            
-            <md-tab label="Historique de mes économies">
-                <md-content class="md-padding">
-                </md-content>
-            </md-tab>
-
-            <md-tab label="Modifier ma liste d’épicerie">
-                <div id="groceryListContainer" ng-include="'<?php echo base_url(); ?>/assets/templates/user_grocery_list.html'"></div>
+                </div>
             </md-tab>
 
             <md-tab label="Modifier mes magasins préférés">
@@ -253,47 +376,7 @@ $(document).ready(function()
                     </form>
                 </md-content>  
                 
-                <md-content layout-padding>
-                    <md-subheader class="md-warn">Vérifier votre numéro de téléphone</md-subheader>
-                    
-                        
-                        <div class="col-sm-12" ng-show="enterVerificationNumber">
-                            <div class="alert alert-danger" ng-show="phoneNumberError">
-                                <strong>Erreur!</strong> {{phoneNumberError}}.
-                            </div>
-                            <div class="alert alert-success" ng-show="validateCodeMessage">
-                                <strong>Success!</strong> {{validateCodeMessage}}
-                            </div>
-                            <p style="text-align: center; color: green;" ng-show="loggedUser.phone_verified == 1">Verified : {{loggedUser.phone}}</p>
-                            <p style="text-align: center;">Veuillez entrer ci-dessous un numéro de téléphone où nous vous enverrons le code de vérification.</p>
-                            <md-input-container class="col-sm-12 col-md-6 col-md-offset-3">
-                                <md-icon style="color: #1abc9c;"><i class="material-icons">phone</i></md-icon>
-                                <input class="form-control" style="border-radius: 2px;" type="tel" id="phone">
-                            </md-input-container>
-                            <div class="col-sm-12">
-                                <md-button class="md-primary md-raised col-md-4 col-md-offset-4" ng-click="sendVerificationCode()">
-                                    Valider
-                                </md-button>
-                            </div>
-                        </div>
-                        
-                        <div class="col-sm-12" ng-hide="enterVerificationNumber">
-                            <div class="alert alert-danger" ng-show="validateCodeMessage">
-                                <strong>Erreur!</strong> {{validateCodeMessage}}
-                            </div>
-                            <p style="text-align: center;">Veuillez entrer ci-dessous le code que vous avez reçu ou cliquez sur <a href ng-click="enterVerificationNumber = true">réessayez</a> pour renvoyer un autre code de vérification.</p>
-                            <md-input-container class="col-sm-12 col-md-6 col-md-offset-3">
-                                <label>Code</label>
-                                <input ng-model="verificationCode">
-                            </md-input-container>
-                            <div class="col-sm-12">
-                                <md-button class="md-primary md-raised col-md-4 col-md-offset-4" ng-click="validateCode()">
-                                    Valider
-                                </md-button>
-                            </div>
-                        </div>
-                    
-                </md-content>
+                
             </md-tab>
         </md-content>
     </md-tabs>

@@ -156,7 +156,7 @@ $(document).ready(function(){
                                 
                         <div class="col-md-3  condition" style=" margin-top:20px;"> <!-- Lien vers page Terme -->
                             <p class="pg_connex ">
-                                <a href="#">Terme et Condition</a>
+                                <a  href  onclick="window.open('<?php echo base_url("/assets/files/terms_and_conditions.pdf")?>', '_blank', 'fullscreen=yes'); return false;">Terme et Condition</a>
                             </p>
                         </div>
                                   

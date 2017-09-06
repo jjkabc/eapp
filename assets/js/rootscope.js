@@ -9,6 +9,28 @@ $(document).ready(function()
         rootScope.valid = true;
         rootScope.success_message = "";
         rootScope.error_message = "";
+        rootScope.currentAddress = "1953 Rue Ste-Catherine Ouest, Québec, Montréal";
+        rootScope.longitude = -73.5815;
+        rootScope.latitude = 45.4921;
+        rootScope.postcode = "";
+        
+        if(rootScope.isUserLogged)
+        {
+            if(window.localStorage.getItem("latitude"))
+            {
+                rootScope.latitude = window.localStorage.getItem("latitude");
+            }
+
+            if(window.localStorage.getItem("longitude"))
+            {
+                rootScope.longitude = window.localStorage.getItem("longitude");
+            }
+
+            if(window.localStorage.getItem("currentAddress"))
+            {
+                rootScope.currentAddress = window.localStorage.getItem("currentAddress");
+            }
+        }
         
         /* CART */
         
@@ -69,9 +91,10 @@ $(document).ready(function()
         };
         
         rootScope.get_store_total = function(store_index)
-        {        
-            var total = 0;
-
+        {   
+            
+            var total = 0;            
+            
             for(var key in rootScope.cart)
             {
                 //$rootScope.store_products[index].store_products
@@ -91,6 +114,60 @@ $(document).ready(function()
             for(var key in rootScope.cart)
             {
                 total += parseFloat(rootScope.cart[key].quantity * rootScope.cart[key].store_product.price);
+            }
+
+            return total;
+        };
+        
+        rootScope.get_cart_total_available_products = function()
+        {
+            var total = 0;
+            
+            if(rootScope.viewing_cart_optimization.value)
+            {
+                for(var key in rootScope.cart)
+                {
+                    var sp = rootScope.cart[key].store_product;
+                    if(parseFloat(sp.department_store.distance) === 0)
+                    {
+                        continue;
+                    }
+                    total += parseFloat(rootScope.cart[key].quantity * sp.price);
+                }
+            }
+            else
+            {
+                for(var i in rootScope.selectedStore.store_products)
+                {
+                    total += parseFloat(rootScope.selectedStore.store_products[i].quantity * rootScope.selectedStore.store_products[i].store_product.price);
+                }
+            }
+
+            return total;
+        };
+        
+        rootScope.get_cart_total_unavailable_products = function()
+        {
+            var total = 0;
+            
+            if(rootScope.viewing_cart_optimization.value)
+            {
+                for(var key in rootScope.cart)
+                {
+                    var sp = rootScope.cart[key].store_product;
+                    if(parseFloat(sp.department_store.distance) > 0)
+                    {
+                        continue;
+                    }
+                    total += parseFloat(rootScope.cart[key].quantity * sp.price);
+                }
+            }
+            else
+            {
+                for(var i in rootScope.selectedStore.missing_products)
+                {
+                    total += parseFloat(rootScope.selectedStore.missing_products[i].quantity * rootScope.selectedStore.missing_products[i].store_product.price);
+                }
             }
 
             return total;
@@ -126,16 +203,22 @@ $(document).ready(function()
             return total;
         };
         
-        rootScope.add_product_to_cart = function(product_id)
+        rootScope.add_product_to_cart = function(product_id, store_product_id)
         {
+            if(typeof store_product_id === 'undefined')
+            {
+                store_product_id = -1;
+            }
+            
             var data = 
             {
                 product_id : product_id,
                 longitude : rootScope.longitude,
-                latitude : rootScope.latitude
+                latitude : rootScope.latitude,
+                store_product_id : store_product_id
             };
 
-                $.ajax({
+            $.ajax({
                 type: 'POST',
                 url:   rootScope.site_url.concat("/cart/insert"),
                 data: data,
@@ -249,16 +332,70 @@ $(document).ready(function()
 	rootScope.getUserCoordinates = function()
         {
             // Get the current geo location only if it's not yet the case
-            if ('https:' === document.location.protocol && "geolocation" in navigator && !window.localStorage.getItem("longitude") && !window.localStorage.getItem("latitude")) 
+            if ("geolocation" in navigator) 
             {
                 navigator.geolocation.getCurrentPosition(function(position) 
                 {
                     rootScope.longitude = position.coords.longitude;
                     rootScope.latitude = position.coords.latitude;
+                    var geocoder = new google.maps.Geocoder;
+                    rootScope.geocodeLatLng(geocoder, rootScope.latitude, rootScope.longitude);
+                    
                     window.localStorage.setItem("longitude", rootScope.longitude);
                     window.localStorage.setItem("latitude", rootScope.latitude);
                 });
             }
+        };
+        
+        rootScope.getUserCoordinatesFromPostcode = function()
+        {
+            var geocoder = new google.maps.Geocoder;
+            
+            geocoder.geocode( { 'address': rootScope.postcode}, function(results, status) 
+            {
+                if (status == google.maps.GeocoderStatus.OK) 
+                {
+                    rootScope.longitude = results[0].geometry.location.lng();
+                    rootScope.latitude =results[0].geometry.location.lat();
+                    rootScope.geocodeLatLng(geocoder, rootScope.latitude, rootScope.longitude);
+                    
+                    window.localStorage.setItem("longitude", rootScope.longitude);
+                    window.localStorage.setItem("latitude", rootScope.latitude);
+                    
+                }
+            });      
+        };
+        
+        rootScope.geocodeLatLng = function(geocoder, latitude, longitude) 
+        {
+            var latlng = {lat: latitude, lng: longitude};
+            
+            geocoder.geocode({'location': latlng}, function(results, status) 
+            {
+                if (status === 'OK') 
+                {
+                    if (results[0]) 
+                    {
+                        rootScope.$apply(function()
+                        {
+                            rootScope.currentAddress = results[0].formatted_address;
+                            window.localStorage.setItem("currentAddress", rootScope.currentAddress);
+                            
+                            rootScope.successMessage = true;
+                        });
+                        
+                    } 
+                    else 
+                    {
+                        
+                        window.alert('No results found');
+                    }
+                } 
+                else 
+                {
+                    window.alert('Geocoder failed due to: ' + status);
+                }
+            });
         };
         
 	rootScope.promptForZipCode = function(ev) 

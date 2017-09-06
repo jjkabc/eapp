@@ -56,9 +56,10 @@ class Cart_model extends CI_Model
      */
     public function getProducts($product_id)
     {
-        $array = array("period_from <=" => date("Y-m-d"), "period_to >=" => date("Y-m-d"), "product_id" => $product_id);
+        $array = array("product_id" => $product_id);
         $this->db->select("*");
         $this->db->from(STORE_PRODUCT_TABLE);
+        $this->db->where('period_from <= CURDATE() AND period_to >= CURDATE()', NULL, FALSE);
         $this->db->where($array);
         return $this->db->get()->result();
     }
@@ -110,7 +111,14 @@ class Cart_model extends CI_Model
         return $closest;
     }
     
-    public function get_best_store_product($product_id, $distance, $max_distance, $user, $search_all = false, $coords = null) 
+    public function get_best_store_product(
+            $product_id, 
+            $distance, 
+            $max_distance, 
+            $user, 
+            $search_all = false, 
+            $coords = null, 
+            $store_product_id = -1) 
     {
         $product_found = false;
         
@@ -159,11 +167,14 @@ class Cart_model extends CI_Model
             
             $this->db->where(array("product_id" => $product_id));
             
-            $this->db->order_by("unit_price", "ASC");
+            $this->db->where('period_from <= CURDATE() AND period_to >= CURDATE()', NULL, FALSE);
+            
+            $this->db->order_by("unit_price, range", "ASC");
 			
             $query = $this->db->get_compiled_select(STORE_PRODUCT_TABLE);
             $store_product = $this->db->query($query)->first_row();
             $related_products = array();
+            
             if($store_product != null)
             {
                 $product_found = true;
@@ -171,10 +182,23 @@ class Cart_model extends CI_Model
                 // get all the other choices
                 $all_store_products = $this->db->query($query)->result();
                 $close_store_products = array();
+                
+                // The store product selected by the user if applicale
+                $user_selected_sp = null;
+                
                 foreach($all_store_products as $val)
                 {
-                    if(isset($close_store_products[$val->id]) 
-                            && $close_store_products[$val->id]->merchant_id == $val->merchant_id)
+                    if($user_selected_sp == null && $val->id == $store_product_id)
+                    {
+                        $sp = $this->getStoreProduct($val->id);
+                        $sp->department_store = $this->get(CHAIN_STORE_TABLE, $val->department_store_id);
+                        $sp->department_store->range = $val->range;
+                        $sp->merchant_id = $val->merchant_id;
+                        $user_selected_sp = $sp;
+                        continue;
+                    }
+                    
+                    if(isset($close_store_products[$val->id]) && $close_store_products[$val->id]->merchant_id == $val->merchant_id)
                     {
                         $prev_range = floatval($close_store_products[$val->id]->department_store->range);
                         
@@ -184,7 +208,7 @@ class Cart_model extends CI_Model
                         }
                     }
 					
-                    $sp = $this->getStoreProduct($val->id, false, false, true);
+                    $sp = $this->getStoreProduct($val->id, false, false, false);
                     $sp->department_store = $this->get(CHAIN_STORE_TABLE, $val->department_store_id);
                     $sp->department_store->range = $val->range;
                     $sp->merchant_id = $val->merchant_id;
@@ -194,6 +218,22 @@ class Cart_model extends CI_Model
 				
 		// order by unit price
 		usort($close_store_products, "cmp_unit_price");
+                
+                if($store_product_id != -1)
+                {
+                    if($user_selected_sp == null)
+                    {
+                        $user_selected_sp =  $this->getStoreProduct($store_product_id);
+                        $user_selected_sp->id = $store_product_id;
+                        $user_selected_sp->department_store = new stdClass();
+                        $user_selected_sp->department_store->name = "Le magasin n'est pas disponible près de chez vous.";
+                        $user_selected_sp->department_store->id = -1;
+                        $user_selected_sp->department_store->distance = 0;
+                    }
+                    
+                    array_unshift($close_store_products, $user_selected_sp);
+                }
+                
 		// The best store product (cheapest) will be at the top of the list
 		$store_product = reset($close_store_products);
 		$related_products = $close_store_products;
@@ -209,11 +249,11 @@ class Cart_model extends CI_Model
 	
         if($product_found)
         {			
-            $best_Store_product = $this->getStoreProduct($store_product->id, false, false, true);
+            $best_Store_product = $this->getStoreProduct($store_product->id);
             
             if(sizeof($related_products) > 1)
             {
-            	$best_Store_product->worst_product = $store_product->worst_product;
+                $best_Store_product->worst_product = $store_product->worst_product;
             	$best_Store_product->related_products = $related_products;
             }
             
@@ -224,7 +264,7 @@ class Cart_model extends CI_Model
         // There was no best product wrt the user. Get the cheapest product    
         if($store_product == null)
         {
-            $best_Store_product = $this->get_cheapest_store_product($product_id);
+            $best_Store_product = $this->get_cheapest_store_product($product_id, true, $store_product_id);
             $best_Store_product->worst_product = null;
             $best_Store_product->related_products = array();
         }
@@ -232,13 +272,16 @@ class Cart_model extends CI_Model
         return $best_Store_product;
     }
     
-    public function get_cheapest_store_product($product_id, $latest = true) 
+    public function get_cheapest_store_product($product_id, $latest = true, $store_product_id = -1) 
     {
         $this->db->where(array("product_id" => $product_id));
+        if($store_product_id != -1)
+        {
+            $this->db->where(STORE_PRODUCT_TABLE.".id = ".$store_product_id);
+        }
         if($latest)
         {
-            $array = array('period_from <=' => date("Y-m-d"), 'period_to >=' => date("Y-m-d"));
-            $this->db->where($array);
+            $this->db->where('period_from <= CURDATE() AND period_to >= CURDATE()', NULL, FALSE);
         }
         
         $this->db->order_by("price", "ASC");
@@ -247,7 +290,7 @@ class Cart_model extends CI_Model
         $cheapest_store_product = null;
         if($store_product != null)
         {
-            $cheapest_store_product = $this->getStoreProduct($store_product->id, false, $latest, true);
+            $cheapest_store_product = $this->getStoreProduct($store_product->id, true, $latest, true);
         }
 		        
         if($cheapest_store_product == null)
@@ -257,6 +300,7 @@ class Cart_model extends CI_Model
         }
         $cheapest_store_product->department_store = new stdClass();
         $cheapest_store_product->department_store->name = "Le magasin n'est pas disponible près de chez vous.";
+        $cheapest_store_product->department_store->id = -1;
         $cheapest_store_product->department_store->distance = 0;
         
         return $cheapest_store_product;

@@ -65,6 +65,8 @@ class Account_model extends CI_Model
         
         $user_account->profile = $this->get_specific(USER_PROFILE_TABLE, array("user_account_id" => $user_account->id));
         
+        $user_account->optimizations = $this->get_user_optimizations($user_account);
+        
         $product_list = $this->get_specific(USER_GROCERY_LIST_TABLE, array("user_account_id" => $user_account->id));
 		
         $favorite_stores = array();
@@ -168,6 +170,27 @@ class Account_model extends CI_Model
         }else{
             return false;
         }
+    }
+    
+    public function get_user_optimizations($user) 
+    {
+        if($user == null)
+        {
+            return null;
+        }
+        
+        // get current week optimizations
+        $optimizations = new stdClass();
+        
+        $optimizations->currentWeek = $this->db->query("SELECT *, YEARWEEK(date_created) as weekCreated, YEARWEEK(NOW()) as currentWeek FROM ".USER_OPTIMIZATION_TABLE." HAVING weekCreated = currentWeek AND user_account_id = ".$user->id)->result();
+        $optimizations->currentYear = $this->db->query("SELECT *, YEAR(date_created) as yearCreated, YEAR(NOW()) as currentYear FROM ".USER_OPTIMIZATION_TABLE." HAVING yearCreated = currentYear AND user_account_id = ".$user->id)->result();
+        $optimizations->currentMonth = $this->db->query("SELECT *, YEAR(date_created) as yearCreated, YEAR(NOW()) as currentYear, MONTH(date_created) as monthCreated, MONTH(NOW()) as currentMonth FROM ".USER_OPTIMIZATION_TABLE." HAVING yearCreated = currentYear AND monthCreated = currentMonth AND user_account_id = ".$user->id)->result();
+        
+        $this->db->where("user_account_id", $user->id);
+        $optimizations->overall = $this->db->get(USER_OPTIMIZATION_TABLE)->result();
+        
+        return $optimizations;
+        
     }
 
 }

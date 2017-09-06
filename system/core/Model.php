@@ -105,8 +105,7 @@ class CI_Model {
     public function __construct()
     {
         log_message('info', 'Model Class Initialized');
-
-        $this->latest_products_condition = array('period_from <=' => date("Y-m-d"), 'period_to >=' => date("Y-m-d"));
+        $this->latest_products_condition = 'period_from <= CURDATE() AND period_to >= CURDATE()';
         $this->store_product_product_join = sprintf("%s.product_id = %s.id", STORE_PRODUCT_TABLE, PRODUCT_TABLE);
         $this->store_product_subcategory_join = sprintf("%s.subcategory_id = %s.id", PRODUCT_TABLE, SUB_CATEGORY_TABLE);
     }
@@ -183,8 +182,7 @@ class CI_Model {
         // Get the store product object
 	if($latestProduct)
 	{
-            $array = array('period_from <=' => date("Y-m-d"), 'period_to >=' => date("Y-m-d"));
-            $this->db->where($array);
+            $this->db->where('period_from <= CURDATE() AND period_to >= CURDATE()', NULL, FALSE);
 	}
 	
         $store_product_columns = "*";
@@ -218,7 +216,7 @@ class CI_Model {
             // Get subcategory
             if($store_product->product != null && $includeRelatedProducts)
             {
-                $store_product->related_products = $this->get_related_products($store_product);
+                $store_product->similar_products = $this->get_related_products($store_product);
             }
             
             $store_product->brand = $this->get(PRODUCT_BRAND_TABLE, $store_product->brand_id, $brand_columns);
@@ -263,6 +261,24 @@ class CI_Model {
 
         return $products;
     }
+    
+    public function get_chains()
+    {
+        
+        $chains = $this->get_all(CHAIN_TABLE);
+        
+        foreach ($chains as $key => $value) 
+        {
+            $store_image_path = ASSETS_DIR_PATH."img/stores/".$value->image;
+            
+            if(!file_exists($store_image_path) || empty($value->image))
+            {
+                $chains[$key]->image = "no_image_available.png";
+            }
+        }
+        
+        return $chains;
+    }
         
     /**
      * This method gets the other store products related to this store product
@@ -270,22 +286,27 @@ class CI_Model {
      */
     private function get_related_products($storeProduct, $latestProduct = true) 
     {
+        $related_products = array();
+        
         $array = array("product_id" => $storeProduct->product_id, STORE_PRODUCT_TABLE.".id !=" => $storeProduct->id);
-        $get = sprintf("%s.*, %s.name, %s.image, %s.name as retailer_name", STORE_PRODUCT_TABLE, PRODUCT_TABLE, PRODUCT_TABLE, CHAIN_TABLE);
-        $join = sprintf("%s.product_id = %s.id", STORE_PRODUCT_TABLE, PRODUCT_TABLE);
-        $join2 = sprintf("%s.retailer_id = %s.id", STORE_PRODUCT_TABLE, CHAIN_TABLE);
+        $get = sprintf("%s.id", STORE_PRODUCT_TABLE);
         $this->db->select($get);
         $this->db->from(STORE_PRODUCT_TABLE);
-        $this->db->join(PRODUCT_TABLE, $join);
-        $this->db->join(CHAIN_TABLE, $join2);
         $this->db->where($array);
         // Get the store product object
         if($latestProduct)
         {
-            $where = array('period_from <=' => date("Y-m-d"), 'period_to >=' => date("Y-m-d"));
-            $this->db->where($where);
+            $this->db->where('period_from <= CURDATE() AND period_to >= CURDATE()', NULL, FALSE);
         }
-        return $this->db->get()->result();
+        $ids = $this->db->get()->result();
+        
+        foreach ($ids as $value) 
+        {
+            array_push($related_products, $this->getStoreProduct($value->id, false));
+        }
+        
+        return $related_products;
+        
     }
     
     public function get_all_limit($table_name, $limit, $offset)
@@ -493,7 +514,8 @@ class CI_Model {
         {
             $this->db->join(SUB_CATEGORY_TABLE, $this->store_product_subcategory_join);	
             $this->db->where(array(SUB_CATEGORY_TABLE.".product_category_id" => $category_id));
-        }    
+        } 
+                
         // Get products that satisfy conditions
         $product_ids = $this->get_distinct(STORE_PRODUCT_TABLE, "product_id", $this->latest_products_condition);
 
@@ -513,7 +535,7 @@ class CI_Model {
         $this->db->select(STORE_PRODUCT_TABLE.".id, price, product_id, ".PRODUCT_TABLE.".name");
         $this->db->join(PRODUCT_TABLE, $this->store_product_product_join);
         $this->db->where("product_id", $product_id);
-        $this->db->where($this->latest_products_condition);
+        $this->db->where($this->latest_products_condition, NULL, FALSE);
         
         if($store_id != null)
         {
@@ -524,7 +546,6 @@ class CI_Model {
             $this->db->join(SUB_CATEGORY_TABLE, $this->store_product_subcategory_join);	
             $this->db->where(array(SUB_CATEGORY_TABLE.".product_category_id" => $category_id));
         }
-
         return $this->db->get(STORE_PRODUCT_TABLE)->row();
     }
     
@@ -613,24 +634,23 @@ class CI_Model {
 
         $this->db->select($columns);
 
-        if($where !== null)
+        if($where != null)
         {
-            $this->db->where($where);
+            $this->db->where($where, NULL, FALSE);
         }
-
         return $this->db->get($table_name)->result();
     }
 	
-	/*
-	* Method to get for a given user the different stores
-	*/
-	public function get_favorite_stores($user_id)
-	{
-            $this->db->select(CHAIN_TABLE.".*");
-            $this->db->join(USER_FAVORITE_STORE_TABLE, USER_FAVORITE_STORE_TABLE.'.retailer_id = '.CHAIN_TABLE.'.id');
-            $this->db->where(array("user_account_id" => $user_id));
-            return $this->db->get(CHAIN_TABLE)->result();
-	}
+    /*
+    * Method to get for a given user the different stores
+    */
+    public function get_favorite_stores($user_id)
+    {
+        $this->db->select(CHAIN_TABLE.".*");
+        $this->db->join(USER_FAVORITE_STORE_TABLE, USER_FAVORITE_STORE_TABLE.'.retailer_id = '.CHAIN_TABLE.'.id');
+        $this->db->where(array("user_account_id" => $user_id));
+        return $this->db->get(CHAIN_TABLE)->result();
+    }
     
     public function delete($table_name, $data)
     {

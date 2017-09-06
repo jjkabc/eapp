@@ -154,7 +154,28 @@ class CI_Controller {
                 $product_id = $item['id'];
                 $rowid = $item['rowid'];
                 // Get best match close to user
-                $store_product = $this->cart_model->get_cheapest_store_product($product_id);
+                
+                $store_product_id = -1;
+                
+                if($this->cart->has_options($rowid))
+                {
+                    $options = $this->cart->product_options($rowid);
+                    $store_product_id = $options['store_product_id'];
+                }
+                
+                if($store_product_id == -1)
+                {
+                    // Get best match close to user
+                    $store_product = $this->cart_model->get_cheapest_store_product($product_id);
+                }
+                else
+                {
+                    $store_product = $this->cart_model->getStoreProduct($store_product_id, false, true, true);
+                    $store_product->department_store = new stdClass();
+                    $store_product->department_store->name = "Le magasin n'est pas disponible près de chez vous.";
+                    $store_product->department_store->id = -1;
+                    $store_product->department_store->distance = 0;
+                }
                 
                 if($store_product === null)
                 {
@@ -162,6 +183,7 @@ class CI_Controller {
                 }
 
                 $cart_item['store_product'] = $store_product;
+                $cart_item['store_product_id'] = $store_product_id;
                 $cart_item['product'] = isset($store_product->product) ? $store_product->product : $this->cart_model->get_product($product_id);
                 $cart_item['rowid'] = $rowid;
                 $cart_item['quantity'] = 1;

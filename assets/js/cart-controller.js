@@ -50,7 +50,7 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
     /**
      * Set distance
      */
-    $scope.distance = 10;
+    $scope.distance = 4;
     
     $scope.true_value = true;
     $scope.false_value = false;
@@ -72,9 +72,10 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
             var cartItem = $rootScope.cart[index];
             var data = 
             {
-                    id : cartItem.product.id,
-                    rowid : cartItem.rowid,
-                    quantity : cartItem.quantity
+                id : cartItem.product.id,
+                rowid : cartItem.rowid,
+                quantity : cartItem.quantity,
+                store_product_id : cartItem.store_product_id
             };
             store_products.push(data);
         }
@@ -151,7 +152,7 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
     
     $scope.orderByStore = function()
     {
-        var currentDepartmentStoreID = -1;
+        var currentDepartmentStoreID = 0;
         
         $rootScope.departmenStores = [];
         
@@ -206,14 +207,16 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
         
         for(var i in $rootScope.cart)
         {
+            var cart_item = $rootScope.cart[i];
+            
             var item = $rootScope.cart[i].store_product;
             
-            // each related product represents a store
-            for(var x in item.related_products)
+            cart_item.store_product = item;
+            
+            if(item.related_products.length === 0)
             {
-                // get a product store product
-                var store_product = item.related_products[x];
-                store_product.related_products = item.related_products;
+                var store_product = item;
+                
                 // check if the store for this related product has already been added to the array
                 var index = stores.map(function(e) { return e.id; }).indexOf(store_product.retailer.id); 
                 
@@ -222,7 +225,7 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
                     var product_index = stores[index].store_products.map(function(e){ return e.product.id; }).indexOf(store_product.product.id);
                     if(product_index === -1)
                     {
-                        stores[index].store_products.push(store_product);
+                        stores[index].store_products.push(cart_item);
                     }
                 }
                 else
@@ -232,7 +235,37 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
    
                     stores.push(retailer);
                     stores[stores.length - 1].store_products = [];
-                    stores[stores.length - 1].store_products.push(store_product);
+                    stores[stores.length - 1].store_products.push(cart_item);
+                }
+            }
+            
+            // each related product represents a store
+            for(var x in item.related_products)
+            {
+                // get a product store product
+                var store_product = item.related_products[x];
+                store_product.related_products = item.related_products;
+                
+                cart_item.store_product = store_product;
+                // check if the store for this related product has already been added to the array
+                var index = stores.map(function(e) { return e.id; }).indexOf(store_product.retailer.id); 
+                
+                if(index >= 0)
+                {
+                    var product_index = stores[index].store_products.map(function(e){ return e.product.id; }).indexOf(store_product.product.id);
+                    if(product_index === -1)
+                    {
+                        stores[index].store_products.push(cart_item);
+                    }
+                }
+                else
+                {
+                    var retailer = store_product.retailer;
+                    retailer.department_store = store_product.department_store;
+   
+                    stores.push(retailer);
+                    stores[stores.length - 1].store_products = [];
+                    stores[stores.length - 1].store_products.push(cart_item);
                 }
             }
         }
@@ -243,8 +276,6 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
             
             for(var x in stores)
             {
-                
-                                
                 index = stores[x].store_products.map(function(e) { return e.product.id; }).indexOf(item.store_product.product.id); 
                 
                 // The product does not exist in that store
@@ -261,17 +292,44 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
             
         }
         
+        stores.sort(function(a, b)
+        {
+           
+           if(a.store_products.length === b.store_products.length)
+           {
+               return 0;
+           }
+           
+           if(a.store_products.length > b.store_products.length)
+           {
+               return -1;
+           }
+           else
+           {
+               return 1;
+           }
+            
+        });
         
         return stores;
     };
     
     $scope.storeTabSelected = function(store)
     {
+        $rootScope.selectedStore = store;
+        
         for(var i in $rootScope.cart)
         {
             var related_products = $rootScope.cart[i].store_product.related_products;
+            
             if(typeof related_products !== 'undefined')
             {
+                // There are no related items. Skip this product
+                if(related_products.length === 0)
+                {
+                    continue;
+                }
+                
                 $rootScope.cart[i].store_product = related_products[related_products.length - 1];
                 $rootScope.cart[i].store_product.related_products = related_products;
             }
@@ -281,7 +339,16 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
             {
                 if(parseInt($rootScope.cart[i].store_product.product.id) === parseInt(store.store_products[x].product.id))
                 {
-                    $rootScope.cart[i].store_product = store.store_products[x];
+                    $rootScope.cart[i].store_product = store.store_products[x].store_product;
+                }
+            }
+            
+            // reset the product price
+            for(var x in store.missing_products)
+            {
+                if(parseInt($rootScope.cart[i].store_product.product.id) === parseInt(store.missing_products[x].product.id))
+                {
+                    $rootScope.cart[i].store_product = store.missing_products[x].store_product;
                 }
             }
         }
@@ -450,6 +517,63 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
                 
           });
     };
+    
+    $scope.InitMap = function(ev, departmentStore)
+    {
+        $mdDialog.show({
+            controller: GoogleMapsController,
+            templateUrl:  $scope.base_url + 'assets/templates/google-map.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose:true,
+            preserveScope:true,
+            scope : $scope,
+            fullscreen: true,
+            onComplete : function()
+            {
+                var origin = {lat: parseFloat($scope.loggedUser.profile.latitude), lng: parseFloat($scope.loggedUser.profile.longitude)};
+                var destination = {lat: parseFloat(departmentStore.latitude), lng: parseFloat(departmentStore.longitude)};
+
+                var map = new google.maps.Map(document.getElementById('map'), {
+                  center: destination,
+                  zoom: 7
+                });
+
+                var directionsDisplay = new google.maps.DirectionsRenderer({
+                  map: map
+                });
+
+                // Set destination, origin and travel mode.
+                var request = {
+                  destination: destination,
+                  origin: origin,
+                  travelMode: 'DRIVING'
+                };
+
+                // Pass the directions request to the directions service.
+                var directionsService = new google.maps.DirectionsService();
+                directionsService.route(request, function(response, status) {
+                  if (status == 'OK') {
+                    // Display the route on the map.
+                    directionsDisplay.setDirections(response);
+                  }
+                });
+            }
+        })
+        .then(function(answer) {
+
+        }, function() {
+                
+        });
+    };
+    
+    function GoogleMapsController()
+    {
+        $scope.cancel = function() 
+        {
+            $mdDialog.cancel();
+        };
+    };
 	
     function ChangeStoreController($scope, $mdDialog) 
     {
@@ -466,8 +590,12 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
         $scope.change = function(sp)
         {
             var related_store_products = $scope.selectedStoreProduct.different_store_products;
+            var related_products = $scope.selectedStoreProduct.related_products;
+            var in_user_grocery_list = $scope.selectedStoreProduct.product.in_user_grocery_list;
             $scope.selectedStoreProduct = sp;
             $scope.selectedStoreProduct.different_store_products = related_store_products;
+            $scope.selectedStoreProduct.related_products = related_products;
+            $scope.selectedStoreProduct.product.in_user_grocery_list = in_user_grocery_list;
         };
 
         $scope.selectStoreProduct = function() 
@@ -477,6 +605,8 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
             $mdDialog.hide();
         };
     };
+    
+   
     
     function ChangeFormatController($scope, $mdDialog) 
     {
@@ -493,8 +623,12 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
         $scope.change = function(sp)
         {
             var related_store_products = $scope.selectedStoreProduct.different_format_products;
+            var related_products = $scope.selectedStoreProduct.related_products;
+            var in_user_grocery_list = $scope.selectedStoreProduct.product.in_user_grocery_list;
             $scope.selectedStoreProduct = sp;
             $scope.selectedStoreProduct.different_format_products = related_store_products;
+            $scope.selectedStoreProduct.related_products = related_products;
+            $scope.selectedStoreProduct.product.in_user_grocery_list = in_user_grocery_list;
         };
 
         $scope.selectStoreProduct = function() 
@@ -565,77 +699,31 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
 	
     $scope.update_price_optimization = function()
     {
-            $scope.distance_optimization = 0;
-            $scope.price_optimization = 0;
+        $scope.distance_optimization = 0;
+        $scope.price_optimization = 0;
 
-            for(var key in $scope.cart)
+        for(var key in $scope.cart)
+        {
+            var cart_item = $scope.cart[key];
+
+            if(typeof cart_item.store_product.worst_product === "undefined" || cart_item.store_product.worst_product === null)
             {
-                var cart_item = $scope.cart[key];
-
-                if(typeof cart_item.store_product.worst_product === "undefined" || cart_item.store_product.worst_product === null)
-                {
-                    continue;
-                }
-                $scope.price_optimization += parseFloat(cart_item.store_product.worst_product.price) - parseFloat(cart_item.store_product.price);
+                continue;
             }
+            $scope.price_optimization += (parseFloat(cart_item.store_product.worst_product.unit_price) - parseFloat(cart_item.store_product.unit_price)) * parseFloat(cart_item.quantity);
+        }
     };
     
-    /**
-     * Optimize product list by finding items in stores
-     * close to you.
-     * @returns {undefined}
-     */
-    $scope.update_product_list_by_store = function()
+    $scope.getCartItemRebate = function(cart_item)
     {
-        $rootScope.close_stores = [];
-        $rootScope.store_products = [];
-        $rootScope.loading_store_products = true;
-        // Create array with selected store_product id's
-        var store_products = [];
-        // Get optimized list here
-        for(var index in $rootScope.cart)
+        if(typeof cart_item.store_product.worst_product === "undefined" || cart_item.store_product.worst_product === null)
         {
-            var cartItem = $rootScope.cart[index];
-            var data = 
-            {
-                id : cartItem.product.id,
-                rowid : cartItem.rowid,
-                quantity : cartItem.quantity
-            };
-            store_products.push(data);
+            return 0;
         }
-
-        var formData = new FormData();
-        formData.append("products", JSON.stringify(store_products));
-        formData.append("distance", $scope.distance);
-        formData.append("longitude", $scope.longitude);
-        formData.append("latitude", $scope.latitude);
-	formData.append("searchAll", !$rootScope.searchInMyList);
-        // Send request to server to get optimized list 	
-        $scope.store_cart_promise = 
-            $http.post( $scope.site_url.concat("/cart/optimize_product_list_by_store"), 
-            formData, { transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(
-            function(response)
-            {
-                
-                $rootScope.close_stores = response.data.close_stores;
-                $rootScope.store_products = response.data.products;
-                                
-                var close_stores_array = $.map($rootScope.close_stores, function(value, index) {
-                    return [value];
-                });
-                
-                var store_products_array = $.map($rootScope.store_products, function(value, index) {
-                    return [value];
-                });
-                
-                $rootScope.close_stores = close_stores_array;
-                $rootScope.cart = store_products_array;
-                $rootScope.loading_store_products = false;
-                
-            });
         
+        return (parseFloat(cart_item.store_product.worst_product.unit_price) - parseFloat(cart_item.store_product.unit_price));
     };
+   
     
     $scope.get_price_label = function(store_product, product)
     {
@@ -696,6 +784,7 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
             {
                 $rootScope.cart = [];
                 $rootScope.stores = [];
+                $rootScope.departmenStores = [];
             });
 
         });
@@ -733,235 +822,352 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
         });
     };
 	
-	$rootScope.getListAsText = function()
-	{
-            var currentDepartmentStoreID = -1;
-            var smsText = "Votre liste d'épicerie fourni par OtiPrix \n";
-            for(var x in $rootScope.cart)
+    $rootScope.getListAsText = function()
+    {
+        var currentDepartmentStoreID = -1;
+        var smsText = "Votre liste d'épicerie fourni par OtiPrix \n";
+        for(var x in $rootScope.cart)
+        {
+            var storeProduct = $rootScope.cart[x].store_product;
+
+            if(parseFloat(storeProduct.price) === 0)
             {
-                var storeProduct = $rootScope.cart[x].store_product;
-                
-                if(parseFloat(storeProduct.price) === 0)
-                {
-                    continue;
-                }
-                
-                if(currentDepartmentStoreID !== parseInt(storeProduct.department_store.id))
-                {
-                        currentDepartmentStoreID = parseInt(storeProduct.department_store.id);
+                continue;
+            }
 
-                        smsText += storeProduct.retailer.name;
-                        if(typeof storeProduct.department_store !== "undefined" && parseInt(storeProduct.department_store.distance) !== 0)
-                        {
-                             smsText += " - " +  storeProduct.department_store.address + ", " + storeProduct.department_store.state + ", " + storeProduct.department_store.city + "," + storeProduct.department_store.postcode;
-                        }
-                        smsText += "\n";
+            if(currentDepartmentStoreID !== parseInt(storeProduct.department_store.id))
+            {
+                    currentDepartmentStoreID = parseInt(storeProduct.department_store.id);
+
+                    smsText += storeProduct.retailer.name;
+                    if(typeof storeProduct.department_store !== "undefined" && parseInt(storeProduct.department_store.distance) !== 0)
+                    {
+                         smsText += " - " +  storeProduct.department_store.address + ", " + storeProduct.department_store.state + ", " + storeProduct.department_store.city + "," + storeProduct.department_store.postcode;
+                    }
+                    smsText += "\n";
+            }
+
+            smsText += storeProduct.product.name + ": " + storeProduct.price + " $ CAD";
+
+            if(storeProduct.unit != null && typeof storeProduct.unit !== "undefined")
+            {
+                smsText += "/" + storeProduct.unit.name + "\n";
+            }
+            else
+            {
+                smsText += "\n";
+            }
+        }
+
+                    smsText += "TOTAL : $ CAD " + $scope.get_cart_total_price();
+
+                    if(parseFloat($scope.price_optimization) > 0)
+                    {
+                            smsText += "Vous économiserez environs : $ CAD " +  $scope.price_optimization;
+                    }
+
+        return smsText;
+    };
+	
+    $scope.showAlert = function(ev, title, message) 
+    {
+            // Appending dialog to document.body to cover sidenav in docs app
+            // Modal dialogs should fully cover application
+            // to prevent interaction outside of dialog
+            $mdDialog.show(
+              $mdDialog.alert()
+                    .parent(angular.element(document.querySelector('#popupContainer')))
+                    .clickOutsideToClose(true)
+                    .title(title)
+                    .textContent(message)
+                    .ariaLabel('Alert')
+                    .ok('Ok')
+                    .targetEvent(ev)
+            );
+    };
+
+    $rootScope.sortCart = function()
+    {
+        $rootScope.cart.sort(function(a, b)
+        {
+            var keyA = a.store_product.retailer.name.toString(),
+            keyB = b.store_product.retailer.name.toString();
+            return keyA.localeCompare(keyB);
+        });
+    };
+        
+    $rootScope.sendListAsEmail = function($event)
+    {
+        if(!$rootScope.isUserLogged)
+        {
+            return;
+        }
+
+        if(!$rootScope.isUserLogged)
+        {
+            $scope.showAlert($event, "Se connecter", "Vous devez vous connecter au site pour utiliser cette fonctionnalité..");
+            return;
+        }
+
+        if($rootScope.cart.length === 0)
+        {
+            $scope.showAlert($event, "Panier vide", "Votre panier est actuellement vide. Ajoutez des éléments au panier avant d'utiliser cette fonctionnalité.");
+            return;
+        }
+        
+        $scope.saveUserOptimisation(3);
+
+        $rootScope.sortCart();
+
+        var formData = new FormData();
+        var content = $scope.getCartHtmlContent();
+        formData.append("content", content);
+        // Send request to server to get optimized list 	
+        $http.post($scope.site_url.concat("/cart/mail_user_cart"), 
+        formData, { transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(
+        function(response)
+        {
+            if(response.data)
+            {
+                $scope.showAlert($event, "Email envoyé", "Votre liste d'épicerie a été envoyée à votre email.");
+            }
+            else
+            {
+                $scope.showAlert($event, "Erreur du serveur", "Une erreur inattendue s'est produite. Veuillez réessayer plus tard..");
+            }
+        });
+    };
+
+    $rootScope.sendListAsSMS = function($event)
+    {
+        if(!$rootScope.isUserLogged)
+        {
+            return;
+        }
+
+        if(!$rootScope.loggedUser.phone_verified)
+        {
+            $scope.showAlert($event, "Votre numéro de téléphone n'est pas vérifié", "Votre numéro de téléphone n'est pas vérifié. Veuillez consulter l'onglet de sécurité de votre compte pour vérifier votre numéro de téléphone.");
+            return;
+        }
+
+        if($rootScope.cart.length === 0)
+        {
+            $scope.showAlert($event, "Panier vide", "Votre panier est actuellement vide. Ajoutez des éléments au panier avant d'utiliser cette fonctionnalité.");
+            return;
+        }
+        
+        $scope.saveUserOptimisation(1);
+
+        $rootScope.sortCart();
+
+        var formData = new FormData();
+        formData.append("sms", $rootScope.getListAsText());
+        // Send request to server to get optimized list 	
+        $scope.promise = $http.post($scope.site_url.concat("/cart/send_sms"), 
+        formData, { transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(
+        function(response)
+        {
+            if(response.data)
+            {
+                $scope.showAlert($event, "Message envoyé", "Votre liste d'épicerie a été envoyée à votre téléphone.");
+            }
+        });
+    };
+
+    $rootScope.printCart = function($event) 
+    {
+        if(!$rootScope.isUserLogged)
+        {
+            return;
+        }
+
+        if($rootScope.cart.length === 0)
+        {
+            $scope.showAlert($event, "Panier vide", "Votre panier est actuellement vide. Ajoutez des éléments au panier avant d'utiliser cette fonctionnalité.");
+            return;
+        }
+        
+        $scope.saveUserOptimisation(0);
+
+        var mywindow = window.open('', 'PRINT');
+
+        mywindow.document.write($scope.getCartHtmlContent());
+
+        mywindow.document.close(); // necessary for IE >= 10
+        mywindow.focus(); // necessary for IE >= 10*/
+
+        mywindow.print();
+        mywindow.close();
+        
+        
+        return true;
+
+    };
+    
+    $scope.selectProduct = function(store_product)
+    {
+        window.location = $scope.site_url.concat("/cart/product/").concat(store_product.product.id).concat("/").concat(store_product.id);
+    };
+	
+    $scope.getCartHtmlContent = function()
+    {
+
+        var content = "";
+
+        $rootScope.sortCart();
+
+        content += '<html><head><title style="font-style: italic; color : #444; ">OtiPrix - All RIghts Reserved</title>';
+        content += '</head><body >';
+        content += "<h3 style='text-align : center; color : #444;'>OtiPrix - Liste d'épicerie optimisé</h3>";
+
+        var currentDepartmentStoreID = -1;
+
+        for(var x in $rootScope.cart)
+        {
+            var storeProduct = $rootScope.cart[x].store_product;
+
+            if(parseFloat(storeProduct.price) === 0)
+            {
+                continue;
+            }
+
+            if(currentDepartmentStoreID !== parseInt(storeProduct.department_store.id))
+            {
+                if(currentDepartmentStoreID !== -1)
+                {
+                    content += "<br></div></ul>";
                 }
 
-                smsText += storeProduct.product.name + ": " + storeProduct.price + " $ CAD";
-                
-                if(storeProduct.unit != null && typeof storeProduct.unit !== "undefined")
+                if(typeof storeProduct.department_store !== "undefined" && parseInt(storeProduct.department_store.distance) !== 0)
                 {
-                    smsText += "/" + storeProduct.unit.name + "\n";
+                    var text = storeProduct.retailer.name + " - " + storeProduct.department_store.address + ", " + storeProduct.department_store.state + ", " + storeProduct.department_store.city + "," + storeProduct.department_store.postcode;
+                    content += "<h4 style='color: #1abc9c; border-bottom-style: solid; border-width : 1px; border-color: gray; padding-bottom : 10px;'>" + text + "</h4>";
                 }
                 else
                 {
-                    smsText += "\n";
+                    content += "<h4 style='color: red; border-bottom-style: solid; border-width : 1px; border-color: gray; padding-bottom : 10px;'> " + storeProduct.retailer.name + " - Le magasin n'est pas proche de chez vous.</h4>";
                 }
-            }
-		
-			smsText += "TOTAL : $ CAD " + $scope.get_cart_total_price();
-		
-			if(parseFloat($scope.price_optimization) > 0)
-			{
-				smsText += "Vous économiserez environs : $ CAD " +  $scope.price_optimization;
-			}
 
-            return smsText;
-	};
-	
-	$scope.showAlert = function(ev, title, message) 
-	{
-		// Appending dialog to document.body to cover sidenav in docs app
-		// Modal dialogs should fully cover application
-		// to prevent interaction outside of dialog
-		$mdDialog.show(
-		  $mdDialog.alert()
-			.parent(angular.element(document.querySelector('#popupContainer')))
-			.clickOutsideToClose(true)
-			.title(title)
-			.textContent(message)
-			.ariaLabel('Alert Dialog Demo')
-			.ok('Got it!')
-			.targetEvent(ev)
-		);
-  	};
-	
-	$rootScope.sortCart = function()
-	{
-            $rootScope.cart.sort(function(a, b)
-            {
-                var keyA = a.store_product.retailer.name.toString(),
-                keyB = b.store_product.retailer.name.toString();
-                return keyA.localeCompare(keyB);
-            });
-	};
-	
-	$rootScope.sendListAsSMS = function($event)
-	{
-            if(!$rootScope.isUserLogged)
-            {
-                return;
+                currentDepartmentStoreID = parseInt(storeProduct.department_store.id);
+
+                // Open new table
+                content += "<div>";
+                content += "<ul style='list-style-type: none;'>";
             }
 
-            if(!$rootScope.loggedUser.phone_verified)
+            var description = "<p style='color : #444; font-style: italic;'>   - ";
+            if(storeProduct.size)
             {
-                    $scope.showAlert($event, "Votre numéro de téléphone n'est pas vérifié", "Votre numéro de téléphone n'est pas vérifié. Veuillez consulter l'onglet de sécurité de votre compte pour vérifier votre numéro de téléphone.");
+                description += " Taile : " + storeProduct.size;
+            }
+            if(storeProduct.brand)
+            {
+                description += " Marque : " + storeProduct.brand.name;
+            }
+            if(storeProduct.format)
+            {
+                description += " Format : " + storeProduct.format;
+            }
+            if(storeProduct.state)
+            {
+                description += " Origine : " + storeProduct.state;
             }
 
-            if($rootScope.cart.length === 0)
+            var unit = "";
+
+            if(storeProduct.unit)
             {
-                    $scope.showAlert($event, "Panier vide", "Votre panier est actuellement vide. Ajoutez des éléments au panier avant d'utiliser cette fonctionnalité.");
+                unit += " / " + storeProduct.unit.name;
             }
-		
-            $rootScope.sortCart();
 
-            var formData = new FormData();
-            formData.append("sms", $rootScope.getListAsText());
-            // Send request to server to get optimized list 	
-            $scope.promise = $http.post($scope.site_url.concat("/cart/send_sms"), 
-            formData, { transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(
-            function(response)
-            {
-                if(response.data)
-                {
-                    $scope.showAlert($event, "Message envoyé", "Votre liste d'épicerie a été envoyée à votre téléphone.");
-                }
-            });
-	};
-	
-	$rootScope.printCart = function($event) 
-	{
-		if(!$rootScope.isUserLogged)
-		{
-				return;
-		}
+            var price = Math.round(parseFloat(storeProduct.price) * 100) / 100;
 
-		if($rootScope.cart.length === 0)
-		{
-				$scope.showAlert($event, "Panier vide", "Votre panier est actuellement vide. Ajoutez des éléments au panier avant d'utiliser cette fonctionnalité.");
-		}
-		
-		var mywindow = window.open('', 'PRINT', 'height=400,width=600');
-		
-		mywindow.document.write($scope.getCartHtmlContent());
+            description += " Prix : <b> $ CAD " + price + unit + "</b></p>";
 
-		mywindow.document.close(); // necessary for IE >= 10
-		mywindow.focus(); // necessary for IE >= 10*/
+            var product_text = "<p><b>" + storeProduct.product.name +  "</b></p>" + description;
 
-		mywindow.print();
-		mywindow.close();
+            content += "<li class='list-group-item'>" + product_text + "</li>";
+        }
 
-		return true;
+        if(currentDepartmentStoreID !== -1)
+        {
+            // Close last opened tag
+            content += "</div>";
+            content += "</ul>";
+        }
 
-	};
-	
-	$scope.getCartHtmlContent()
-	{
-		
-		var content = "";
-		
-		$rootScope.sortCart();
-		
-		content += '<html><head><title>OtiPrix</title>';
-		content += '</head><body >';
-		content += "<h1 style='text-align : center;'>OtiPrix - Liste d'épicerie optimisé</h1>";
-		
-		var currentDepartmentStoreID = -1;
+        var total_price = Math.round(parseFloat($rootScope.get_cart_total_price()) * 100) / 100;
+
+        content += "<br>";
+        content += "<br>";
+        content += "<p style='float : right;'><b><span>Totale : <span><span style=' color : red;'>$ CAD " + total_price + "<span> + taxes. </b></p>";
+
+        if($rootScope.price_optimization > 0)
+        {
+            content += "<p style='float : right; color : red;'><b>Vous économiserez environs : $ CAD  " + $rootScope.price_optimization + "</b></p>";
+        }
+        content += '</body></html>';
+
+        return content;
+    };
+    
+    /**
+     * The mode represents the method used by the user
+     * to get the optimization details. 
+     * 0 = Print
+     * 1 = sent via sms
+     * 2 = sent via email
+     */
+    $scope.saveUserOptimisation = function(mode)
+    {
+        var optimization_data = 
+        {
+            items : getUserCartDetails(),
+            price_optimization : $scope.price_optimization,
+            mode : mode
+        };
+        
+        var formData = new FormData();
+        formData.append("optimization_data", JSON.stringify(optimization_data));
+        // Send request to server to get optimized list 	
+        $scope.promise = $http.post($scope.site_url.concat("/cart/save_user_optimisation"), 
+        formData, { transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(
+        function(response)
+        {
             
-		for(var x in $rootScope.cart)
-		{
-				var storeProduct = $rootScope.cart[x].store_product;
-
-				if(parseFloat(storeProduct.price) === 0)
-				{
-					continue;
-				}
-
-				if(currentDepartmentStoreID !== parseInt(storeProduct.department_store.id))
-				{
-						if(currentDepartmentStoreID !== -1)
-						{
-								content += "<br></div></ul>";
-						}
-
-						if(typeof storeProduct.department_store !== "undefined" && parseInt(storeProduct.department_store.distance) !== 0)
-						{
-								var text = storeProduct.retailer.name + " - " + storeProduct.department_store.address + ", " + storeProduct.department_store.state + ", " + storeProduct.department_store.city + "," + storeProduct.department_store.postcode;
-								content += "<h3>" + text + "</h3>";
-						}
-						else
-						{
-								content += "<h3> " + storeProduct.retailer.name + " - Le magasin n'est pas proche de chez vous.</h3>";
-						}
-
-						currentDepartmentStoreID = parseInt(storeProduct.department_store.id);
-
-						// Open new table
-						content += "<div>";
-						content += "<ul style='list-style-type: none;'>";
-				}
-
-				var description = "";
-				if(storeProduct.size)
-				{
-						description += ", Taile : " + storeProduct.size;
-				}
-				if(storeProduct.brand)
-				{
-						description += ", Marque : " + storeProduct.brand.name;
-				}
-				if(storeProduct.format)
-				{
-						description += ", Format : " + storeProduct.format;
-				}
-				if(storeProduct.state)
-				{
-						description += ", Origine : " + storeProduct.state;
-				}
-
-				var unit = "";
-
-				if(storeProduct.unit)
-				{
-						unit += " / " + storeProduct.unit.name;
-				}
-
-				description += ", Prix : <b> $ CAD " + storeProduct.price + unit + "</b>";
-
-				var product_text = "<p><b>" + storeProduct.product.name +  "</b> - " + description + "</p>";
-
-				content += "<li class='list-group-item'>" + product_text + "</li>";
-			}
-
-			if(currentDepartmentStoreID !== -1)
-			{
-					// Close last opened tag
-					content += "</div>";
-					content += "</ul>";
-			}
-
-			content += "<br>";
-			content += "<br>";
-			content += "<p style='float : right;'><b>Totale : $ CAD " + $rootScope.get_cart_total_price() + " + taxes. </b></p>";
-
-			if($rootScope.price_optimization > 0)
-			{
-					content += "<p style='float : right;'><b>Vous économiserez environs : $ CAD  " + $rootScope.price_optimization + "</b></p>";
-			}
-			content += '</body></html>';
-		
-			return content;
-	}
+        });
+        
+        
+    };
+    
+    /**
+     * This method gets the cart details
+     * and saves them to the database for the user
+     * The mode represents the method used by the user
+     * to get the optimization details. 
+     * 0 = Print
+     * 1 = sent via sms
+     * 2 = sent via email
+     */
+    function getUserCartDetails()
+    {
+        var items = [];
+        
+        
+        for(var i in $scope.cart)
+        {
+            var data = 
+            {
+                store_product_id : $scope.cart[i].store_product.id,
+                product : $scope.cart[i].store_product.product.id,
+                quantity : $scope.cart[i].quantity
+            };
+            
+            items.push(data);
+        }
+        
+        return items;
+    }
 	
 }]);

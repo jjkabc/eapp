@@ -26,10 +26,28 @@ class Home extends CI_Controller {
      */
     public function index()
     {
-        $this->data['stores'] = $this->admin_model->get_all(CHAIN_TABLE);
+        $this->data['stores'] = $this->admin_model->get_chains();
         $this->data['latestProducts'] = $this->home_model->get_store_products_limit(25, 0)["products"];
         $this->data['body'] = $this->load->view('home/index', $this->data, TRUE);
         $this->rememberme->recordOrigPage();
         $this->parser->parse('eapp_template', $this->data);
-    }    
+    }
+
+    public function change_location()
+    {
+        $this->data['body'] = $this->load->view('home/change-location', $this->data, TRUE);
+        $this->parser->parse('eapp_template', $this->data);
+    }
+    
+    public function goback() 
+    {
+        $redirect_url = $this->rememberme->getOrigPage();
+                
+        if(!$redirect_url)
+        {
+            $redirect_url = "home";
+        }
+        
+        redirect($redirect_url);
+    }
 }

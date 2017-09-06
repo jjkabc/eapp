@@ -45,15 +45,11 @@ class Cart extends CI_Controller {
         $this->parser->parse('eapp_template', $this->data);
     }
     
-    public function product($id)
+    public function product($id, $store_product_id = -1)
     {
         // get best product
-        $best_store_product = $this->cart_model->get_best_store_product($id, DEFAULT_DISTANCE, MAX_DISTANCE, $this->user);
-        $store_product = $this->cart_model->getStoreProduct($best_store_product->id);
-        $data["relatedProducts"] = $store_product->related_products;
-        $data["retailer"] = $store_product->retailer;
+        $store_product = $this->cart_model->get_best_store_product($id, DEFAULT_DISTANCE, MAX_DISTANCE, $this->user, false, null, $store_product_id);
         $data['store_product'] = addslashes(json_encode($store_product));
-        $data['products'] = addslashes(json_encode($this->admin_model->get_all(PRODUCT_TABLE)));
         $this->data['body'] = $this->load->view('cart/product', $data, TRUE);
         $this->rememberme->recordOrigPage();
         $this->parser->parse('eapp_template', $this->data);
@@ -92,13 +88,26 @@ class Cart extends CI_Controller {
     {
         $product_id = $this->input->post("product_id");
         
+        $store_product_id = $this->input->post("store_product_id");
+        
         $result = array
 	(
             "success" => false,
 	);
-	
-        // Get best match close to user
-        $store_product = $this->cart_model->get_cheapest_store_product($product_id);
+        
+        if($store_product_id == -1)
+        {
+            // Get best match close to user
+            $store_product = $this->cart_model->get_cheapest_store_product($product_id);
+        }
+        else
+        {
+            $store_product = $this->cart_model->getStoreProduct($store_product_id, false, true, true);
+            $store_product->department_store = new stdClass();
+            $store_product->department_store->name = "Le magasin n'est pas disponible près de chez vous.";
+            $store_product->department_store->id = -1;
+            $store_product->department_store->distance = 0;
+        }
         
         if($store_product == null)
         {
@@ -111,7 +120,8 @@ class Cart extends CI_Controller {
             'id'      => $store_product->product_id,
             'qty'     => 1,
             'price'   => $store_product->price,
-            'name'    => 'name_'.$store_product->product_id
+            'name'    => 'name_'.$store_product->product_id,
+            'options' => array('store_product_id' => $store_product_id)
 	);	    
         
         $rowid = $this->cart->insert($data);
@@ -154,6 +164,23 @@ class Cart extends CI_Controller {
         echo json_encode($result);
     }
     
+    public function mail_user_cart() 
+    {
+        $html_content = $this->input->post("content");
+        
+        set_error_handler(function(){ });
+                    
+        $subject = "Merci d'utiliser OtiPrix";
+        $headers = "From: mo-reply@otiprix.com \r\n";
+        $headers .= "Reply-To: no-reply@otiprix.com \r\n";
+        $headers .= "MIME-Version: 1.0\r\n";
+        $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+
+        echo json_encode(mail($this->user->email,$subject,$html_content,$headers));            
+                    
+        restore_error_handler();
+    }
+    
     /**
      * Descroy the cart
      */
@@ -191,17 +218,19 @@ class Cart extends CI_Controller {
         $products = json_decode($this->input->post("products"));
         $search_all = $this->input->post("searchAll") == "true" ? true : false;
         $coords = array("longitude" => $this->input->post("longitude"), "latitude" => $this->input->post("latitude"));
+        // get the store_product id if applicable
 
         foreach($products as $product)
         {
             // get the best store product based on price
-            $store_product = $this->cart_model->get_best_store_product($product->id, $distance, $distance, $this->user, $search_all, $coords);
+            $store_product = $this->cart_model->get_best_store_product($product->id, $distance, $distance, $this->user, $search_all, $coords, $product->store_product_id);
             $cart_item = new stdClass();
             $cart_item->store_product = $store_product;
             $cart_item->store_product->product->in_user_grocery_list = $this->inUserList($product->id);
             $cart_item->product = $this->cart_model->get_product($product->id);
             $cart_item->product->in_user_grocery_list = $this->inUserList($product->id);
             $cart_item->rowid = $product->rowid;
+            $cart_item->store_product_id = $product->store_product_id;
             $cart_item->quantity = $product->quantity;
             
             // distance of 0 means it wasn't found within the distance specified
@@ -237,53 +266,23 @@ class Cart extends CI_Controller {
 	
     public function send_sms()
     {
-            $this->send_twilio_sms($this->input->post("sms"));
+        $this->send_twilio_sms($this->input->post("sms"));
     }
-	
-    public function optimize_product_list_by_store()
+    
+    public function save_user_optimisation() 
     {
-        $result = array();
-        // convert km to mile
-    	$distance = $this->input->post("distance");
-        $products = json_decode($this->input->post("products"));
-        $coords = array("longitude" => $this->input->post("longitude"), "latitude" => $this->input->post("latitude"));  
-        $search_all = $this->input->post("searchAll") == "true" ? true : false;
-    	// get top 5 or less closest department stores 
-        // that contain at least one of the products
-        $close_stores = $this->cart_model->get_closest_stores($this->user, $distance, $products, $search_all, $coords);
-        
-        $result['products'] = array();
-        
-        foreach($products as $product_item)
+        if($this->user != null)
         {
-            $store_product = $this->cart_model->get_best_store_product($product_item->id, $distance, $distance, $this->user, $search_all, $coords);
-            $cart_item = new stdClass();
-            $cart_item->store_product = $store_product;
-            $cart_item->product = $this->cart_model->get_product($product_item->id);
-            $cart_item->rowid = $product_item->rowid;
-            $cart_item->quantity = $product_item->quantity;
-            $cart_item->store_products = array();
+            $optimization_data = json_decode($this->input->post("optimization_data"));
             
-            foreach($close_stores as $store)
-            {
-                // Check if the product exists for that store
-                $current_store_product = $this->cart_model->get_specific(STORE_PRODUCT_TABLE, array("product_id" => $product_item->id, "retailer_id" => $store->store->chain_id));
-                
-                if($current_store_product != null)
-                {
-                    array_push($cart_item->store_products, $this->cart_model->getStoreProduct($current_store_product->id, false, false));
-                }
-                else
-                {
-                    array_push($cart_item->store_products, $this->cart_model->create_empty_store_product());
-                }
-            }
+            $data = array();
             
-            array_push($result['products'], $cart_item);
+            $data["mode"] = $optimization_data->mode;
+            $data["price_optimization"] = $optimization_data->price_optimization;
+            $data["items"] = json_encode($optimization_data->items);
+            $data["user_account_id"] = $this->user->id;
+            
+            $this->account_model->create(USER_OPTIMIZATION_TABLE, $data);
         }
-        
-        $result['close_stores'] = $close_stores;
-        echo json_encode($result);
-	
     }
 }
