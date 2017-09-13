@@ -86,21 +86,22 @@ class Account_model extends CI_Model
             foreach ($product_list as $item) 
             {
                 $product = $this->get_product($item->id);
-				
+		
+		            // This is a list of user favorite stores where this product is available
                 $product->store = array();
 
                 // For each favorite store, get the store_product and price of the product
                 foreach($favorite_stores as $favorite_store)
                 {
-                    $product->store[$favorite_store->id] = $favorite_store;
-                    // product should be currently available 
-                    $this->db->where('period_from <= CURDATE() AND period_to >= CURDATE()', NULL, FALSE);
-                    $store_product = $this->get_specific(STORE_PRODUCT_TABLE, array("retailer_id" => $favorite_store->id, "product_id" => $product->id));
+										$product->store[$favorite_store->id] = $favorite_store;
+										// product should be currently available 
+										$this->db->where('period_from <= CURDATE() AND period_to >= CURDATE()', NULL, FALSE);
+										$store_product = $this->get_specific(STORE_PRODUCT_TABLE, array("retailer_id" => $favorite_store->id, "product_id" => $product->id));
 
-                    if($store_product != null)
-                    {
-                        $product->store[$favorite_store->id]->store_product = $store_product;
-                    }
+										if($store_product != null)
+										{
+												$product->store[$favorite_store->id]->store_product = $store_product;
+										}
                 }
 				
                 $product->quantity = $item->quantity;
