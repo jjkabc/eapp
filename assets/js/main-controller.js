@@ -221,9 +221,9 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
                         index = stores.length - 1;
                     }
 
-                    if(typeof stores[index].store_product !== "undefined")
+                    if(typeof productStore.store_product !== "undefined")
                     {
-                        stores[index].price += parseFloat(stores[index].store_product.price);
+                        stores[index].price += parseFloat(productStore.store_product.price);
                         stores[index].count++;
                     }
                 }
