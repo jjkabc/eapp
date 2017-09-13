@@ -39,6 +39,12 @@ class Home extends CI_Controller {
         $this->parser->parse('eapp_template', $this->data);
     }
     
+    public function contact_us()
+    {
+        $this->data['body'] = $this->load->view('home/contact-us', $this->data, TRUE);
+        $this->parser->parse('eapp_template', $this->data);
+    }
+    
     public function goback() 
     {
         $redirect_url = $this->rememberme->getOrigPage();

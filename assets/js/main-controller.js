@@ -203,7 +203,6 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
 
         if($scope.loggedUser !== null && typeof $scope.loggedUser !== "undefined" && typeof $scope.loggedUser.grocery_list !== "undefined")
         {
-
             for(var i in $scope.loggedUser.grocery_list)
             {
                 var product = $scope.loggedUser.grocery_list[i];
@@ -214,8 +213,8 @@ eappApp.controller('AccountController', ["$scope", "$http", "$mdToast", "$q", "$
                     
                     var index = stores.map(function(e) { return e.id; }).indexOf(productStore.id);
 
-                    if(index === -1) {
-
+                    if(index === -1) 
+                    {
                         productStore.price = 0;
                         productStore.count = 0;
                         stores.push(productStore);

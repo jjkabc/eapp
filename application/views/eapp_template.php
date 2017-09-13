@@ -171,14 +171,27 @@
     <notifications-bar class="notifications"></notifications-bar>
 
     <div class="container search-box" id="search-box" ng-controller="ShopController" ng-hide="hideSearchArea" style="margin-top: 60px;">
-        <form ng-submit="searchProducts(searchText)">
-            <md-input-container class="md-icon-float md-icon-right md-block">
-                <label>Rechercher produits</label>
-                <input name="searchText" ng-model="searchText" aria-label="Rechercher" />
-                <md-icon ng-hide="true"><i class="material-icons">search</i></md-icon>
-            </md-input-container>
-        </form>
-        <p style="text-align: center;" ng-hide="isUserLogged">Résultats optimisés pour {{currentAddress}} | <a href="<?php echo site_url("/home/change_location"); ?>">Changer</a></p>
+        
+            <div class="row">
+                <div ng-class="{'col-sm-12 col-md-12' : isUserLogged, 'col-sm-12 col-md-6' : !isUserLogged}">
+                    <form ng-submit="searchProducts(searchText)">
+                        <md-input-container class="md-icon-float md-icon-right md-block">
+                            <label>Rechercher produits</label>
+                            <input name="searchText" ng-model="searchText" aria-label="Rechercher" />
+                            <md-icon ng-hide="true"><i class="material-icons">search</i></md-icon>
+                    
+                        </md-input-container>
+                    </form>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <p ng-hide="isUserLogged">Résultats optimisés pour {{currentAddress}} | <a href="<?php echo site_url("/home/change_location"); ?>">Changer</a></p>
+                </div>
+            </div>
+            
+            
+            
+        
+        
     </div>
     
     <div id="mainmenu-area" class="mainmenu-area" class="navbar-wrapper">
@@ -266,7 +279,6 @@
     </div>
 
     <div id="eapp-footer" class="footer-top-area" ng-controller="FooterController">
-        <div class="zigzag-bottom"></div>
         <div class="container">
             <div class="row">
                 <div class="col-md-3 col-sm-6">
@@ -320,11 +332,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div> <!-- End footer top area -->
-    
-    <div class="footer-bottom-area">
-        <div class="container">
             <div class="row">
                 <div class="col-md-8">
                     <div class="copyright">
@@ -342,7 +349,9 @@
                 </div>
             </div>
         </div>
-    </div> <!-- End footer bottom area -->
+    </div> <!-- End footer top area -->
+    
+    
    {scripts}
   </body>
 </html>

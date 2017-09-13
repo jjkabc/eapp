@@ -164,9 +164,8 @@ class CI_Model {
     public function get_specific($table_name, $data)
     {
         $this->db->select("*");
-        $this->db->from($table_name);
         $this->db->where($data);
-        $query = $this->db->get();
+        $query = $this->db->get($table_name);
         if($query != null)
         {
             return $query->row();

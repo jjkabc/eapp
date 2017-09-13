@@ -2,8 +2,8 @@
 
 <div id="home-container">
 
-    <div id="admin-container" class="slider-area" >
-        <div class="zigzag-bottom"></div>
+    <div id="admin-container" class="slider-area"   ng-controller="MenuController">
+        
         <div id="slide-list" class="carousel carousel-fade slide" data-ride="carousel">
             <div class="slide-bulletz">
                 <div class="container">
@@ -29,10 +29,10 @@
                                     <div class="row">
                                         <div class="col-md-6 col-md-offset-6">
                                             <div class="slide-content">
-                                                <h2>Browse Categories</h2>
-                                                <p> Use our wonderful services to browse different categories and find the different products that make up your shopping list.!</p>
-                                                <p>Simple fast, reliable and up to date. Start today.</p>
-                                                <a href="" class="readmore">Browse Categories</a>
+                                                <h2>Parcourir les catégories</h2>
+                                                <p>Utilisez nos services merveilleux pour parcourir différentes catégories et trouver les différents produits qui composent votre liste d'achats!</p>
+                                                <p>Simple rapide, fiable et à jour. Commencez dès aujourd'hui.</p>
+                                                <a href="<?php echo site_url("shop/categories"); ?>" class="readmore">Categories</a>
                                             </div>
                                         </div>
                                     </div>
@@ -50,9 +50,9 @@
                                     <div class="row">
                                         <div class="col-md-6 col-md-offset-6">
                                             <div class="slide-content">
-                                                <h2>Browse Flyers</h2>
-                                                <p>Every week, visit us for new flyers with amazing prices. Saving money begins with a click!</p>
-                                                <a href="" class="readmore">Browse Flyers</a>
+                                                <h2>Parcourir les circulaires</h2>
+                                                <p>Chaque semaine, visitez-nous pour les nouveaux prospectus avec des prix incroyables. L'économie d'argent commence par un clic!</p>
+                                                <a href="<?php echo site_url("shop/select_flyer_store"); ?>" class="readmore">Circulaires</a>
                                             </div>
                                         </div>
                                     </div>
@@ -70,10 +70,10 @@
                                     <div class="row">
                                         <div class="col-md-6 col-md-offset-6">
                                             <div class="slide-content">
-                                                <h2>Find Product</h2>
-                                                <p>Know what you are looking for?</p>
-                                                <p>In a few clicks you are ready to find the best deals.</p>
-                                                <a href="" class="readmore">Find Product</a>
+                                                <h2>Trouver un produit</h2>
+                                                <p>Savez vous ce que tu cherchez?</p>
+                                                <p>En quelques clics, vous êtes prêt à trouver les meilleures offres</p>
+                                                <a href ng-click="gotoShop()" class="readmore">Find Product</a>
                                             </div>
                                         </div>
                                     </div>
@@ -87,43 +87,45 @@
         </div>        
     </div> <!-- End slider area -->
     
+    
     <div class="promo-area">
-        <div class="zigzag-bottom"></div>
         <div class="container">
             <div class="row">
                 <div class="col-md-4 col-sm-8">
                     <div class="single-promo">
-                        
-                        <h2>Votre liste d'épicerie</h2>
+                        <a href="<?php echo site_url("account/my_grocery_list"); ?>" class="promo-image"><img class="img-circle" width="150px;" height="150px;" src="<?php echo base_url("/assets/img/grocerylist.png"); ?>"></a>
+                        <h2 class="md-otiprix-text">Votre liste d'épicerie</h2>
 <!--                        <i class="fa fa-heart"></i>-->
-                        <p>Créez votre liste d'épicerie et économisez sur les dépenses.</p>
+                        <p class="md-gray-text">Créez votre liste d'épicerie et économisez sur les dépenses.</p>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-8">
                     <div class="single-promo">
+                        <a href="<?php echo site_url("shop/select_flyer_store"); ?>" class="promo-image"><img class="img-circle" width="150px;" height="150px;" src="<?php echo base_url("/assets/img/flyers.jpg"); ?>"></a>
 <!--                        <i class="fa fa-unlock"></i>-->
-                        <h2>Les Circulaires</h2>
-                        <p>Utilisez nos circulaires pour créer votre panier d'épicerie et économisez sur les dépenses</p>
+                        <h2 class="md-otiprix-text">Les Circulaires</h2>
+                        <p class="md-gray-text">Utilisez nos circulaires pour créer votre panier d'épicerie et économisez sur les dépenses</p>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-8">
                     <div class="single-promo">
-                        <h2>Les catégories de produits</h2>
+                        <a href="<?php echo site_url("shop/categories"); ?>" class="promo-image"><img class="img-circle" width="150px;" height="150px;" src="<?php echo base_url("/assets/img/categories.png"); ?>"></a>
+                        <h2 class="md-otiprix-text">Les catégories de produits</h2>
 <!--                        <i class="fa fa-calendar"></i>-->
-                        <p>Utilisez nos catégories de produits pour créer votre panier d'épicerie et économiser sur les dépenses.</p>
+                        <p class="md-gray-text">Utilisez nos catégories de produits pour créer votre panier d'épicerie et économiser sur les dépenses.</p>
                     </div>
                 </div>
             </div>
         </div>
+        <md-divider></md-divider>
     </div> <!-- End promo area -->
     
     <div class="maincontent-area">
-        <div class="zigzag-bottom"></div>
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
                     <div class="latest-product" ng-controller="CartController">
-                        <h2 class="section-title">Derniers Produits</h2>
+                        <h2 class="section-title md-otiprix-text">Produits en vedette</h2>
                         <div class="product-carousel row">
                             <?php foreach($latestProducts as $product): ?>
                                 <div class="single-product col-md-12 col-sm-12">
@@ -151,7 +153,7 @@
         </div>
     </div> <!-- End main content area -->
     
-    <div class="brands-area">
+    <div class="brands-area" ng-hide="true">
         <div class=""></div>
         <div class="container">
             <div class="row">
