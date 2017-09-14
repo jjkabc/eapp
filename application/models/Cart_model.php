@@ -316,7 +316,7 @@ class Cart_model extends CI_Model
         return $empty_store_product;
     }
     
-    public function get_closest_stores($user, $distance, $products, $search_all = false, $coords = null, $limit = 5)
+    public function get_closest_stores($user, $distance, $products, $search_all = false, $coords = null, $limit = 10)
     {
             $stores = array();
             
@@ -405,6 +405,67 @@ class Cart_model extends CI_Model
 
             return $stores;
 	}
+        
+    public function get_closest_merchants($user, $coords = null, $distance = 4)
+    {
+        $stores = array();
+
+        $range = "";
+
+        $longitude = -73.5815;
+        $latitude = 45.4921;
+        
+        if($user != null)
+        {
+            $longitude = $user->profile->longitude;
+            $latitude = $user->profile->latitude;
+        }
+
+        if($user == null && $coords != null && $coords["latitude"] != 0 && $coords["longitude"] != 0)
+        {
+            $longitude = $coords["longitude"];
+            $latitude = $coords["latitude"];
+        }
+
+        if($latitude != null && $longitude != null)
+        {
+            $range = "SQRT(POW(69.1 * (latitude - ".$latitude."), 2) + POW(69.1 * (".$longitude." - longitude) * COS(latitude / 57.3), 2))";
+        }
+
+        // join chain stores with chain
+        $range_select = empty($range) ? "" : ", (".$range.") AS 'range'";
+        $this->db->select(CHAIN_STORE_TABLE.'.* '.$range_select);
+        $this->db->join(CHAIN_TABLE, CHAIN_TABLE.'.id = '.CHAIN_STORE_TABLE.'.chain_id');
+        $this->db->where(array($range.' <=' => $distance));
+        $this->db->order_by("range", "ASC");
+
+        $result = $this->db->get(CHAIN_STORE_TABLE);
+
+        foreach($result->result() as $row)
+        {
+            $department_store = $row;
+
+            if($department_store != null && !isset($stores[$department_store->chain_id]))
+            {
+                if($this->get_store_product_count($department_store->chain_id) > 0)
+                {
+                    $stores[$department_store->chain_id] = $this->get(CHAIN_TABLE, $department_store->chain_id);
+                    $stores[$department_store->chain_id]->department_store = $department_store;
+                }
+                
+            }
+        }
+        
+        return $stores;
+    }
+    
+    private function get_store_product_count($merchant_id)
+    {
+        $this->db->where('period_from <= CURDATE() AND period_to >= CURDATE()', NULL, FALSE);
+        $this->db->where(array('retailer_id' => $merchant_id));
+        $result = $this->db->get(STORE_PRODUCT_TABLE);
+        return $result->num_rows();
+    }
 	
     private function compute_driving_distance($department_store, $user, $coords)
     {

@@ -35,7 +35,7 @@ class Shop extends CI_Controller {
     
     public function select_flyer_store()
     {
-        $retailers = $this->admin_model->get_all(CHAIN_TABLE);
+        $retailers = $this->cart_model->get_closest_merchants($this->user);
         
         foreach ($retailers as $key => $value) 
         {

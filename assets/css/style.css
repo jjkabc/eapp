@@ -172,10 +172,9 @@ z-index: 9;
 .readmore:hover {background: #222;text-decoration: none;color: #fff;border: 1px solid #fff}
 
 
-.promo-area {
-  background: none repeat scroll 0 0 whitesmoke;
-  color: #fff;
-  padding: 60px 0 60px;
+.promo-area 
+{
+  background: none repeat scroll 0 0;
 }
 
 .brands-area {
@@ -1242,6 +1241,15 @@ div.cart-collaterals ul.products li.product:hover .add_to_cart_button{background
 .promo-image:hover img {
 	-webkit-filter: sepia(0);
 	filter: sepia(0);
+}
+
+.contact-us
+{
+    background-image: url("../img/contact-us-background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding-top: 60px;
+    
 }
 
 
