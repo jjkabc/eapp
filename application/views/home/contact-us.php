@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-md-12" ng-controller="HomeController">
         
-            <div class="col-md-offset-6 col-md-6 col-sm-offset-0 col-sm-12" style="padding : 30px; background-color: white; margin-bottom: 10px;">
+            <div class="col-md-offset-6 col-md-6 col-sm-offset-0 col-sm-12 contact-us-form">
                  <div class="col-sm-12">
                      <md-input-container class="md-block" flex-gt-xs>
                          <label>Nom</label>
