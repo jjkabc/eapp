@@ -119,6 +119,8 @@ defined('BLOG_POSTS')                   OR define('BLOG_POSTS', 'eapp_blog_posts
 defined('BLOG_POSTS_COMMENTS')          OR define('BLOG_POSTS_COMMENTS', 'eapp_blog_posts_comments');
 defined('BLOG_POSTS_LIKES')             OR define('BLOG_POSTS_LIKES', 'eapp_blog_posts_likes');
 defined('USER_OPTIMIZATION_TABLE')      OR define('USER_OPTIMIZATION_TABLE', 'eapp_user_optimization');
+defined('CONTACTS_TABLE')             OR define('CONTACTS_TABLE', 'eapp_contacts');
+
 
 
 

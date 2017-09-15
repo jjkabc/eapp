@@ -45,6 +45,38 @@ class Home extends CI_Controller {
         $this->parser->parse('eapp_template', $this->data);
     }
     
+    public function contactus()
+    {
+        $name = $this->input->post("name");
+        $email = $this->input->post("email");
+        $subject = $this->input->post("subject");
+        $comment = $this->input->post("comment");
+        
+        $data = array
+        (
+            "name" => $name,
+            "email" => trim($email)            
+        );
+        
+        $contact = $this->home_model->get_specific(CONTACTS_TABLE, array("email" => trim($email)));
+        
+        if(!$contact)
+        {
+            $this->home_model->create(CONTACTS_TABLE, $data);
+        }
+                
+        set_error_handler(function(){ });
+                    
+        $headers = "From: ".$email." \r\n";
+        $headers .= "Reply-To: ".$email." \r\n";
+        $headers .= "MIME-Version: 1.0\r\n";
+        $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+
+        echo json_encode( array("result" => mail("infos@otiprix.com",$subject,$comment,$headers)));            
+                    
+        restore_error_handler();
+    }
+    
     public function goback() 
     {
         $redirect_url = $this->rememberme->getOrigPage();
