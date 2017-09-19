@@ -276,7 +276,7 @@ $(document).ready(function()
                 <div class="form-group">
                     <!-- Button -->  
                     <div class="col-md-offset-0 col-md-3 pull-right" style="padding-top:25px;">
-                        <md-button id="btn-signup"  ng-click="submit_favorite_stores()" class="md-primary md-raised col-md-12">Terminer l'inscription</md-button>
+                        <md-button id="btn-signup"  ng-click="submit_favorite_stores()" class="md-otiprix md-raised col-md-12">Sélectionner</md-button>
                     </div>
                 </div>
             </md-tab>
