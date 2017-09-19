@@ -50,6 +50,42 @@ class Shop extends CI_Controller {
         $this->data['body'] = $this->load->view('shop/select_flyer_store', $this->data, TRUE);
         $this->parser->parse('eapp_template', $this->data);
     }
+    
+    public function get_retailers() 
+    {
+        $coords = array("longitude" => $this->input->post("longitude"), "latitude" => $this->input->post("latitude"));
+        
+        $distance = $this->input->post("distance");
+        
+        $retailers = $this->cart_model->get_closest_merchants($this->user, $coords, $distance);
+        
+        if($this->user != null)
+        {
+            $data = array
+            (
+                'id' => $this->user->profile->id,
+                'optimization_distance' => $distance
+            );
+
+            $this->shop_model->create(USER_PROFILE_TABLE, $data);
+        }
+        
+        
+        
+        foreach ($retailers as $key => $value) 
+        {
+            $path = ASSETS_DIR_PATH."img/stores/".$value->image;
+            
+            if(!file_exists($path))
+            {
+                $retailers[$key]->image = "no_image_available.png";
+            }
+        }
+        
+        $result = array();
+        $result["retailers"] = $retailers;
+        echo json_encode($result);
+    }
 	
     public function categories()
     {

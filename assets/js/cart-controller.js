@@ -55,6 +55,27 @@ angular.module("eappApp").controller("CartController", ["$scope","$rootScope", "
     $scope.true_value = true;
     $scope.false_value = false;
     
+    $rootScope.$watch('cart', function(newValue, oldValue) 
+    {
+        //$scope.orderByStore();
+    });
+    
+    $rootScope.remove_product_from_cart = function(product_id)
+    {
+        var formData = new FormData();
+        formData.append("rowid", $rootScope.getRowID(product_id));
+        
+        $http.post
+        ($rootScope.site_url.concat("/cart/remove"), formData, { transformRequest: angular.identity, headers: {'Content-Type': undefined}}).then(function(response)
+        {
+            if(Boolean(response.data.success))
+            {
+                $rootScope.removeItemFromCart(product_id);
+                $scope.orderByStore();
+            }
+        });
+    };
+    
     /**
      * Updates the cart list by finding cheap products 
      * close to you

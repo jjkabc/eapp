@@ -1,4 +1,4 @@
-angular.module('eappApp').controller('ShopController', ["$scope", "$q", "$http", function ($scope, $q, $http) 
+angular.module('eappApp').controller('ShopController', ["$scope", "$q", "$http", "$mdDialog", function ($scope, $q, $http, $mdDialog) 
 {
     
     var bookmark;
@@ -123,6 +123,62 @@ angular.module('eappApp').controller('ShopController', ["$scope", "$q", "$http",
         $scope.clearSessionItems();
         window.sessionStorage.setItem("searchText", searchText);
         window.location.href =  $scope.site_url.concat("/shop");
+    };
+    
+    $scope.changeDistance = function(ev)
+    {
+        $scope.default_distance = $scope.distance;
+        
+        $mdDialog.show({
+            controller: ChangeDistance,
+            templateUrl:  $scope.base_url + 'assets/templates/change-distance.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose:true,
+            preserveScope:true,
+            scope : $scope,
+            fullscreen: true //
+          })
+          .then(function(answer) {
+                
+          }, function() {
+                
+          });
+    };
+    
+    function ChangeDistance($scope, $mdDialog, $http) 
+    {
+        $scope.hide = function() 
+        {
+            $mdDialog.hide();
+        };
+
+        $scope.cancel = function() 
+        {
+            $mdDialog.cancel();
+        };
+        
+        $scope.change = function()
+        {
+            $scope.distance = $scope.default_distance;
+            $scope.loading = true;
+            var formData = new FormData();
+            formData.append("distance", $scope.distance);
+            formData.append("longitude", $scope.longitude);
+            formData.append("latitude", $scope.latitude);
+            
+            $http.post($scope.site_url.concat("/shop/get_retailers"), formData, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            }).then(function(response)
+            {
+                window.sessionStorage.setItem('distance', $scope.distance);
+                $scope.loading = false;
+                $scope.retailers = response.data.retailers;
+                $mdDialog.hide();
+            });
+            
+        };
     };
  
   

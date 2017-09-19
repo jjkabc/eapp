@@ -246,12 +246,7 @@
                                     <li><a href="<?php echo site_url("home/about_us"); ?>">À propos</a></li>
                                 </ul>
                             </li>
-                            <li class=" dropdown"><a href="#" class="dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Contact <span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="<?php echo site_url("home/contact"); ?>">Formulaire</a></li>
-                                </ul>
-                            </li>
-
+                            <li><a  href="<?php echo site_url("home/contact"); ?>">Contact</a></li>
                         </ul>
                         <ul class="nav navbar-nav pull-right"  ng-controller="AccountController">
                             <li ng-hide="isUserLogged"><a href="<?php echo site_url("account/login"); ?>"><i class="fa fa-user"></i>s'identifier</a></li>

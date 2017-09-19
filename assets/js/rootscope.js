@@ -301,34 +301,6 @@ $(document).ready(function()
             }
         };
 		
-	rootScope.remove_product_from_cart = function(product_id)
-        {
-
-            var data = 
-            {
-                rowid : rootScope.getRowID(product_id)
-            };
-
-            $.ajax({
-                type: 'POST',
-                url:   rootScope.site_url.concat("/cart/remove"),
-                data: data,
-                success: function(response)
-                {
-                    var response_data = JSON.parse(response);
-
-                    if(Boolean(response_data.success))
-                    {
-                        rootScope.$apply(function()
-                        {
-                            rootScope.removeItemFromCart(product_id);
-                        });
-                    }
-                },
-                async:true
-            });
-        };
-	
 	rootScope.getUserCoordinates = function()
         {
             // Get the current geo location only if it's not yet the case

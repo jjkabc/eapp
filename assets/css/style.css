@@ -207,7 +207,7 @@ z-index: 9;
 .product-f-image 
 {
     position: relative;
-    height: 270px;
+    height: 180px;
 }
 .product-hover {
     height: 100%;
@@ -277,8 +277,8 @@ z-index: 9;
   overflow: hidden;
 }
 .single-product:hover {}
-.single-product:hover .product-hover a.add-to-cart-link {top: 32%;}
-.single-product:hover .product-hover a.view-details-link {bottom: 32%;}
+.single-product:hover .product-hover a.add-to-cart-link {top: 20%;}
+.single-product:hover .product-hover a.view-details-link {bottom: 20%;}
 .single-product:hover .product-hover:after{left: 0}
 
 
@@ -1227,8 +1227,8 @@ div.cart-collaterals ul.products li.product:hover .add_to_cart_button{background
 .img-circle {
     border-radius: 50%;
     margin : 5px;
-    width : 200px;
-    height: 200px;
+    width : 120px;
+    height: 120px;
 }
 
 /* Sepia */

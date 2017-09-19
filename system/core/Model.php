@@ -370,7 +370,7 @@ class CI_Model {
         {
             $store_product_columns = "id, product_id, retailer_id, brand_id, unit_id, country, state, organic, format, size, quantity, price";
         }
-        
+        $this->db->where('period_from <= CURDATE() AND period_to >= CURDATE()', NULL, FALSE);
         $this->db->select($store_product_columns.", ".PRODUCT_BRAND_TABLE.".name as brandName, ".PRODUCT_BRAND_TABLE.".id as brand_id");
         $this->db->where(array(STORE_PRODUCT_TABLE.".product_id" => $product_id, "in_flyer" => 1));
         $this->db->join(PRODUCT_BRAND_TABLE, PRODUCT_BRAND_TABLE.".id = ".STORE_PRODUCT_TABLE.".brand_id", "left outer");

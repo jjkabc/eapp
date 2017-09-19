@@ -6,6 +6,17 @@ $(document).ready(function(){
     scope.$apply(function()
     {
         scope.retailers = JSON.parse('<?php echo $retailers; ?>');
+        
+        // initialize initial distance
+        scope.distance = 10;
+        
+        if(window.sessionStorage.getItem('distance'))
+        {
+            scope.distance = parseInt(window.sessionStorage.getItem('distance'));
+        }
+        
+        scope.distance = parseInt(scope.isUserLogged ? scope.loggedUser.profile.optimization_distance : scope.distance);
+        
     });
 })
 </script>
@@ -28,10 +39,16 @@ $(document).ready(function(){
 </div> <!-- End Page title area -->
 
 <div id="admin-container" class="container" ng-controller="ShopController">    
-
+        
         <div id="signupbox" style=" margin-top:50px" class="container">
+            <div class="col-12">
+                <p style="text-align: center;">Affichage des résultats dans un rayon de {{distance}} km
+                    <span> | <a href ng-click="changeDistance($event)">Changer</a></span>
+                </p>
+            </div>
+           
 	    <div class="panel panel-info">
-                
+
                 <md-toolbar style="background-color: #1abc9c;">
                     <div>
                         <h2 class="md-toolbar-tools">Sélectionnez le magasin pour afficher le contenu du circulaire</h2>

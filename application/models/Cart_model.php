@@ -419,6 +419,7 @@ class Cart_model extends CI_Model
         {
             $longitude = $user->profile->longitude;
             $latitude = $user->profile->latitude;
+            $distance = $user->profile->optimization_distance;
         }
 
         if($user == null && $coords != null && $coords["latitude"] != 0 && $coords["longitude"] != 0)

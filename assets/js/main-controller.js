@@ -162,15 +162,23 @@ eappApp.controller('ProductsController', ['$scope','$rootScope', function($scope
 
 eappApp.controller('HomeController', ["$scope", "$http", function($scope, $http) 
 {
+    $scope.contact = 
+    {
+        name : "",
+        email : "",
+        subject : "",
+        comment : ""
+    };
+    
     $scope.contactus = function()
     {
         if($scope.contactusForm.$valid)
         {
             var formData = new FormData();
-            formData.append("name", $scope.contactName);
-            formData.append("email", $scope.contactEmail);
-            formData.append("subject", $scope.contactSubject);
-            formData.append("comment", $scope.contactComment);
+            formData.append("name", $scope.contact.name);
+            formData.append("email", $scope.contact.email);
+            formData.append("subject", $scope.contact.subject);
+            formData.append("comment", $scope.contact.comment);
 
             $http.post( $scope.site_url.concat("/home/contactus"), formData, {
                     transformRequest: angular.identity,
@@ -180,18 +188,21 @@ eappApp.controller('HomeController', ["$scope", "$http", function($scope, $http)
                 if(response.data.result)
                 {
                     $scope.message = "Votre message a bien été envoyé.";
-                    $scope.contactName = "";
-                    $scope.contactEmail = "";
-                    $scope.contactSubject = "";
-                    $scope.contactComment = "";
+                    $scope.contact = 
+                    {
+                        name : "",
+                        email : "",
+                        subject : "",
+                        comment : ""
+                    };
                     $scope.contactusForm.$setPristine();
                     $scope.contactusForm.$setValidity();
+                    $scope.contactusForm.$setUntouched();
                 }
                 else
                 {
                     $scope.errorMessage = "Une erreur de serveur inattendue s'est produite. Veuillez réessayer plus tard.";
                 }
-                
 
             });
         }        
