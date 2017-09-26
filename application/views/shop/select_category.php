@@ -35,7 +35,7 @@ $(document).ready(function(){
             
             <md-toolbar style="background-color: #1abc9c;">
                 <div>
-                    <h2 class="md-toolbar-tools">Sélectionnez une categorie pour voire son contenu</h2>
+                    <h2 class="md-toolbar-tools">Sélectionnez une categorie pour voir son contenu</h2>
                 </div>
             </md-toolbar>
            
