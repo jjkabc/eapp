@@ -42,7 +42,7 @@ $(document).ready(function(){
         
         <div id="signupbox" style=" margin-top:50px" class="container">
             <div class="col-12">
-                <p style="text-align: center;">Affichage des résultats dans un rayon de {{distance}} km
+                <p style="text-align: center;">Résultats dans un rayon de {{distance}} km
                     <span> | <a href ng-click="changeDistance($event)">Changer</a></span>
                 </p>
             </div>
@@ -61,8 +61,8 @@ $(document).ready(function(){
                             <a href><img  ng-click="select_retailer($event)" id="{{store.id}}" ng-src="<?php echo base_url("assets/img/stores/"); ?>{{store.image}}" alt="{{store.name}}" style="height: 80px; display: block; margin: 0 auto;" class="img-thumbnail img-check"></a>
                             <input type="checkbox" name="store_{{store.id}}" value="{{store.id}}" class="hidden" autocomplete="off">
                             <a href ng-click="select_retailer($event)" id="{{store.id}}">
-                            <p class="md-otiprix-text" style="text-align: center;">{{store.department_store.address}}, {{store.department_store.city}}</p>
-                            <p class="md-otiprix-text" style="text-align: center;"><span ng-show="store.department_store.state">{{store.department_store.state}},</span> <span ng-show="store.department_store.postcode">{{store.department_store.postcode}}</span></p>
+                            <p class="md-otiprix-text" style="text-align: center;" ng-hide="true">{{store.department_store.address}}, {{store.department_store.city}}</p>
+                            <p class="md-otiprix-text" style="text-align: center;" ng-hide="true"><span ng-show="store.department_store.state">{{store.department_store.state}},</span> <span ng-show="store.department_store.postcode">{{store.department_store.postcode}}</span></p>
                             </a>
                         </div>
                     </div>
