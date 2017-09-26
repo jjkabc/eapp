@@ -314,19 +314,21 @@
                     <div class="footer-menu">
                         <h2 class="footer-wid-title">Categories</h2>
                         <ul>
-                            <li   ng-click="select_category($event)" id="{{category.id}}"  ng-repeat="category in categories"><a href="#">{{category.name}}</a></li>
+                            <li ng-click="select_category($event)" id="{{category.id}}"  ng-repeat="category in categories"><a href="#">{{category.name}}</a></li>
                         </ul>                        
                     </div>
                 </div>
                 
                 <div class="col-md-3 col-sm-6">
                     <div class="footer-newsletter">
-                        <h2 class="footer-wid-title">Newsletter</h2>
-                        <p>Inscrivez-vous à notre newsletter et obtenez des offres exclusives que vous ne trouverez nulle part ailleurs dans votre boîte de réception!</p>
+                        <h2 class="footer-wid-title">Bulletin</h2>
+		    	<p>Inscrivez-vous à notre Infolettre et soyez les premiers informés sur :</p>
+		     	<p style="padding-left:5em;">- l’évolution des prix des denrées alimentaires;</p>
+		    	<p style="padding-left:5em;">- toutes les opportunités  pour réduire le coût de votre épicerie.</p>
                         <div class="newsletter-form">
                             <form action="#">
                                 <input type="email" placeholder="Entrez votre email">
-                                <input type="submit" value="Souscrire">
+                                <input type="submit" value="S’INSCRIRE">
                             </form>
                         </div>
                     </div>
