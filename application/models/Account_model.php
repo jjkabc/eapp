@@ -86,6 +86,7 @@ class Account_model extends CI_Model
             foreach ($product_list as $item) 
             {
                 $product = $this->get_product($item->id);
+		$product->store_products = array();    
 		
 		            // This is a list of user favorite stores where this product is available
                 $product->store = array();
@@ -99,6 +100,7 @@ class Account_model extends CI_Model
 
                     if($store_product != null)
                     {
+			array_push($product->store_products, $store_product);
                         $product->store[$favorite_store->id] = $favorite_store;
                         $product->store[$favorite_store->id]->store_product = $store_product;
                     }
