@@ -30,8 +30,10 @@
                                         <div class="col-md-6 col-md-offset-6">
                                             <div class="slide-content">
                                                 <h2>Parcourir les catégories</h2>
-                                                <p>Utilisez nos services merveilleux pour parcourir différentes catégories et trouver les différents produits qui composent votre liste d'achats!</p>
-                                                <p>Simple rapide, fiable et à jour. Commencez dès aujourd'hui.</p>
+                                                <p>Faites votre liste d’épicerie en un temps record en utilisant les </p>
+																							  <p>différentes catégories et </p>
+																							  <p>Réduisez votre facture d’épicerie en un temps record.</p>
+																							  <p>N’attendez plus, commencez dès aujourd'hui ici!</p>
                                                 <a href="<?php echo site_url("shop/categories"); ?>" class="readmore">Categories</a>
                                             </div>
                                         </div>
@@ -51,7 +53,9 @@
                                         <div class="col-md-6 col-md-offset-6">
                                             <div class="slide-content">
                                                 <h2>Parcourir les circulaires</h2>
-                                                <p>Chaque semaine, visitez-nous pour les nouveaux prospectus avec des prix incroyables. L'économie d'argent commence par un clic!</p>
+																								<p>Consulter en un seul clic les vrais rabais dans les grandes surfaces et </p>
+																								<p>dans tous les petits magasins proches de vous.</p>
+																								<p>Les vraies économies d'argent commencent par ici!</p>
                                                 <a href="<?php echo site_url("shop/select_flyer_store"); ?>" class="readmore">Circulaires</a>
                                             </div>
                                         </div>
@@ -71,9 +75,10 @@
                                         <div class="col-md-6 col-md-offset-6">
                                             <div class="slide-content">
                                                 <h2>Trouver un produit</h2>
-                                                <p>Savez vous ce que tu cherchez?</p>
-                                                <p>En quelques clics, vous êtes prêt à trouver les meilleures offres</p>
-                                                <a href ng-click="gotoShop()" class="readmore">Find Product</a>
+                                                <p>Que cherchez-vous?</p>
+                                                <p>Trouvez en un seul clic le meilleur prix pour un produit.</p>
+																							  <p>C’est simple et surtout très économique Ici!</p>
+                                                <a href ng-click="gotoShop()" class="readmore">Chercher produit</a>
                                             </div>
                                         </div>
                                     </div>
