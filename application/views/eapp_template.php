@@ -323,8 +323,8 @@
                     <div class="footer-newsletter">
                         <h2 class="footer-wid-title">Bulletin</h2>
 		    	<p>Inscrivez-vous à notre Infolettre et soyez les premiers informés sur :</p>
-		     	<p style="padding-left:5em;">- l’évolution des prix des denrées alimentaires;</p>
-		    	<p style="padding-left:5em;">- toutes les opportunités  pour réduire le coût de votre épicerie.</p>
+		     	<p> - l’évolution des prix des denrées alimentaires;</p>
+		    	<p> - toutes les opportunités  pour réduire le coût de votre épicerie.</p>
                         <div class="newsletter-form">
                             <form action="#">
                                 <input type="email" placeholder="Entrez votre email">
