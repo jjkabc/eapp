@@ -102,7 +102,7 @@ angular.module("eappApp").controller('AdminController', ["$scope", "Form", "$htt
             return;
         }
         
-        var image_url = $scope.base_url.concat("/assets/img/products/") + item.image;
+        var image_url = item.image;
         
         $scope.api.removeAll();
         

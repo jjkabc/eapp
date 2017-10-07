@@ -28,7 +28,7 @@ angular.module('eappApp').controller('ShopController', ["$scope", "$q", "$http",
     $scope.query = 
     {
         filter: '',
-        limit: '25',
+        limit: '50',
         order: 'name',
         page: 1
     };

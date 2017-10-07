@@ -58,7 +58,7 @@ $(document).ready(function(){
 		<md-content id="retailer-contents" style="padding : 10px;">
                     <div class="form-group-inline" ng-repeat="store in retailers">
                         <div class="col-md-3 col-sm-4" style="height: 160px;">
-                            <a href><img  ng-click="select_retailer($event)" id="{{store.id}}" ng-src="<?php echo base_url("assets/img/stores/"); ?>{{store.image}}" alt="{{store.name}}" style="height: 80px; display: block; margin: 0 auto;" class="img-thumbnail img-check"></a>
+                            <a href><img  ng-click="select_retailer($event)" id="{{store.id}}" ng-src="{{store.image}}" alt="{{store.name}}" style="height: 80px; display: block; margin: 0 auto;" class="img-thumbnail img-check"></a>
                             <input type="checkbox" name="store_{{store.id}}" value="{{store.id}}" class="hidden" autocomplete="off">
                             <a href ng-click="select_retailer($event)" id="{{store.id}}">
                             <p class="md-otiprix-text" style="text-align: center;" ng-hide="true">{{store.department_store.address}}, {{store.department_store.city}}</p>

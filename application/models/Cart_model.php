@@ -311,7 +311,7 @@ class Cart_model extends CI_Model
         $empty_store_product = new stdClass();
         $empty_store_product->price = 0;
         $empty_store_product->retailer = new stdClass();
-        $empty_store_product->retailer->image = "no_image_available.png";
+        $empty_store_product->retailer->image = base_url("/assets/img/stores/no_image_available.png");
         $empty_store_product->retailer->name = "none";       
         return $empty_store_product;
     }

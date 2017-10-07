@@ -206,10 +206,16 @@ class CI_Model {
             // Get product store
             $store_product->retailer = $this->get(CHAIN_TABLE, $store_product->retailer_id, $chain_columns);
             $store_image_path = ASSETS_DIR_PATH."img/stores/".$store_product->retailer->image;
-            if(!file_exists($store_image_path) || empty($store_product->retailer->image))
+            
+            if(strpos($store_product->retailer->image, 'http') === FALSE)
             {
-                $store_product->retailer->image = "no_image_available.png";
+                if(!file_exists($store_image_path) || empty($store_product->retailer->image))
+                {
+                    $store_product->retailer->image = "no_image_available.png";
+                }
+                $store_product->retailer->image = base_url('/assets/img/stores/').$store_product->retailer->image;
             }
+            
             // Get product unit
             $store_product->unit = $this->get(UNITS_TABLE, $store_product->unit_id, $units_columns);
             // Get subcategory
@@ -222,14 +228,19 @@ class CI_Model {
             
             if($store_product->brand != null)
             {
-                $brand_image = ASSETS_DIR_PATH."img/products/".$store_product->brand->image;
-                
-                if(file_exists($brand_image) && !empty($store_product->brand->image) && $store_product->product != null)
+                if(strpos($store_product->brand->image, 'http') !== FALSE)
                 {
                     $store_product->product->image = $store_product->brand->image;
                 }
+                else
+                {
+                    $brand_image = ASSETS_DIR_PATH."img/products/".$store_product->brand->image;
+                    if(file_exists($brand_image) && !empty($store_product->brand->image) && $store_product->product != null)
+                    {
+                        $store_product->product->image = base_url("/assets/img/products/").$store_product->brand->image;
+                    }
+                }
             }
-            
         }
         
         return $store_product;
@@ -274,6 +285,8 @@ class CI_Model {
             {
                 $chains[$key]->image = "no_image_available.png";
             }
+            
+            $chains[$key]->image = base_url('/assets/img/stores/').$chains[$key]->image;
         }
         
         return $chains;
@@ -341,11 +354,17 @@ class CI_Model {
         
         $store_image_path = ASSETS_DIR_PATH."img/products/".$value->image;
         
-        if(!file_exists($store_image_path) || empty($value->image))
+        if(strpos($value->image, 'http') === false)
         {
-            $value->image = "no_image_available.png";
+            // File doesn't exist or image value is empty, set the empty image value
+            if((!file_exists($store_image_path) || empty($value->image)))
+            {
+                $value->image = "no_image_available.png";
+            }
+            
+            $value->image = base_url("/assets/img/products/").$value->image;
         }
-
+        
         $value->subcategory = $this->get(SUB_CATEGORY_TABLE, $value->subcategory_id, $subcategory_columns);
         
         // Get category

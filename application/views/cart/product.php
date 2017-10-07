@@ -30,7 +30,7 @@ $(document).ready(function()
         <div class="row">
             <!-- Product Image Area -->
             <div class="col-sm-12 col-md-4">
-                <img  ng-src="<?php echo base_url("assets/img/products/"); ?>{{storeProduct.product.image}}" alt="{{storeProduct.product.name}}" style="margin : auto; display : block;">
+                <img  ng-src="{{storeProduct.product.image}}" alt="{{storeProduct.product.name}}" style="margin : auto; display : block;">
             </div>
             
             <!-- Product Description Area -->
@@ -39,7 +39,7 @@ $(document).ready(function()
                 <md-divider></md-divider>
                 <div style="font-style: italic;">
                     
-                    <img  ng-src="<?php echo base_url("assets/img/stores/"); ?>{{storeProduct.retailer.image}}" alt="{{storeProduct.retailer.name}}" width="100px" style="margin-bottom: 10px; margin-top: 20px;">
+                    <img  ng-src="{{storeProduct.retailer.image}}" alt="{{storeProduct.retailer.name}}" width="100px" style="margin-bottom: 10px; margin-top: 20px;">
                     <ul class="breadcrumb" style="background-color: white; text-align: left;">
                         <li><a href ng-click="select_category($event)" id="{{storeProduct.product.category.id}}">{{storeProduct.product.category.name}}</a></li>
                         <li class="active">{{storeProduct.product.subcategory.name}}</li>
@@ -68,7 +68,7 @@ $(document).ready(function()
             <md-list flex>
                 <md-subheader class="md-no-sticky">Produits similaires</md-subheader>
                 <md-list-item class="md-3-line" ng-repeat="sp in storeProduct.similar_products" ng-click="selectProduct(sp)">
-                  <img ng-src="<?php echo base_url("assets/img/stores/"); ?>{{sp.retailer.image}}" class="md-avatar" alt="{{sp.retailer.name}}" />
+                  <img ng-src="{{sp.retailer.image}}" class="md-avatar" alt="{{sp.retailer.name}}" />
                   <div class="md-list-item-text" layout="column">
                     <p>Prix : <b> $ CAD {{sp.price}} <span ng-show="sp.unit"> / {{sp.unit.name}}</span></b></p>
                     <p>Marchand : <b><a href>{{sp.retailer.name}}</a></b></p>

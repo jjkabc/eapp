@@ -41,7 +41,7 @@
             <div ng-repeat="category in myCategories">
                 <md-subheader class="md-no-sticky">{{category.name}}</md-subheader>
                     <md-list-item ng-repeat="product in category.products" ng-click="viewProductDetails(product.id, $event)" class="noright">
-                        <img alt="{{ product.name }}" ng-src="{{base_url}}/assets/img/products/{{ product.image }}" class="md-avatar" />
+                        <img alt="{{ product.name }}" ng-src="{{ product.image }}" class="md-avatar" />
                         <p>{{ product.name }}  <span class="badge" ng-show="product.store_products.length == 0">Le produit n'est pas disponible</span><span class="badge" ng-show="product.store_products.length > 0"> Disponible dans {{product.store_products.length}} magasins</span></p>
                         
                         <md-input-container class="md-secondary">
@@ -63,7 +63,7 @@
                 </div>
             </md-toolbar>
             <md-list-item class="md-2-line" ng-repeat="store in getUserListStorePrices()">
-                <img ng-src="{{base_url}}/assets/img/stores/{{ store.image }}" class="md-avatar" alt="{{store.name}}" />
+                <img ng-src="{{ store.image }}" class="md-avatar" alt="{{store.name}}" />
                 <div class="md-list-item-text md-offset" ng-show="store.price > 0">
                       <h3> Prix total a {{store.name}} : <b>CAD {{ store.price | number : 2 }}</b> </h3>
                       <p> Nombre d'items disponibles : {{ store.count }} </p>

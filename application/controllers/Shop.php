@@ -45,6 +45,7 @@ class Shop extends CI_Controller {
             {
                 $retailers[$key]->image = "no_image_available.png";
             }
+           $retailers[$key]->image = base_url('/assets/img/stores/').$retailers[$key]->image;
         }
         $this->data['retailers'] = addslashes(json_encode($retailers));
         $this->data['body'] = $this->load->view('shop/select_flyer_store', $this->data, TRUE);
@@ -80,6 +81,7 @@ class Shop extends CI_Controller {
             {
                 $retailers[$key]->image = "no_image_available.png";
             }
+            $retailers[$key]->image = base_url('/assets/img/stores/').$retailers[$key]->image;
         }
         
         $result = array();
@@ -99,6 +101,7 @@ class Shop extends CI_Controller {
             {
                 $categories[$key]->image = "no_image_available.png";
             }
+            $categories[$key]->image = base_url('/assets/img/categories/').$categories[$key]->image;
         }
         $this->data['categories'] = addslashes(json_encode($categories));
         $this->data['body'] = $this->load->view('shop/select_category', $this->data, TRUE);

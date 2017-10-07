@@ -44,7 +44,7 @@ $(document).ready(function(){
                     
                     <div class="col-md-3" style="padding-top:40px;">
                         <label class="btn item-block">
-                            <img  ng-click="select_category($event)" id="{{category.id}}" ng-src="<?php echo base_url("assets/img/categories/"); ?>{{category.image}}" alt="{{category.name}}" class="category-block img-check">
+                            <img  ng-click="select_category($event)" id="{{category.id}}" ng-src="{{category.image}}" alt="{{category.name}}" class="category-block img-check">
                             <input type="checkbox" name="category_{{category.id}}" value="{{category.id}}" class="hidden" autocomplete="off">
                         </label>
                         <b><p style="text-align: center;">{{category.name}}</p></b>

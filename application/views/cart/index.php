@@ -79,11 +79,11 @@
                     <tr>
                         <td colspan="6">
                             <md-subheader class="" ng-show="departmentStore.distance > 0">
-                                <img alt="{{ product.name }}" ng-src="{{base_url}}/assets/img/stores/{{departmentStore.image}}" style="height : 44px;" />
+                                <img alt="{{ product.name }}" ng-src="{{departmentStore.image}}" style="height : 44px;" />
                                 <b> <a href ng-click="InitMap($event, departmentStore)">{{departmentStore.address}}, {{departmentStore.city}}, {{departmentStore.state}}, {{departmentStore.postcode}}, {{departmentStore.distance}} Km en voiture (environs {{departmentStore.time | number : 0}} Minutes)</a></b>
                             </md-subheader>
                             <md-subheader class="md-warn" ng-hide="departmentStore.distance > 0">
-                                <img alt="{{ product.name }}" ng-src="{{base_url}}/assets/img/stores/{{departmentStore.image}}" style="height : 44px;" />
+                                <img alt="{{ product.name }}" ng-src="{{departmentStore.image}}" style="height : 44px;" />
                                 <b> Le magasin n'est pas disponible près de chez vous.</b>
                             </md-subheader> 
                         </td>
@@ -96,7 +96,7 @@
 
 
                         <td md-cell width = "20%">
-                            <a href><img alt="poster_1_up" class="admin-image" ng-src="{{base_url}}/assets/img/products/{{item.store_product.product.image}}"></a>
+                            <a href><img alt="poster_1_up" class="admin-image" ng-src="{{item.store_product.product.image}}"></a>
                         </td>
 
                         <td md-cell width = "30%">
@@ -154,7 +154,7 @@
                         <md-subheader>Produits disponibles <span class="badge">{{store.store_products.length}}</md-subheader>
 
                         <md-list-item ng-repeat="item in store.store_products" class="noright">
-                            <img alt="{{ item.product.name }}" ng-src="{{base_url}}/assets/img/products/{{ item.store_product.product.image }}" class="md-avatar" />
+                            <img alt="{{ item.product.name }}" ng-src="{{ item.store_product.product.image }}" class="md-avatar" />
                             <div class="md-list-item-text" layout="column">
                                 <a  href="<?php echo site_url("cart/product/"); ?>{{item.store_product.product.id}}">{{ item.store_product.product.name }}</a>
                                 <p ng-show="item.store_product.format">{{item.store_product.format}}<span ng-show="item.store_product.unit"> {{item.store_product.unit.name}}</span></p>
@@ -169,13 +169,13 @@
                         <md-subheader class="md-warn"><a class="md-warn" href  data-toggle="collapse" data-target="#products_{{store.id}}">Voir produits indisponibles</a> <span class="badge">{{store.missing_products.length}}</md-subheader>
                         <div id="products_{{store.id}}" class="collapse">
                             <md-list-item ng-repeat="item in store.missing_products" class="noright">
-                              <img alt="{{ item.store_product.product.name }}" ng-src="{{base_url}}/assets/img/products/{{ item.store_product.product.image }}" class="md-avatar" />
+                              <img alt="{{ item.store_product.product.name }}" ng-src="{{ item.store_product.product.image }}" class="md-avatar" />
                               <div class="md-list-item-text" layout="column">
                                 <a  href="<?php echo site_url("cart/product/"); ?>{{item.store_product.product.id}}">{{ item.store_product.product.name }}</a>
                                 <p ng-show="item.store_product.format">{{item.store_product.format}}<span ng-show="item.store_product.unit"> {{item.store_product.unit.name}}</span></p>
                                 <p ng-show="item.store_product.brand">{{item.store_product.brand.name}}</p>
                               </div>
-                              <img  alt="{{ product.name }}" ng-src="{{base_url}}/assets/img/stores/{{item.store_product.retailer.image }}" class="md-secondary md-avatar" />
+                              <img  alt="{{ product.name }}" ng-src="{{item.store_product.retailer.image }}" class="md-secondary md-avatar" />
                               <md-input-container class="md-secondary">
                                   <p><b>$ CAD {{item.store_product.price}} <span ng-show="item.store_product.unit"> / {{item.store_product.unit.name}}</span></b></p>
                               </md-input-container>

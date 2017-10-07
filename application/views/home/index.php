@@ -135,7 +135,7 @@
                             <?php foreach($latestProducts as $product): ?>
                                 <div class="single-product col-md-12 col-sm-12">
                                     <div class="product-f-image">
-                                        <img ng-src="<?php echo base_url("assets/img/products/").$product->product->image;?>" style="height: 100%;" alt="">
+                                        <img ng-src="<?php echo $product->product->image;?>" style="height: 100%;" alt="">
                                         <div class="product-hover">
                                             <a href ng-show="can_add_to_cart(<?php echo $product->product_id; ?>)" class="add-to-cart-link" ng-click="add_product_to_cart(<?php echo $product->product_id; ?>)"><i class="fa fa-shopping-cart"></i>Ajouter</a>
                                             <a href ng-hide="can_add_to_cart(<?php echo $product->product_id; ?>)" class="add-to-cart-link" ng-click="remove_product_from_cart(<?php echo $product->product_id; ?>)"><i class="fa fa-shopping-cart"></i>Retirer</a>
@@ -167,7 +167,7 @@
                         <h2 class="section-title">Stores</h2>
                         <div class="brand-list">
                             <?php foreach($stores as $store): ?>
-                            <img src="<?php echo base_url("assets/img/stores/").$store->image; ?>" style="width: 270px; height: 120px;" width="270" height="120" alt="">    
+                            <img src="<?php echo $store->image; ?>" style="width: 270px; height: 120px;" width="270" height="120" alt="">    
                             <?php endforeach; ?>
                         </div>
                     </div>

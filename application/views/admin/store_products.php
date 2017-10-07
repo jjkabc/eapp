@@ -83,11 +83,11 @@
                     </td>
 
                     <td md-cell>
-                        <div class="admin-image"><a href=""><img alt="" ng-src="<?php echo base_url("assets/img/stores/"); ?>{{retailers[store_product.retailer_id].image}}" ></a></div>
+                        <div class="admin-image"><a href=""><img alt="" ng-src="}" ></a></div>
                     </td>
 
                     <td md-cell>
-                        <div class="admin-image"><a href=""><img alt="" ng-src="<?php echo base_url("assets/img/products/"); ?>{{store_product.product.image}}" ></a></div>
+                        <div class="admin-image"><a href=""><img alt="" ng-src="{{store_product.product.image}}" ></a></div>
                     </td>
 
                     <td md-cell width="100%">
